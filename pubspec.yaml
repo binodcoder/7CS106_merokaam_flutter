@@ -37,6 +37,7 @@ dependencies:
   flutter_screenutil: ^5.9.1
   flutter_bloc: ^8.1.5
   bloc: ^8.1.4
+  equatable: ^2.0.3
   shared_preferences: ^2.2.3
   flare_flutter: ^3.0.2
   fluttertoast: ^8.0.9
