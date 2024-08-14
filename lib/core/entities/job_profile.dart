@@ -1,4 +1,4 @@
-class JobProfileEntity {
+class JobProfile {
   int userAccountId;
   String firstName;
   String lastName;
@@ -11,7 +11,7 @@ class JobProfileEntity {
   String profilePhoto;
   String photosImagePath;
 
-  JobProfileEntity({
+  JobProfile({
     required this.userAccountId,
     required this.firstName,
     required this.lastName,
@@ -24,4 +24,6 @@ class JobProfileEntity {
     required this.profilePhoto,
     required this.photosImagePath,
   });
+
+
 }
