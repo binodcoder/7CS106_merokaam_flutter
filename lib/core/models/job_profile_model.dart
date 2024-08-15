@@ -1,4 +1,7 @@
 import 'package:merokaam/core/entities/job_profile.dart';
+import 'dart:convert';
+
+List<JobProfileModel> jobProfileModelsFromMap(String str) => List<JobProfileModel>.from(json.decode(str).map((x) => JobProfileModel.fromMap(x)));
 
 class JobProfileModel extends JobProfile {
   JobProfileModel(

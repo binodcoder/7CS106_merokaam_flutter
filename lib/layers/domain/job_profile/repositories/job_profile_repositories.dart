@@ -7,5 +7,4 @@ abstract class JobProfileRepository {
   Future<Either<Failure, int>>? deleteJobProfile(JobProfile post);
   Future<Either<Failure, int>>? createJobProfile(JobProfile post);
   Future<Either<Failure, int>>? updateJobProfile(JobProfile post);
-  Future<Either<Failure, List<JobProfile>>>? findJobProfiles(String searchTerm);
 }
