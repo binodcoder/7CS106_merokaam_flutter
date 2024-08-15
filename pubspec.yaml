@@ -41,6 +41,7 @@ dependencies:
   shared_preferences: ^2.2.3
   flare_flutter: ^3.0.2
   fluttertoast: ^8.0.9
+  dartz: ^0.10.0
 
 dev_dependencies:
   flutter_test:
