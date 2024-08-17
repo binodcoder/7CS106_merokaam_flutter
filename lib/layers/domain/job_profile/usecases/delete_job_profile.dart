@@ -5,12 +5,12 @@ import '../../../../core/errors/failures.dart';
 import '../repositories/job_profile_repositories.dart';
 
 class DeleteJobProfile implements UseCase<int, JobProfile> {
-  JobProfileRepository postRepository;
+  JobProfileRepository jobProfileRepository;
 
-  DeleteJobProfile(this.postRepository);
+  DeleteJobProfile(this.jobProfileRepository);
 
   @override
   Future<Either<Failure, int>?> call(JobProfile jobProfile) async {
-    return await postRepository.deleteJobProfile(jobProfile);
+    return await jobProfileRepository.deleteJobProfile(jobProfile);
   }
 }

@@ -4,7 +4,7 @@ import 'package:merokaam/core/models/job_profile_model.dart';
 
 import '../../../../core/errors/exceptions.dart';
 
-abstract class JobProfileRemoteDataSources {
+abstract class JobProfileRemoteDataSource {
   Future<List<JobProfileModel>> readJobProfile();
 
   Future<int> deleteJobProfile(int userAccountId);
@@ -14,10 +14,10 @@ abstract class JobProfileRemoteDataSources {
   Future<int> updateJobProfile(JobProfileModel postModel);
 }
 
-class JobProfileRemoteDataSourcesImpl implements JobProfileRemoteDataSources {
+class JobProfileRemoteDataSourceImpl implements JobProfileRemoteDataSource {
   final http.Client client;
 
-  JobProfileRemoteDataSourcesImpl({required this.client});
+  JobProfileRemoteDataSourceImpl({required this.client});
 
   Future<int> _createJobProfile(String url, JobProfileModel jobProfileModel) async {
     final response = await client.post(

@@ -24,6 +24,4 @@ class JobProfile {
     required this.profilePhoto,
     required this.photosImagePath,
   });
-
-
 }

@@ -1,6 +1,9 @@
 const String imagePath = "assets/images";
 
 class ImageAssets {
+  static const String logo = "$imagePath/logo.png";
+  static const String drawerHeaderLogo = "$imagePath/image.jpg";
+  static const String appIcon = "$imagePath/appicon.png";
   static const String background = "$imagePath/image.jpg";
   static const String splashLogo = "$imagePath/R.png";
   static const String onBoardingLogo1 = "$imagePath/pic1.png";

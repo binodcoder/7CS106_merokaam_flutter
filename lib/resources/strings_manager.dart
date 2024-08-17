@@ -1,5 +1,11 @@
 class AppStrings {
+  static const String jobProfileDetails = "JobProfileDetails";
+  static const String login = "Login";
+  static const String logOut = "Log out";
+  static const String aboutUs = "About Us";
+  static const String softwareCompany = "BinodSoft";
   static const String noRouteFound = "No Route Found";
+  static const String required = '*Required';
   static const String titleLabel = "Fitness App";
   static const String titleRoutineLabel = "Routines";
   static const String titleWalkLabel = "Purposed Walks";
@@ -7,6 +13,12 @@ class AppStrings {
   static const String titleWalkMediaLabel = "Walk Media";
   static const String titleLiveTrainingLabel = "Live Trainings";
   static const String title = "Title";
+  static const String areYouSure = "Are you sure?";
+  static const String yes = "Yes";
+  static const String no = "No";
+
+  static const String addJobProfile = "Add Job Profile";
+  static const String updateJobProfile = "Update Job Profile";
   static const String content = "Content";
   static const String imageURL = "Image URL";
   static const String register = "Register";

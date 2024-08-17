@@ -6,13 +6,13 @@ import 'package:dartz/dartz.dart';
 
 import '../repositories/job_profile_repositories.dart';
 
-class CreatePost implements UseCase<int, JobProfile> {
-  final JobProfileRepository postRepository;
+class CreateJobProfile implements UseCase<int, JobProfile> {
+  final JobProfileRepository jobProfileRepository;
 
-  CreatePost(this.postRepository);
+  CreateJobProfile(this.jobProfileRepository);
 
   @override
   Future<Either<Failure, int>?> call(JobProfile jobProfile) async {
-    return await postRepository.createJobProfile(jobProfile);
+    return await jobProfileRepository.createJobProfile(jobProfile);
   }
 }

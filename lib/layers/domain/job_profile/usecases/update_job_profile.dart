@@ -4,13 +4,13 @@ import '../../../../core/errors/failures.dart';
 import '../../../../core/usecases/usecase.dart';
 import '../repositories/job_profile_repositories.dart';
 
-class UpdatePost implements UseCase<int, JobProfile> {
-  JobProfileRepository postRepository;
+class UpdateJobProfile implements UseCase<int, JobProfile> {
+  JobProfileRepository jobProfileRepository;
 
-  UpdatePost(this.postRepository);
+  UpdateJobProfile(this.jobProfileRepository);
 
   @override
   Future<Either<Failure, int>?> call(JobProfile jobProfile) async {
-    return await postRepository.updateJobProfile(jobProfile);
+    return await jobProfileRepository.updateJobProfile(jobProfile);
   }
 }

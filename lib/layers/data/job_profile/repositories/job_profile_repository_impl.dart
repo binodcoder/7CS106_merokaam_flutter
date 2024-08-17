@@ -7,7 +7,7 @@ import '../../../../core/errors/failures.dart';
 import '../../../domain/job_profile/repositories/job_profile_repositories.dart';
 
 class JobProfileRepositoryImpl implements JobProfileRepository {
-  final JobProfileRemoteDataSources jobProfileRemoteDataSources;
+  final JobProfileRemoteDataSource jobProfileRemoteDataSources;
 
   JobProfileRepositoryImpl({
     required this.jobProfileRemoteDataSources,

@@ -6,13 +6,13 @@ import 'package:dartz/dartz.dart';
 
 import '../repositories/job_profile_repositories.dart';
 
-class ReadPosts implements UseCase<List<JobProfile>, NoParams> {
-  final JobProfileRepository repository;
+class ReadJobProfile implements UseCase<List<JobProfile>, NoParams> {
+  final JobProfileRepository jobProfileRepository;
 
-  ReadPosts(this.repository);
+  ReadJobProfile(this.jobProfileRepository);
 
   @override
   Future<Either<Failure, List<JobProfile>>?> call(NoParams noParams) async {
-    return await repository.readJobProfiles();
+    return await jobProfileRepository.readJobProfiles();
   }
 }
