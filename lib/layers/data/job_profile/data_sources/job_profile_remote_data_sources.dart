@@ -1,6 +1,7 @@
 import 'package:http/http.dart' as http;
 
 import 'package:merokaam/core/models/job_profile_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/errors/exceptions.dart';
 
@@ -16,8 +17,9 @@ abstract class JobProfileRemoteDataSource {
 
 class JobProfileRemoteDataSourceImpl implements JobProfileRemoteDataSource {
   final http.Client client;
+  final SharedPreferences sharedPreferences;
 
-  JobProfileRemoteDataSourceImpl({required this.client});
+  JobProfileRemoteDataSourceImpl({required this.client, required this.sharedPreferences});
 
   Future<int> _createJobProfile(String url, JobProfileModel jobProfileModel) async {
     final response = await client.post(
@@ -33,7 +35,13 @@ class JobProfileRemoteDataSourceImpl implements JobProfileRemoteDataSource {
   }
 
   Future<List<JobProfileModel>> _readJobProfile(String url) async {
-    final response = await client.get(Uri.parse(url), headers: {'Content-Type': 'application/json'});
+    final response = await client.get(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': sharedPreferences.getString("jwt_token")!.split(';').first,
+      },
+    );
     if (response.statusCode == 200) {
       return jobProfileModelsFromMap(response.body);
     } else {
@@ -70,7 +78,7 @@ class JobProfileRemoteDataSourceImpl implements JobProfileRemoteDataSource {
   Future<int> createJobProfile(JobProfileModel jobProfileModel) => _createJobProfile("", jobProfileModel);
 
   @override
-  Future<List<JobProfileModel>> readJobProfile() => _readJobProfile("");
+  Future<List<JobProfileModel>> readJobProfile() => _readJobProfile("http://192.168.1.180:8080/api/job-profile/profile");
 
   @override
   Future<int> updateJobProfile(JobProfileModel jobProfileModel) => _updateJobProfile("", jobProfileModel);

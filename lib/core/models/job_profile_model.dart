@@ -36,16 +36,16 @@ class JobProfileModel extends JobProfile {
   factory JobProfileModel.fromMap(Map<String, dynamic> map) {
     return JobProfileModel(
       userAccountId: map['userAccountId'],
-      firstName: map['firstName'],
-      lastName: map['lastName'],
-      city: map['city'],
-      state: map['state'],
-      country: map['country'],
-      workAuthorization: map['workAuthorization'],
-      employmentType: map['employmentType'],
-      resume: map['resume'],
-      profilePhoto: map['profilePhoto'],
-      photosImagePath: map['photosImagePath'],
+      firstName: map['firstName'] ?? "",
+      lastName: map['lastName'] ?? "",
+      city: map['city'] ?? "",
+      state: map['state'] ?? "",
+      country: map['country'] ?? "",
+      workAuthorization: map['workAuthorization'] ?? "",
+      employmentType: map['employmentType'] ?? "",
+      resume: map['resume'] ?? "",
+      profilePhoto: map['profilePhoto'] ?? "",
+      photosImagePath: map['photosImagePath'] ?? "",
     );
   }
 }

@@ -50,6 +50,7 @@ Future<void> init() async {
   );
   sl.registerLazySingleton<JobProfileRemoteDataSource>(() => JobProfileRemoteDataSourceImpl(
         client: sl(),
+        sharedPreferences: sl(),
       ));
 
   //login

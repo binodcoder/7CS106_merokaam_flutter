@@ -212,7 +212,7 @@ class _ReadJobProfilePageState extends State<ReadJobProfilePage> {
                                   height: size.height * 0.01,
                                 ),
                                 Text(
-                                  jobProfileModel.firstName,
+                                  jobProfileModel.lastName,
                                   style: TextStyle(
                                     fontSize: FontSize.s14,
                                     color: ColorManager.black,

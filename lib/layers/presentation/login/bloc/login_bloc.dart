@@ -4,12 +4,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:merokaam/core/entities/user_info_response.dart';
 import 'package:merokaam/layers/presentation/login/bloc/login_event.dart';
 import 'package:merokaam/layers/presentation/login/bloc/login_state.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/mappers/map_failure_to_message.dart';
+import '../../../../injection_container.dart';
 import '../../../domain/login/usecases/login.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final Login login;
+  final SharedPreferences sharedPreferences = sl<SharedPreferences>();
 
   LoginBloc({required this.login}) : super(LoginInitialState()) {
     on<LoginInitialEvent>(loginInitialEvent);
@@ -31,5 +34,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     });
   }
 
-  saveUserData(UserInfoResponse userInfoResponse) {}
+  saveUserData(UserInfoResponse userInfoResponse) {
+    sharedPreferences.setString('jwt_token', userInfoResponse.jwtToken);
+  }
 }
