@@ -1,11 +1,17 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:merokaam/core/entities/user_info_response.dart';
 import 'package:merokaam/layers/presentation/login/bloc/login_event.dart';
 import 'package:merokaam/layers/presentation/login/bloc/login_state.dart';
 
+import '../../../../core/mappers/map_failure_to_message.dart';
+import '../../../domain/login/usecases/login.dart';
+
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginBloc() : super(LoginInitialState()) {
+  final Login login;
+
+  LoginBloc({required this.login}) : super(LoginInitialState()) {
     on<LoginInitialEvent>(loginInitialEvent);
     on<LoginButtonPressEvent>(loginButtonPressEvent);
   }
@@ -16,7 +22,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   FutureOr<void> loginButtonPressEvent(LoginButtonPressEvent event, Emitter<LoginState> emit) async {
     emit(LoginLoadingState());
+    final result = await login(event.loginModel);
+    result!.fold((failure) {
+      emit(LoginErrorState(message: mapFailureToMessage(failure)));
+    }, (result) {
+      emit(LoggedState());
+      saveUserData(result);
+    });
   }
 
-  saveUserData() {}
+  saveUserData(UserInfoResponse userInfoResponse) {}
 }

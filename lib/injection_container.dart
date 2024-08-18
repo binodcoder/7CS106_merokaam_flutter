@@ -1,4 +1,5 @@
 import 'package:get_it/get_it.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'layers/data/job_profile/data_sources/job_profile_remote_data_sources.dart';
@@ -15,6 +16,7 @@ import 'layers/domain/login/usecases/login.dart';
 import 'layers/presentation/JobProfile/add_update_job_profile/bloc/create_job_profile_bloc.dart';
 import 'layers/presentation/JobProfile/read_job_profile/bloc/read_job_profile_bloc.dart';
 import 'layers/presentation/login/bloc/login_bloc.dart';
+import 'package:http/http.dart' as http;
 
 /*
 It is a powerful dependency injection framework that enables registration and retrieval of dependencies,
@@ -51,7 +53,7 @@ Future<void> init() async {
       ));
 
   //login
-  sl.registerFactory(() => LoginBloc());
+  sl.registerFactory(() => LoginBloc(login: sl()));
 
   sl.registerLazySingleton(() => Login(sl()));
   sl.registerLazySingleton<LoginRepository>(
@@ -63,4 +65,6 @@ Future<void> init() async {
   //! External
   final sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton(() => sharedPreferences);
+  sl.registerLazySingleton(() => http.Client());
+  sl.registerLazySingleton(() => InternetConnectionChecker());
 }

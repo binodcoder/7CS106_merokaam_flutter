@@ -1,10 +1,11 @@
 import 'package:http/http.dart' as http;
 import '../../../../core/entities/login.dart';
+import '../../../../core/entities/user_info_response.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/models/user_model.dart';
 
 abstract class LoginRemoteDataSource {
-  Future<UserModel> login(LoginModel loginModel);
+  Future<UserInfoResponse> login(LoginModel loginModel);
 }
 
 class LoginRemoteDataSourceImpl implements LoginRemoteDataSource {
@@ -12,21 +13,19 @@ class LoginRemoteDataSourceImpl implements LoginRemoteDataSource {
 
   LoginRemoteDataSourceImpl({required this.client});
 
-  Future<UserModel> _login(String url, LoginModel loginModel) async {
+  Future<UserInfoResponse> _login(String url, LoginModel loginModel) async {
     final response = await client.post(
       Uri.parse(url),
       headers: {'Content-Type': 'application/json'},
-      body: loginModelToJson(
-        loginModel,
-      ),
+      body: loginModelToJson(loginModel),
     );
     if (response.statusCode == 200) {
-      return userModelFromJson(response.body);
+      return userInfoResponseFromJson(response.body);
     } else {
       throw LoginException();
     }
   }
 
   @override
-  Future<UserModel> login(LoginModel loginModel) => _login(" ", loginModel);
+  Future<UserInfoResponse> login(LoginModel loginModel) => _login("http://192.168.1.180:8080/api/auth/signin", loginModel);
 }

@@ -3,13 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import '../../../../core/entities/login.dart';
+import '../../../../injection_container.dart';
 import '../../../../resources/colour_manager.dart';
 import '../../../../resources/font_manager.dart';
 import '../../../../resources/styles_manager.dart';
 import '../../../../resources/values_manager.dart';
+import '../../JobProfile/read_job_profile/ui/read_job_profile_page.dart';
 import '../../register/ui/register_page.dart';
 import '../bloc/login_bloc.dart';
 
+import '../bloc/login_event.dart';
 import '../bloc/login_state.dart';
 import '../widgets/bear_log_in_controller.dart';
 import '../widgets/sign_in_button.dart';
@@ -37,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
     bearLogInController = BearLogInController();
   }
 
-  // final LoginBloc loginBloc = sl<LoginBloc>();
+  final LoginBloc loginBloc = sl<LoginBloc>();
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +50,7 @@ class _LoginPageState extends State<LoginPage> {
     EdgeInsets devicePadding = MediaQuery.of(context).padding;
 
     return BlocConsumer<LoginBloc, LoginState>(
-      // bloc: loginBloc,
+      bloc: loginBloc,
       listenWhen: (previous, current) => current is LoginActionState,
       buildWhen: (previous, current) => current is! LoginActionState,
       listener: (context, state) {
@@ -60,11 +64,12 @@ class _LoginPageState extends State<LoginPage> {
         } else if (state is LoggedState) {
           userNameController.clear();
           passwordController.clear();
-          // Navigator.of(context).pushReplacement(
-          // MaterialPageRoute(
-          //   builder: (context) => const RoutinePage(),
-          // ),
-          // );
+
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) => const ReadJobProfilePage(),
+            ),
+          );
         } else if (state is LoginErrorState) {
           Navigator.pop(context);
           Fluttertoast.showToast(
@@ -113,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                           children: <Widget>[
                             Center(
                               child: Text(
-                                "Fitness App",
+                                "Merokaam",
                                 style: getBoldStyle(
                                   fontSize: FontSize.s30,
                                   color: ColorManager.white,
@@ -235,7 +240,7 @@ class _LoginPageState extends State<LoginPage> {
                                             ),
                                           ),
                                           onPressed: () {
-                                            //  _onLogin(loginBloc);
+                                            _onLogin(loginBloc);
                                           },
                                         ),
                                         SizedBox(
@@ -277,13 +282,13 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _onLogin(LoginBloc loginBloc) async {
-    // if (formKey.currentState!.validate()) {
-    //   LoginModel loginModel = LoginModel(
-    //     email: userNameController.text,
-    //     password: passwordController.text,
-    //   );
-    //   loginBloc.add(LoginButtonPressEvent(loginModel));
-    // }
+    if (formKey.currentState!.validate()) {
+      LoginModel loginModel = LoginModel(
+        email: userNameController.text,
+        password: passwordController.text,
+      );
+      loginBloc.add(LoginButtonPressEvent(loginModel));
+    }
   }
 
   Future<bool> showExitPopup() async {
