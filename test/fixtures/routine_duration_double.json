@@ -1,0 +1,9 @@
+{
+  "id": 37,
+  "name": "string",
+  "description": "This is for random",
+  "difficulty": "easy",
+  "duration": 10.0,
+  "source": "pre_loaded",
+  "exercises": []
+}

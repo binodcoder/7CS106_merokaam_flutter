@@ -43,17 +43,12 @@ class _JobProfileDetailsPageState extends State<JobProfileDetailsPage> {
           },
           icon: Icon(
             Icons.arrow_back,
-            color: ColorManager.primary,
           ),
         ),
         backgroundColor: ColorManager.white,
         elevation: 2,
-        title: Text(
+        title: const Text(
           AppStrings.jobProfileDetails,
-          style: TextStyle(
-            color: ColorManager.primary,
-            fontWeight: FontWeight.bold,
-          ),
         ),
         centerTitle: true,
       ),
@@ -111,16 +106,6 @@ class _JobProfileDetailsPageState extends State<JobProfileDetailsPage> {
                       SizedBox(
                         height: size.height * 0.01,
                       ),
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: Text(
-                          widget.jobProfile!.lastName!,
-                          style: TextStyle(
-                            fontSize: FontSize.s12,
-                            color: ColorManager.blue,
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                   isThreeLine: true,
@@ -128,7 +113,6 @@ class _JobProfileDetailsPageState extends State<JobProfileDetailsPage> {
                 SizedBox(
                   height: size.height * 0.01,
                 ),
-                const Align(alignment: Alignment.bottomRight, child: Text("....")),
               ],
             ),
           ),

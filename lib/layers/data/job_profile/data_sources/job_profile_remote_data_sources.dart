@@ -1,8 +1,6 @@
 import 'package:http/http.dart' as http;
-
 import 'package:merokaam/core/models/job_profile_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../../core/errors/exceptions.dart';
 
 abstract class JobProfileRemoteDataSource {
@@ -25,7 +23,7 @@ class JobProfileRemoteDataSourceImpl implements JobProfileRemoteDataSource {
     final response = await client.post(
       Uri.parse(url),
       headers: {'Content-Type': 'application/json'},
-      body: jobProfileModel.toMap(),
+      body: jobProfileModel.toJson(),
     );
     if (response.statusCode == 201) {
       return 1;
@@ -53,7 +51,7 @@ class JobProfileRemoteDataSourceImpl implements JobProfileRemoteDataSource {
     final response = await client.put(
       Uri.parse(url),
       headers: {'Content-Type': 'application/json'},
-      body: jobProfileModel.toMap(),
+      body: jobProfileModel.toJson(),
     );
     if (response.statusCode == 200) {
       return 1;

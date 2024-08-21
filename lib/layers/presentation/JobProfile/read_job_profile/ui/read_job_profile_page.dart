@@ -98,28 +98,8 @@ class _ReadJobProfilePageState extends State<ReadJobProfilePage> {
                     )
                   : null,
               appBar: AppBar(
-                  title: Container(
-                padding: EdgeInsets.symmetric(horizontal: size.width * 0.04),
-                width: size.width,
-                height: size.height * 0.054,
-                decoration: BoxDecoration(
-                  border: Border.all(color: ColorManager.primary),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: TextField(
-                  autofocus: true,
-                  controller: searchMenuController,
-                  style: getBoldStyle(color: ColorManager.primary),
-                  decoration: InputDecoration(
-                    focusedBorder: InputBorder.none,
-                    fillColor: ColorManager.primary,
-                    hintText: AppStrings.title,
-                    focusColor: ColorManager.primary,
-                    hintStyle: getRegularStyle(color: ColorManager.primary),
-                  ),
-                  onChanged: (value) => jobProfileBloc.add(JobProfileAddButtonClickedEvent()),
-                ),
-              )),
+                title: Text("Merokaam"),
+              ),
               body: Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(

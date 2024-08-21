@@ -1,7 +1,7 @@
 import 'package:merokaam/core/entities/job_profile.dart';
 import 'dart:convert';
 
-List<JobProfileModel> jobProfileModelsFromMap(String str) => List<JobProfileModel>.from(json.decode(str).map((x) => JobProfileModel.fromMap(x)));
+List<JobProfileModel> jobProfileModelsFromMap(String str) => List<JobProfileModel>.from(json.decode(str).map((x) => JobProfileModel.fromJson(x)));
 
 class JobProfileModel extends JobProfile {
   JobProfileModel(
@@ -17,7 +17,7 @@ class JobProfileModel extends JobProfile {
       required super.profilePhoto,
       required super.photosImagePath});
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'userAccountId': userAccountId,
       'firstName': firstName,
@@ -33,7 +33,7 @@ class JobProfileModel extends JobProfile {
     };
   }
 
-  factory JobProfileModel.fromMap(Map<String, dynamic> map) {
+  factory JobProfileModel.fromJson(Map<String, dynamic> map) {
     return JobProfileModel(
       userAccountId: map['userAccountId'],
       firstName: map['firstName'] ?? "",
