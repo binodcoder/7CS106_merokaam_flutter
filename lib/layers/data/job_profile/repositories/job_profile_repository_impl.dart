@@ -53,7 +53,7 @@ class JobProfileRepositoryImpl implements JobProfileRepository {
       }
     } else {
       try {
-        List<JobProfile> jobProfiles = await jobProfilesLocalDataSource.getLastJobProfiles();
+        List<JobProfile> jobProfiles = await jobProfilesLocalDataSource.readLastJobProfiles();
         return Right(jobProfiles);
       } on CacheException {
         return Left(CacheFailure());
