@@ -16,14 +16,13 @@ import '../../../../domain/job_profile/usecases/update_job_profile.dart';
 
 class ReadJobProfileBloc extends Bloc<ReadJobProfileEvent, ReadJobProfileState> {
   final ReadJobProfile getJobProfiles;
-  final UpdateJobProfile updateJobProfile;
+
   final DeleteJobProfile deleteJobProfile;
 
   ReadJobProfileState get initialState => JobProfileInitialState();
 
   ReadJobProfileBloc({
     required this.getJobProfiles,
-    required this.updateJobProfile,
     required this.deleteJobProfile,
   }) : super(JobProfileInitialState()) {
     on<JobProfileInitialEvent>(jobProfileInitialEvent);
