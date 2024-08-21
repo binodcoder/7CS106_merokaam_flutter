@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'core/db/db_helper.dart';
 import 'layers/data/job_profile/data_sources/job_profile_remote_data_sources.dart';
 import 'layers/data/job_profile/repositories/job_profile_repository_impl.dart';
 import 'layers/data/login/datasources/login_remote_data_source.dart';
@@ -45,6 +46,8 @@ Future<void> init() async {
   sl.registerLazySingleton<JobProfileRepository>(
     () => JobProfileRepositoryImpl(
       jobProfileRemoteDataSources: sl(),
+      jobProfilesLocalDataSource: sl(),
+      networkInfo: sl(),
     ),
   );
   sl.registerLazySingleton<JobProfileRemoteDataSource>(() => JobProfileRemoteDataSourceImpl(
@@ -64,6 +67,8 @@ Future<void> init() async {
 
   //! External
   final sharedPreferences = await SharedPreferences.getInstance();
+  final dbHelper = DatabaseHelper();
+  sl.registerLazySingleton(() => dbHelper);
   sl.registerLazySingleton(() => sharedPreferences);
   sl.registerLazySingleton(() => http.Client());
   sl.registerLazySingleton(() => InternetConnectionChecker());

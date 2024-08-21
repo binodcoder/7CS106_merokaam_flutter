@@ -1,16 +1,9 @@
 import 'package:dartz/dartz.dart';
-import 'package:fitness_app/core/errors/exceptions.dart';
-import 'package:fitness_app/core/errors/failures.dart';
-import 'package:fitness_app/core/model/routine_model.dart';
-import 'package:fitness_app/core/network/network_info.dart';
-import 'package:fitness_app/layers/data/routine/data_sources/routines_local_data_source.dart';
-import 'package:fitness_app/layers/data/routine/data_sources/routines_remote_data_source.dart';
-import 'package:fitness_app/layers/data/routine/repositories/routine_repository_impl.dart';
+import 'package:merokaam/core/network/network_info.dart';
+
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'routine_repositories_impl_test.mock.dart';
 
 class MockRoutinesLocalDataSource extends Mock implements RoutinesLocalDataSource {}
 
