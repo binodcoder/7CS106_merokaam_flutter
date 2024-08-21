@@ -1,13 +1,13 @@
 import 'dart:convert';
-import 'package:fitness_app/core/db/db_helper.dart';
-import 'package:fitness_app/core/errors/exceptions.dart';
-import 'package:fitness_app/core/model/routine_model.dart';
-import 'package:fitness_app/layers/data/routine/data_sources/routines_local_data_source.dart';
+import 'package:merokaam/core/db/db_helper.dart';
+import 'package:merokaam/core/errors/exceptions.dart';
+import 'package:merokaam/core/models/job_profile_model.dart';
+import 'package:merokaam/layers/data/job_profile/data_sources/job_profile_local_data_source.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 import '../../../../fixtures/fixture_reader.dart';
-import 'routines_local_data_source_test.mocks.dart';
+import 'job_profile_local_data_source_test.mocks.dart';
 
 @GenerateMocks([
   DatabaseHelper
@@ -15,52 +15,57 @@ import 'routines_local_data_source_test.mocks.dart';
   MockSpec<DatabaseHelper>(as: #MockDatabaseHelperForTest, onMissingStub: OnMissingStub.returnDefault),
 ])
 void main() {
-  late RoutinesLocalDataSourceImpl dataSource;
+  late JobProfilesLocalDataSourceImpl dataSource;
   late MockDatabaseHelper mockDatabaseHelper;
 
   setUp(() {
     mockDatabaseHelper = MockDatabaseHelper();
-    dataSource = RoutinesLocalDataSourceImpl(mockDatabaseHelper);
+    dataSource = JobProfilesLocalDataSourceImpl(mockDatabaseHelper);
   });
 
-  group('getLastRoutine', () {
-    final tRoutineModel = RoutineModel.fromJson(json.decode(fixture('routine_cached.json')));
-    // const tRoutineModel = null;
-    test('should return routine from Local db when there is one in the cache', () async {
+  group('getLastJobProfile', () {
+    final tJobProfileModel = JobProfileModel.fromJson(json.decode(fixture('JobProfile_cached.json')));
+    // const tJobProfileModel = null;
+    test('should return JobProfile from Local db when there is one in the cache', () async {
       //arrange
-      when(await mockDatabaseHelper.getRoutines()).thenReturn([tRoutineModel]);
+      when(await mockDatabaseHelper.readJobProfiles()).thenReturn([tJobProfileModel]);
       //act
-      final result = await dataSource.getLastRoutines();
+      final result = await dataSource.readLastJobProfiles();
       //assert
-      verify(mockDatabaseHelper.getRoutines());
-      expect(result, equals(tRoutineModel));
+      verify(mockDatabaseHelper.readJobProfiles());
+      expect(result, equals(tJobProfileModel));
     });
 
     test('should throw a CacheException when there is not a cached value', () async {
       //arrange
-      when(await mockDatabaseHelper.getRoutines()).thenReturn([tRoutineModel]);
+      when(await mockDatabaseHelper.readJobProfiles()).thenReturn([tJobProfileModel]);
       //act
-      final call = dataSource.getLastRoutines;
+      final call = dataSource.readLastJobProfiles;
       //assert
       expect(() => call(), throwsA(const TypeMatcher<CacheException>()));
     });
   });
 
-  group('cacheRoutineModel', () {
-    final tRoutineModel = RoutineModel(
-      id: 37,
-      name: 'string',
-      description: 'This is for random',
-      difficulty: 'easy',
-      duration: 10,
-      source: 'pre_loaded',
+  group('cacheJobProfileModel', () {
+    final tJobProfileModel = JobProfileModel(
+      userAccountId: 0,
+      firstName: '',
+      lastName: '',
+      city: '',
+      state: '',
+      country: '',
+      workAuthorization: '',
+      employmentType: '',
+      resume: '',
+      profilePhoto: '',
+      photosImagePath: '',
     );
     test('should call local db to cache the data', () async {
       //act
-      dataSource.cacheRoutine(tRoutineModel);
+      dataSource.cacheJobProfile(tJobProfileModel);
       //assert
-      //final expectedJsonString = json.encode(tRoutineModel.toJson());
-      verify(mockDatabaseHelper.insertRoutine(tRoutineModel));
+      //final expectedJsonString = json.encode(tJobProfileModel.toJson());
+      verify(mockDatabaseHelper.insertJobProfile(tJobProfileModel));
     });
   });
 }

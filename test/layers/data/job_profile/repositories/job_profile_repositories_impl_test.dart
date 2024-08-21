@@ -1,31 +1,39 @@
 import 'package:dartz/dartz.dart';
+import 'package:merokaam/core/errors/exceptions.dart';
+import 'package:merokaam/core/errors/failures.dart';
+import 'package:merokaam/core/models/job_profile_model.dart';
 import 'package:merokaam/core/network/network_info.dart';
+import 'package:merokaam/layers/data/job_profile/data_sources/job_profile_local_data_source.dart';
+import 'package:merokaam/layers/data/job_profile/data_sources/job_profile_remote_data_sources.dart';
+import 'package:merokaam/layers/data/job_profile/repositories/job_profile_repository_impl.dart';
 
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class MockRoutinesLocalDataSource extends Mock implements RoutinesLocalDataSource {}
+import 'job_profile_repositories_impl_test.mock.dart';
+
+class MockJobProfileLocalDataSource extends Mock implements JobProfilesLocalDataSource {}
 
 @GenerateMocks([NetworkInfo])
 @GenerateMocks([
-  RoutineRemoteDataSource
+  JobProfileRemoteDataSource
 ], customMocks: [
-  MockSpec<RoutineRemoteDataSource>(as: #MockRoutinesRemoteDataSourceForTest, onMissingStub: OnMissingStub.returnDefault),
+  MockSpec<JobProfileRemoteDataSource>(as: #MockJobProfileRemoteDataSourceForTest, onMissingStub: OnMissingStub.returnDefault),
 ])
 void main() {
-  late RoutineRepositoryImpl repository;
-  late MockRoutinesRemoteDataSource mockRemoteDataSource;
-  late MockRoutinesLocalDataSource mockLocalDataSource;
+  late JobProfileRepositoryImpl repository;
+  late MockJobProfilesRemoteDataSource mockRemoteDataSource;
+  late MockJobProfileLocalDataSource mockLocalDataSource;
   late MockNetworkInfo mockNetworkInfo;
 
   setUp(() {
-    mockRemoteDataSource = MockRoutinesRemoteDataSource();
-    mockLocalDataSource = MockRoutinesLocalDataSource();
+    mockRemoteDataSource = MockJobProfilesRemoteDataSource();
+    mockLocalDataSource = MockJobProfileLocalDataSource();
     mockNetworkInfo = MockNetworkInfo();
-    repository = RoutineRepositoryImpl(
-      routineRemoteDataSource: mockRemoteDataSource,
-      routineLocalDataSource: mockLocalDataSource,
+    repository = JobProfileRepositoryImpl(
+      jobProfileRemoteDataSources: mockRemoteDataSource,
+      jobProfilesLocalDataSource: mockLocalDataSource,
       networkInfo: mockNetworkInfo,
     );
   });
@@ -39,16 +47,20 @@ void main() {
     });
   }
 
-  group('getRoutines', () {
-    final tRoutineModel = [
-      RoutineModel(
-        id: 37,
-        name: 'string',
-        description: 'This is for random',
-        difficulty: 'easy',
-        duration: 10,
-        source: 'pre_loaded',
-        exercises: [],
+  group('readJobProfile', () {
+    final tJobProfileModel = [
+      JobProfileModel(
+        userAccountId: 0,
+        firstName: '',
+        lastName: '',
+        city: '',
+        state: '',
+        country: '',
+        workAuthorization: '',
+        employmentType: '',
+        resume: '',
+        profilePhoto: '',
+        photosImagePath: '',
       )
     ];
 
@@ -56,7 +68,7 @@ void main() {
       //arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
       //act
-      repository.getRoutines();
+      repository.readJobProfiles();
       //assert
       verify(mockNetworkInfo.isConnected);
     });
@@ -64,29 +76,29 @@ void main() {
     runTestsOnline(() {
       test('should return remote data when the call to remote data source is successful', () async {
         //arrange
-        when(mockRemoteDataSource.getRoutines()).thenAnswer((_) async => tRoutineModel);
+        when(mockRemoteDataSource.readJobProfile()).thenAnswer((_) async => tJobProfileModel);
         //act
-        final result = await repository.getRoutines();
+        final result = await repository.readJobProfiles();
         //assert
-        verify(mockRemoteDataSource.getRoutines());
-        expect(result, equals(Right(tRoutineModel)));
+        verify(mockRemoteDataSource.readJobProfile());
+        expect(result, equals(Right(tJobProfileModel)));
       });
       test('should cache the data locally when the call to remote data source is successful', () async {
         //arrange
-        when(mockRemoteDataSource.getRoutines()).thenAnswer((_) async => tRoutineModel);
+        when(mockRemoteDataSource.readJobProfile()).thenAnswer((_) async => tJobProfileModel);
         //act
-        await repository.getRoutines();
+        await repository.readJobProfiles();
         //assert
-        verify(mockRemoteDataSource.getRoutines());
+        verify(mockRemoteDataSource.readJobProfile());
         // verify(mockLocalDataSource.cacheNumberTrivia(tNumberTriviaModel));
       });
       test('should return serverfailure when the call to remote data source is successful', () async {
         //arrange
-        when(mockRemoteDataSource.getRoutines()).thenThrow(ServerException());
+        when(mockRemoteDataSource.readJobProfile()).thenThrow(ServerException());
         //act
-        final result = await repository.getRoutines();
+        final result = await repository.readJobProfiles();
         //assert
-        verify(mockRemoteDataSource.getRoutines());
+        verify(mockRemoteDataSource.readJobProfile());
         verifyZeroInteractions(mockLocalDataSource);
         expect(result, equals(Left(ServerFailure())));
       });

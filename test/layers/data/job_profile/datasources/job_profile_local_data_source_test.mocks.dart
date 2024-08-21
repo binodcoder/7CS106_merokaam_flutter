@@ -2,8 +2,8 @@
 // in fitness_app/test/layers/data/datasources/routines_local_data_soucre_test.dart.
 // Do not manually edit this file.
 
+import 'package:merokaam/core/db/db_helper.dart' as i2;
 import 'package:mockito/mockito.dart' as i1;
-import 'package:fitness_app/core/db/db_helper.dart' as i2;
 
 // ignore_for_file: avoid_redundant_argument_values
 // ignore_for_file: avoid_setters_without_getters

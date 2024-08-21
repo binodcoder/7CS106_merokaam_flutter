@@ -46,7 +46,7 @@ class DatabaseHelper {
     return await db!.insert('JobProfile', jobProfileModel.toJson());
   }
 
-  Future<List<JobProfileModel>> getJobProfiles() async {
+  Future<List<JobProfileModel>> readJobProfiles() async {
     final db = await database;
     final List<Map<String, dynamic>> maps = await db!.query('JobProfile');
 
