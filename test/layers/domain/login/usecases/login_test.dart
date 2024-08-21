@@ -1,8 +1,9 @@
-import 'package:fitness_app/core/model/login_model.dart';
-import 'package:fitness_app/core/model/user_model.dart';
-import 'package:fitness_app/layers/domain/login/repositories/login_repositories.dart';
-import 'package:fitness_app/layers/domain/login/usecases/login.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:merokaam/core/entities/login.dart';
+import 'package:merokaam/core/entities/user_info_response.dart';
+import 'package:merokaam/core/models/user_model.dart';
+import 'package:merokaam/layers/domain/login/repositories/login_repositories.dart';
+import 'package:merokaam/layers/domain/login/usecases/login.dart';
 import 'package:mockito/mockito.dart';
 import 'package:dartz/dartz.dart';
 
@@ -16,14 +17,11 @@ void main() {
     usecase = Login(mockLoginRepository);
   });
 
-  UserModel tUser = UserModel(
-    email: "",
-    name: " ",
-    password: " ",
-    age: 0,
-    gender: '',
-    institutionEmail: '',
-    role: '',
+  UserInfoResponse tUser = UserInfoResponse(
+    id: 0,
+    jwtToken: '',
+    username: '',
+    userTypeName: '',
   );
   LoginModel tLoginModel = LoginModel(email: "", password: "");
   test(
