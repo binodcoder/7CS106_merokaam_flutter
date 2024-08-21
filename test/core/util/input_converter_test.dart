@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:fitness_app/core/util/input_converter.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:merokaam/core/util/input_converter.dart';
 
 void main() {
   late InputConverter inputConverter;
