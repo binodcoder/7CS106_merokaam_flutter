@@ -1,46 +1,51 @@
-import 'package:fitness_app/core/model/routine_model.dart';
-import 'package:fitness_app/core/usecases/usecase.dart';
-import 'package:fitness_app/layers/domain/routine/repositories/routine_repositories.dart';
-import 'package:fitness_app/layers/domain/routine/usecases/get_routines.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:merokaam/core/models/job_profile_model.dart';
+import 'package:merokaam/core/usecases/usecase.dart';
+import 'package:merokaam/layers/domain/job_profile/repositories/job_profile_repositories.dart';
+import 'package:merokaam/layers/domain/job_profile/usecases/read_job_profile.dart';
 import 'package:mockito/mockito.dart';
 import 'package:dartz/dartz.dart';
 
-class MockRoutineRepository extends Mock implements RoutineRepository {}
+class MockJobProfileRepository extends Mock implements JobProfileRepository {}
 
 void main() {
-  late GetRoutines usecase;
-  late MockRoutineRepository mockRoutineRepository;
+  late ReadJobProfile usecase;
+  late MockJobProfileRepository mockJobProfileRepository;
   setUp(() {
-    mockRoutineRepository = MockRoutineRepository();
-    usecase = GetRoutines(mockRoutineRepository);
+    mockJobProfileRepository = MockJobProfileRepository();
+    usecase = ReadJobProfile(mockJobProfileRepository);
   });
 
-  List<RoutineModel> tRoutine = [
-    RoutineModel(
-      id: 1,
-      description: '',
-      difficulty: '',
-      duration: 0,
-      name: '',
-      source: '',
+  List<JobProfileModel> tJobProfile = [
+    JobProfileModel(
+      userAccountId: 0,
+      firstName: '',
+      lastName: '',
+      city: '',
+      state: '',
+      country: '',
+      workAuthorization: '',
+      employmentType: '',
+      resume: '',
+      profilePhoto: '',
+      photosImagePath: '',
     )
   ];
   test(
     'should get all blog post from the repository',
     () async {
       // "On the fly" implementation of the Repository using the Mockito package.
-      // When readPost is called with any argument, always answer with
+      // When readJobProfile is called with any argument, always answer with
       // the Right "side" of Either containing a test Post object.
-      when(mockRoutineRepository.getRoutines()).thenAnswer((_) async => Right(tRoutine));
+      when(mockJobProfileRepository.readJobProfiles()).thenAnswer((_) async => Right(tJobProfile));
       // The "act" phase of the test. Call the not-yet-existent method.
       final result = await usecase(NoParams());
       // UseCase should simply return whatever was returned from the Repository
-      expect(result, Right(tRoutine));
+      expect(result, Right(tJobProfile));
       // Verify that the method has been called on the Repository
-      verify(mockRoutineRepository.getRoutines());
+      verify(mockJobProfileRepository.readJobProfiles());
       // Only the above method should be called and nothing more.
-      verifyNoMoreInteractions(mockRoutineRepository);
+      verifyNoMoreInteractions(mockJobProfileRepository);
     },
   );
 }
