@@ -7,6 +7,26 @@ import 'package:merokaam/layers/presentation/login/widgets/sign_in_button.dart';
 void main() {
   group("Login Flow Test", () {
     IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
+    testWidgets("Should show Required Fields error message when user taps on login button without entering email id & password",
+        (WidgetTester tester) async {
+      // ARRANGE
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: LoginPage(),
+        ),
+      );
+
+      // ACT
+      Finder loginButton = find.byType(SigninButton);
+      await tester.tap(loginButton);
+      // waits for the frames to settle down
+      await tester.pumpAndSettle(const Duration(seconds: 2));
+      Finder errorText = find.text("Required Field");
+      // ASSERT
+      expect(errorText, findsNWidgets(2));
+    });
+
     testWidgets("Should show home screen when user taps on login button after entering valid email id & password", (WidgetTester tester) async {
       // ARRANGE
       await tester.pumpWidget(
