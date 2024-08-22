@@ -12,4 +12,26 @@ void main() {
     //Assert
     expect(sum, 10);
   });
+
+  test("check for two numbers subtraction", () {
+    //Arrange
+    int a = 10;
+    int b = 5;
+
+    //Act
+    int sub = subtract(a, b);
+    //Assert
+    expect(sub, 5);
+  });
+
+  test("check for two numbers multiplication", () {
+    //Arrange
+    int a = 10;
+    int b = 5;
+
+    //Act
+    int mul = multiply(a, b);
+    //Assert
+    expect(mul, 50);
+  });
 }
