@@ -34,4 +34,36 @@ void main() {
     // assert
     expect(result, null);
   });
+
+  test("validate for empty password", () {
+    // arrange
+    var password = "";
+
+    // act
+    var result = Validator.validatePassword(password);
+
+    // assert
+    expect(result, "Required Field");
+  });
+
+  test("validate for invalid password", () {
+    // arrange
+    var pass = "123";
+    // act
+    String result = Validator.validatePassword(pass);
+    // assert
+    expect(result,
+        "Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a number, and a special character.");
+  });
+
+  test("validate for valid password", () {
+    // arrange
+    var pass = "P@ssw0rd123!";
+
+    // act
+    var result = Validator.validatePassword(pass);
+
+    // assert
+    expect(result, null);
+  });
 }
