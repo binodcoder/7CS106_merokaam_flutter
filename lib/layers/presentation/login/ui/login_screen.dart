@@ -88,6 +88,7 @@ class _LoginPageState extends State<LoginPage> {
               statusBarColor: Colors.transparent,
             ),
             child: Scaffold(
+              appBar: AppBar(title: const Text("Login")),
               body: GestureDetector(
                 onTap: () {
                   FocusScope.of(context).requestFocus(FocusNode());
@@ -173,6 +174,7 @@ class _LoginPageState extends State<LoginPage> {
                                           height: AppHeight.h8,
                                         ),
                                         TrackingTextInput(
+                                          key: const ValueKey("email_id"),
                                           hint: "UserName",
                                           textEditingController: userNameController,
                                           isObscured: false,
@@ -201,6 +203,7 @@ class _LoginPageState extends State<LoginPage> {
                                           height: AppHeight.h8,
                                         ),
                                         TrackingTextInput(
+                                          key: const ValueKey("password"),
                                           hint: "Password",
                                           isObscured: !_passwordVisible,
                                           textEditingController: passwordController,
