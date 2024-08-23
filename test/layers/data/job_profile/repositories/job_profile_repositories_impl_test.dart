@@ -11,7 +11,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'job_profile_repositories_impl_test.mock.dart';
+import 'job_profile_repositories_impl_test.mocks.dart';
 
 class MockJobProfileLocalDataSource extends Mock implements JobProfilesLocalDataSource {}
 
@@ -23,12 +23,12 @@ class MockJobProfileLocalDataSource extends Mock implements JobProfilesLocalData
 ])
 void main() {
   late JobProfileRepositoryImpl repository;
-  late MockJobProfilesRemoteDataSource mockRemoteDataSource;
+  late MockJobProfileRemoteDataSource mockRemoteDataSource;
   late MockJobProfileLocalDataSource mockLocalDataSource;
   late MockNetworkInfo mockNetworkInfo;
 
   setUp(() {
-    mockRemoteDataSource = MockJobProfilesRemoteDataSource();
+    mockRemoteDataSource = MockJobProfileRemoteDataSource();
     mockLocalDataSource = MockJobProfileLocalDataSource();
     mockNetworkInfo = MockNetworkInfo();
     repository = JobProfileRepositoryImpl(

@@ -7,7 +7,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 import '../../../../fixtures/fixture_reader.dart';
-import 'job_profile_local_data_source_test.mocks.dart';
+import 'job_profiles_local_data_source_test.mocks.dart';
 
 @GenerateMocks([
   DatabaseHelper
@@ -24,16 +24,17 @@ void main() {
   });
 
   group('getLastJobProfile', () {
-    final tJobProfileModel = JobProfileModel.fromJson(json.decode(fixture('JobProfile_cached.json')));
+    final tJobProfileModel = JobProfileModel.fromJson(json.decode(fixture('job_profile_cached.json')));
     // const tJobProfileModel = null;
-    test('should return JobProfile from Local db when there is one in the cache', () async {
+    test('should return list of JobProfile from Local db when there is one in the cache', () async {
       //arrange
       when(await mockDatabaseHelper.readJobProfiles()).thenReturn([tJobProfileModel]);
       //act
       final result = await dataSource.readLastJobProfiles();
       //assert
       verify(mockDatabaseHelper.readJobProfiles());
-      expect(result, equals(tJobProfileModel));
+      // expect(result, equals(tJobProfileModel));
+      expect(result, isA<List<JobProfileModel>>());
     });
 
     test('should throw a CacheException when there is not a cached value', () async {

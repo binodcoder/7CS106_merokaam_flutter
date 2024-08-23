@@ -5,7 +5,6 @@ import 'package:merokaam/layers/presentation/login/bloc/login_bloc.dart';
 import 'package:merokaam/layers/presentation/login/ui/login_screen.dart';
 import 'package:merokaam/layers/presentation/login/widgets/sign_in_button.dart';
 import 'package:mockito/annotations.dart';
-
 import 'login_screen_test.mocks.dart';
 
 @GenerateMocks([LoginBloc])

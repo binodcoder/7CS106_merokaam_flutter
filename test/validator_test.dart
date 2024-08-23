@@ -2,6 +2,16 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:merokaam/validator.dart';
 
 void main() {
+  //Pretest
+  setUp(() => null);
+  setUpAll(() => null);
+
+  // setup is called before every test
+  // setupall is called before all the tests
+
+  // Setup -> test -> setup -> test -> setup -> test
+  // SetupAll -> test -> test -> test
+
   test("validate for empty email id", () {
     // arrange
     var email = "";
@@ -66,4 +76,11 @@ void main() {
     // assert
     expect(result, null);
   });
+
+  // Posttest
+  tearDown(() => null);
+  tearDownAll(() => null);
+
+  // test -> teardown -> test -> teardown
+  // test -> test -> test ->  teardownall
 }

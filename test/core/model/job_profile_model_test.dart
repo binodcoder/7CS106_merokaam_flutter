@@ -26,7 +26,7 @@ void main() {
   group('fromJson', () {
     test('should return a valid model', () async {
       //arrange
-      final Map<String, dynamic> jsonMap = json.decode(fixture('routine.json'));
+      final Map<String, dynamic> jsonMap = json.decode(fixture('job_profile.json'));
       //act
       final result = JobProfileModel.fromJson(jsonMap);
       //assert

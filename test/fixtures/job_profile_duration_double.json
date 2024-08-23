@@ -1,9 +1,13 @@
 {
-  "id": 37,
-  "name": "string",
-  "description": "This is for random",
-  "difficulty": "easy",
-  "duration": 10.0,
-  "source": "pre_loaded",
-  "exercises": []
+  "userAccountId": 0,
+  "firstName": "",
+  "lastName": "",
+  "city": "",
+  "state": "",
+  "country": "",
+  "workAuthorization": "",
+  "employmentType": "",
+  "resume": "",
+  "profilePhoto": "",
+  "photosImagePath": ""
 }

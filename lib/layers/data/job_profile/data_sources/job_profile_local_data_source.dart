@@ -11,15 +11,15 @@ class JobProfilesLocalDataSourceImpl implements JobProfilesLocalDataSource {
   JobProfilesLocalDataSourceImpl(this.dbHelper);
 
   @override
-  Future<List<JobProfileModel>> readLastJobProfiles() => _getJobProfilesFromLocal();
-
-  Future<List<JobProfileModel>> _getJobProfilesFromLocal() async {
-    List<JobProfileModel> jobProfileModelList = await dbHelper.readJobProfiles();
-    return jobProfileModelList;
-  }
+  Future<List<JobProfileModel>> readLastJobProfiles() => _readJobProfilesFromLocal();
 
   @override
   Future<void>? cacheJobProfile(JobProfileModel jobProfileModel) {
     return dbHelper.insertJobProfile(jobProfileModel);
+  }
+
+  Future<List<JobProfileModel>> _readJobProfilesFromLocal() async {
+    List<JobProfileModel> jobProfileModelList = await dbHelper.readJobProfiles();
+    return jobProfileModelList;
   }
 }
