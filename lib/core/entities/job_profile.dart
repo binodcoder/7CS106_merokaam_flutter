@@ -10,6 +10,7 @@ class JobProfile {
   String resume;
   String profilePhoto;
   String photosImagePath;
+  double? duration;
 
   JobProfile({
     required this.userAccountId,
@@ -23,5 +24,6 @@ class JobProfile {
     required this.resume,
     required this.profilePhoto,
     required this.photosImagePath,
+    this.duration,
   });
 }

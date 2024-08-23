@@ -16,9 +16,10 @@ void main() {
     resume: '',
     profilePhoto: '',
     photosImagePath: '',
+    duration: 1.1,
   );
 
-  test('should be a subclass of Routine model', () async {
+  test('should be a subclass of JobProfile model', () async {
     //assert
     expect(tJobProfileModel, isA<JobProfileModel>());
   });
@@ -32,13 +33,14 @@ void main() {
       //assert
       expect(result.userAccountId, equals(tJobProfileModel.userAccountId));
     });
+
     test('should return a valid model when the JSON duration is regarded as a double', () async {
       //arrange
-      final Map<String, dynamic> jsonMap = json.decode(fixture('routine_duration_double.json'));
+      final Map<String, dynamic> jsonMap = json.decode(fixture('job_profile_duration_double.json'));
       //act
       final result = JobProfileModel.fromJson(jsonMap);
       //assert
-      expect(result, equals(tJobProfileModel));
+      expect(result.duration, equals(tJobProfileModel.duration));
     });
   });
 
@@ -59,6 +61,7 @@ void main() {
         "resume": '',
         "profilePhoto": '',
         "photosImagePath": '',
+        "duration": 1.1,
       };
       expect(result, equals(expectedMap));
     });

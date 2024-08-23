@@ -4,18 +4,20 @@ import 'dart:convert';
 List<JobProfileModel> jobProfileModelsFromMap(String str) => List<JobProfileModel>.from(json.decode(str).map((x) => JobProfileModel.fromJson(x)));
 
 class JobProfileModel extends JobProfile {
-  JobProfileModel(
-      {required super.userAccountId,
-      required super.firstName,
-      required super.lastName,
-      required super.city,
-      required super.state,
-      required super.country,
-      required super.workAuthorization,
-      required super.employmentType,
-      required super.resume,
-      required super.profilePhoto,
-      required super.photosImagePath});
+  JobProfileModel({
+    required super.userAccountId,
+    required super.firstName,
+    required super.lastName,
+    required super.city,
+    required super.state,
+    required super.country,
+    required super.workAuthorization,
+    required super.employmentType,
+    required super.resume,
+    required super.profilePhoto,
+    required super.photosImagePath,
+    super.duration,
+  });
 
   Map<String, dynamic> toJson() {
     return {
@@ -30,6 +32,7 @@ class JobProfileModel extends JobProfile {
       'resume': resume,
       'profilePhoto': profilePhoto,
       'photosImagePath': photosImagePath,
+      'duration': duration,
     };
   }
 
@@ -46,6 +49,7 @@ class JobProfileModel extends JobProfile {
       resume: map['resume'] ?? "",
       profilePhoto: map['profilePhoto'] ?? "",
       photosImagePath: map['photosImagePath'] ?? "",
+      duration: map['duration'] ?? 0.0,
     );
   }
 }
