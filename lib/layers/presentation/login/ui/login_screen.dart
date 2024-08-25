@@ -44,8 +44,8 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    EdgeInsets devicePadding = MediaQuery.of(context).padding;
+    final Size size = MediaQuery.of(context).size;
+    final EdgeInsets devicePadding = MediaQuery.of(context).padding;
 
     return BlocConsumer<LoginBloc, LoginState>(
       bloc: _loginBloc,
@@ -81,197 +81,18 @@ class _LoginPageState extends State<LoginPage> {
       builder: (context, state) {
         return PopScope(
           canPop: false,
-          onPopInvoked: (didPop) => showExitPopup,
+          onPopInvoked: (didPop) => showExitPopup(),
           child: AnnotatedRegion<SystemUiOverlayStyle>(
             value: const SystemUiOverlayStyle(
               statusBarColor: Colors.transparent,
             ),
             child: Scaffold(
               body: GestureDetector(
-                onTap: () {
-                  FocusScope.of(context).requestFocus(FocusNode());
-                },
+                onTap: () => FocusScope.of(context).unfocus(),
                 child: Stack(
                   children: [
-                    Positioned.fill(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topRight,
-                            end: Alignment.bottomLeft,
-                            stops: const [0.0, 1.0],
-                            colors: [
-                              ColorManager.primary,
-                              ColorManager.primaryOpacity70,
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    Positioned.fill(
-                      child: SingleChildScrollView(
-                        padding: EdgeInsets.only(left: AppWidth.w20, right: AppWidth.w20, top: devicePadding.top + AppHeight.h50),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Center(
-                              child: Text(
-                                AppStrings.appTitle,
-                                style: getBoldStyle(
-                                  fontSize: FontSize.s30,
-                                  color: ColorManager.white,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              height: size.height * 0.2,
-                              padding: EdgeInsets.only(left: AppWidth.w30, right: AppWidth.w30),
-                              child: FlareActor(
-                                ImageAssets.teddy,
-                                shouldClip: false,
-                                alignment: Alignment.bottomCenter,
-                                fit: BoxFit.contain,
-                                controller: bearLogInController,
-                              ),
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: ColorManager.white,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(AppRadius.r25),
-                                ),
-                              ),
-                              child: Form(
-                                key: _formKey,
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: AppWidth.w20),
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(horizontal: AppWidth.w20),
-                                    decoration: BoxDecoration(
-                                      color: ColorManager.white,
-                                      borderRadius: BorderRadius.circular(
-                                        AppRadius.r20,
-                                      ),
-                                    ),
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          height: AppHeight.h20,
-                                        ),
-                                        Text(
-                                          AppStrings.userName,
-                                          style: getBoldStyle(
-                                            fontSize: FontSize.s15,
-                                            color: ColorManager.primary,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: AppHeight.h8,
-                                        ),
-                                        TrackingTextInput(
-                                          key: const ValueKey("email_id"),
-                                          hint: AppStrings.userName,
-                                          textEditingController: _userNameController,
-                                          isObscured: false,
-                                          icon: IconButton(
-                                            onPressed: () {},
-                                            icon: Icon(
-                                              Icons.person,
-                                              color: ColorManager.blue,
-                                              size: FontSize.s20,
-                                            ),
-                                          ),
-                                          onCaretMoved: (Offset? caret) {
-                                            caretView = caret;
-                                            bearLogInController.coverEyes(caret == null);
-                                            bearLogInController.lookAt(caret);
-                                          },
-                                        ),
-                                        Text(
-                                          AppStrings.password,
-                                          style: getBoldStyle(
-                                            fontSize: FontSize.s15,
-                                            color: ColorManager.primary,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: AppHeight.h8,
-                                        ),
-                                        TrackingTextInput(
-                                          key: const ValueKey("password"),
-                                          hint: "Password",
-                                          isObscured: !_passwordVisible,
-                                          textEditingController: _passwordController,
-                                          icon: IconButton(
-                                            icon: Icon(
-                                              _passwordVisible ? Icons.visibility : Icons.visibility_off,
-                                              color: ColorManager.blue,
-                                            ),
-                                            onPressed: () {
-                                              setState(
-                                                () {
-                                                  _passwordVisible = !_passwordVisible;
-                                                  if (_passwordVisible == true && caretView != null) {
-                                                    bearLogInController.coverEyes(caretView == null);
-                                                    bearLogInController.lookAt(caretView);
-                                                  }
-                                                },
-                                              );
-                                            },
-                                          ),
-                                          onCaretMoved: (Offset? caret) {
-                                            if (_passwordVisible == false) {
-                                              bearLogInController.coverEyes(caret != null);
-                                              bearLogInController.lookAt(null);
-                                            } else {
-                                              bearLogInController.coverEyes(caretView == null);
-                                              bearLogInController.lookAt(caretView);
-                                            }
-                                          },
-                                        ),
-                                        SigninButton(
-                                          child: Text(
-                                            "Login",
-                                            style: getRegularStyle(
-                                              fontSize: FontSize.s16,
-                                              color: ColorManager.white,
-                                            ),
-                                          ),
-                                          onPressed: () {
-                                            _onLogin(_loginBloc);
-                                          },
-                                        ),
-                                        SizedBox(
-                                          height: AppHeight.h10,
-                                        ),
-                                        Align(
-                                          alignment: Alignment.bottomRight,
-                                          child: TextButton(
-                                              onPressed: () {
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder: (context) => const RegisterPage(),
-                                                  ),
-                                                );
-                                              },
-                                              child: const Text(
-                                                'Register',
-                                              )),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    _buildBackground(),
+                    _buildLoginForm(size, devicePadding),
                   ],
                 ),
               ),
@@ -282,9 +103,213 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  _onLogin(LoginBloc loginBloc) async {
+  Widget _buildBackground() {
+    return Positioned.fill(
+      child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            stops: const [0.0, 1.0],
+            colors: [
+              ColorManager.primary,
+              ColorManager.primaryOpacity70,
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoginForm(Size size, EdgeInsets devicePadding) {
+    return Positioned.fill(
+      child: SingleChildScrollView(
+        padding: EdgeInsets.only(
+          left: AppWidth.w20,
+          right: AppWidth.w20,
+          top: devicePadding.top + AppHeight.h50,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            _buildTitle(),
+            _buildAnimation(size),
+            _buildFormContainer(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTitle() {
+    return Center(
+      child: Text(
+        AppStrings.appTitle,
+        style: getBoldStyle(
+          fontSize: FontSize.s30,
+          color: ColorManager.white,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAnimation(Size size) {
+    return Container(
+      height: size.height * 0.2,
+      padding: EdgeInsets.symmetric(horizontal: AppWidth.w30),
+      child: FlareActor(
+        ImageAssets.teddy,
+        shouldClip: false,
+        alignment: Alignment.bottomCenter,
+        fit: BoxFit.contain,
+        controller: bearLogInController,
+      ),
+    );
+  }
+
+  Widget _buildFormContainer() {
+    return Container(
+      decoration: BoxDecoration(
+        color: ColorManager.white,
+        borderRadius: BorderRadius.circular(AppRadius.r25),
+      ),
+      child: Form(
+        key: _formKey,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: AppWidth.w20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: AppHeight.h20),
+              _buildUsernameField(),
+              SizedBox(height: AppHeight.h8),
+              _buildPasswordField(),
+              SizedBox(height: AppHeight.h20),
+              _buildSignInButton(),
+              SizedBox(height: AppHeight.h10),
+              _buildRegisterButton(),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildUsernameField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          AppStrings.userName,
+          style: getBoldStyle(
+            fontSize: FontSize.s15,
+            color: ColorManager.primary,
+          ),
+        ),
+        SizedBox(height: AppHeight.h8),
+        TrackingTextInput(
+          key: const ValueKey("email_id"),
+          hint: AppStrings.userName,
+          textEditingController: _userNameController,
+          isObscured: false,
+          icon: IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.person,
+              color: ColorManager.blue,
+              size: FontSize.s20,
+            ),
+          ),
+          onCaretMoved: (Offset? caret) {
+            caretView = caret;
+            bearLogInController.coverEyes(caret == null);
+            bearLogInController.lookAt(caret);
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPasswordField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          AppStrings.password,
+          style: getBoldStyle(
+            fontSize: FontSize.s15,
+            color: ColorManager.primary,
+          ),
+        ),
+        SizedBox(height: AppHeight.h8),
+        TrackingTextInput(
+          key: const ValueKey("password"),
+          hint: AppStrings.password,
+          isObscured: !_passwordVisible,
+          textEditingController: _passwordController,
+          icon: IconButton(
+            icon: Icon(
+              _passwordVisible ? Icons.visibility : Icons.visibility_off,
+              color: ColorManager.blue,
+            ),
+            onPressed: () {
+              setState(() {
+                _passwordVisible = !_passwordVisible;
+                if (_passwordVisible && caretView != null) {
+                  bearLogInController.coverEyes(false);
+                  bearLogInController.lookAt(caretView);
+                }
+              });
+            },
+          ),
+          onCaretMoved: (Offset? caret) {
+            if (!_passwordVisible) {
+              bearLogInController.coverEyes(caret != null);
+              bearLogInController.lookAt(null);
+            } else {
+              bearLogInController.coverEyes(false);
+              bearLogInController.lookAt(caretView);
+            }
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSignInButton() {
+    return SigninButton(
+      child: Text(
+        "Login",
+        style: getRegularStyle(
+          fontSize: FontSize.s16,
+          color: ColorManager.white,
+        ),
+      ),
+      onPressed: () => _onLogin(_loginBloc),
+    );
+  }
+
+  Widget _buildRegisterButton() {
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: TextButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const RegisterPage(),
+            ),
+          );
+        },
+        child: const Text('Register'),
+      ),
+    );
+  }
+
+  void _onLogin(LoginBloc loginBloc) async {
     if (_formKey.currentState!.validate()) {
-      LoginModel loginModel = LoginModel(
+      final loginModel = LoginModel(
         email: _userNameController.text,
         password: _passwordController.text,
       );
