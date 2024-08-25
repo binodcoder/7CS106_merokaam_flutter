@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:merokaam/layers/presentation/login/bloc/login_bloc.dart';
 import 'package:merokaam/layers/presentation/login/ui/login_screen.dart';
 import 'package:merokaam/layers/presentation/register/ui/register_page.dart';
 import 'package:merokaam/resources/strings_manager.dart';
 
+import '../injection_container.dart';
 import '../layers/presentation/JobProfile/add_update_job_profile/ui/create_job_profile_page.dart';
 import '../layers/presentation/JobProfile/read_job_profile/ui/read_job_profile_page.dart';
 
@@ -18,7 +20,10 @@ class RouteGenerator {
   static Route<dynamic> getRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
       case Routes.loginRoute:
-        return MaterialPageRoute(builder: (context) => const LoginPage());
+        return MaterialPageRoute(
+            builder: (context) => LoginPage(
+                  loginBloc: sl<LoginBloc>(),
+                ));
       case Routes.registerRoute:
         return MaterialPageRoute(builder: (context) => const RegisterPage());
       case Routes.createJobProfileRoute:

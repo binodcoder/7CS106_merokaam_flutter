@@ -21,7 +21,8 @@ import '../widgets/sign_in_button.dart';
 import '../widgets/tracking_text_input.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  final LoginBloc? loginBloc;
+  const LoginPage({super.key, this.loginBloc});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -34,12 +35,13 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _passwordController = TextEditingController();
   late BearLogInController bearLogInController;
   Offset? caretView;
-  final LoginBloc _loginBloc = sl<LoginBloc>();
+  late LoginBloc _loginBloc;
 
   @override
   void initState() {
     super.initState();
     bearLogInController = BearLogInController();
+    _loginBloc = widget.loginBloc ?? sl<LoginBloc>();
   }
 
   @override
@@ -52,31 +54,7 @@ class _LoginPageState extends State<LoginPage> {
       listenWhen: (previous, current) => current is LoginActionState,
       buildWhen: (previous, current) => current is! LoginActionState,
       listener: (context, state) {
-        if (state is LoginLoadingState) {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return const Center(child: CircularProgressIndicator());
-            },
-          );
-        } else if (state is LoggedState) {
-          _userNameController.clear();
-          _passwordController.clear();
-
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(
-              builder: (context) => const ReadJobProfilePage(),
-            ),
-          );
-        } else if (state is LoginErrorState) {
-          Navigator.pop(context);
-          Fluttertoast.showToast(
-            msg: state.message,
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: ColorManager.error,
-          );
-        }
+        _handleLoginState(context, state);
       },
       builder: (context, state) {
         return PopScope(
@@ -99,6 +77,37 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
         );
+      },
+    );
+  }
+
+  void _handleLoginState(BuildContext context, LoginState state) {
+    if (state is LoginLoadingState) {
+      _showLoadingDialog(context);
+    } else if (state is LoggedState) {
+      _userNameController.clear();
+      _passwordController.clear();
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const ReadJobProfilePage(),
+        ),
+      );
+    } else if (state is LoginErrorState) {
+      Navigator.pop(context);
+      Fluttertoast.showToast(
+        msg: state.message,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: ColorManager.error,
+      );
+    }
+  }
+
+  void _showLoadingDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const Center(child: CircularProgressIndicator());
       },
     );
   }
