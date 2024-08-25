@@ -1,107 +1,206 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:merokaam/core/entities/job_profile.dart';
 import 'package:merokaam/core/errors/exceptions.dart';
 import 'package:merokaam/core/errors/failures.dart';
 import 'package:merokaam/core/models/job_profile_model.dart';
-import 'package:merokaam/core/network/network_info.dart';
+import 'package:merokaam/layers/data/job_profile/repositories/job_profile_repository_impl.dart';
+import 'package:mockito/annotations.dart';
 import 'package:merokaam/layers/data/job_profile/data_sources/job_profile_local_data_source.dart';
 import 'package:merokaam/layers/data/job_profile/data_sources/job_profile_remote_data_sources.dart';
-import 'package:merokaam/layers/data/job_profile/repositories/job_profile_repository_impl.dart';
-
-import 'package:mockito/annotations.dart';
+import 'package:merokaam/core/network/network_info.dart';
 import 'package:mockito/mockito.dart';
-import 'package:flutter_test/flutter_test.dart';
 
 import 'job_profile_repositories_impl_test.mocks.dart';
 
-class MockJobProfileLocalDataSource extends Mock implements JobProfilesLocalDataSource {}
-
-@GenerateMocks([NetworkInfo])
 @GenerateMocks([
-  JobProfileRemoteDataSource
-], customMocks: [
-  MockSpec<JobProfileRemoteDataSource>(as: #MockJobProfileRemoteDataSourceForTest, onMissingStub: OnMissingStub.returnDefault),
+  JobProfilesLocalDataSource,
+  JobProfileRemoteDataSource,
+  NetworkInfo,
 ])
 void main() {
   late JobProfileRepositoryImpl repository;
+  late MockJobProfilesLocalDataSource mockLocalDataSource;
   late MockJobProfileRemoteDataSource mockRemoteDataSource;
-  late MockJobProfileLocalDataSource mockLocalDataSource;
   late MockNetworkInfo mockNetworkInfo;
 
   setUp(() {
+    mockLocalDataSource = MockJobProfilesLocalDataSource();
     mockRemoteDataSource = MockJobProfileRemoteDataSource();
-    mockLocalDataSource = MockJobProfileLocalDataSource();
     mockNetworkInfo = MockNetworkInfo();
     repository = JobProfileRepositoryImpl(
-      jobProfileRemoteDataSources: mockRemoteDataSource,
       jobProfilesLocalDataSource: mockLocalDataSource,
+      jobProfileRemoteDataSources: mockRemoteDataSource,
       networkInfo: mockNetworkInfo,
     );
   });
 
-  void runTestsOnline(Function body) {
-    group('device is online', () {
-      setUp(() {
-        when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      });
-      body();
+  final tJobProfileModel = JobProfileModel(
+    userAccountId: 1,
+    firstName: 'John',
+    lastName: 'Doe',
+    city: 'City',
+    state: 'State',
+    country: 'Country',
+    workAuthorization: 'Authorization',
+    employmentType: 'Full-time',
+    resume: 'Resume',
+    profilePhoto: 'Photo',
+    photosImagePath: 'Path',
+    duration: 0.1,
+  );
+
+  final tJobProfile = JobProfile(
+    userAccountId: 1,
+    firstName: 'John',
+    lastName: 'Doe',
+    city: 'City',
+    state: 'State',
+    country: 'Country',
+    workAuthorization: 'Authorization',
+    employmentType: 'Full-time',
+    resume: 'Resume',
+    profilePhoto: 'Photo',
+    photosImagePath: 'Path',
+    duration: 0.1,
+  );
+
+  final tJobProfileList = [tJobProfile];
+
+  group('createJobProfile', () {
+    test('should return Right when the call to remote data source is successful', () async {
+      // Arrange
+      when(mockRemoteDataSource.createJobProfile(any)).thenAnswer((_) async => 1);
+
+      // Act
+      final result = await repository.createJobProfile(tJobProfile);
+
+      // Assert
+      expect(result, const Right(1));
+      verify(mockRemoteDataSource.createJobProfile(any));
+      verifyNoMoreInteractions(mockRemoteDataSource);
     });
-  }
 
-  group('readJobProfile', () {
-    final tJobProfileModel = [
-      JobProfileModel(
-        userAccountId: 0,
-        firstName: '',
-        lastName: '',
-        city: '',
-        state: '',
-        country: '',
-        workAuthorization: '',
-        employmentType: '',
-        resume: '',
-        profilePhoto: '',
-        photosImagePath: '',
-      )
-    ];
+    test('should return Left(CacheFailure) when the call to remote data source fails', () async {
+      // Arrange
+      when(mockRemoteDataSource.createJobProfile(any)).thenThrow(CacheException());
 
-    test('should check if the device is online', () async {
-      //arrange
+      // Act
+      final result = await repository.createJobProfile(tJobProfile);
+
+      // Assert
+      expect(result, Left(CacheFailure()));
+      verify(mockRemoteDataSource.createJobProfile(any));
+      verifyNoMoreInteractions(mockRemoteDataSource);
+    });
+  });
+
+  group('readJobProfiles', () {
+    test('should return Right with data from remote data source when there is internet connection', () async {
+      // Arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      //act
-      repository.readJobProfiles();
-      //assert
+      when(mockRemoteDataSource.readJobProfile()).thenAnswer((_) async => [tJobProfileModel]);
+
+      // Act
+      final result = await repository.readJobProfiles();
+
+      // Assert
+      // expect(result, Right<Failure, List<JobProfile>>([tJobProfileModel] as List<JobProfile>));
+      expect(result, isA<Right<Failure, List<JobProfile>>>());
+
       verify(mockNetworkInfo.isConnected);
+      verify(mockRemoteDataSource.readJobProfile());
+      verifyNoMoreInteractions(mockNetworkInfo);
+      verifyNoMoreInteractions(mockRemoteDataSource);
     });
 
-    runTestsOnline(() {
-      test('should return remote data when the call to remote data source is successful', () async {
-        //arrange
-        when(mockRemoteDataSource.readJobProfile()).thenAnswer((_) async => tJobProfileModel);
-        //act
-        final result = await repository.readJobProfiles();
-        //assert
-        verify(mockRemoteDataSource.readJobProfile());
-        expect(result, equals(Right(tJobProfileModel)));
-      });
-      test('should cache the data locally when the call to remote data source is successful', () async {
-        //arrange
-        when(mockRemoteDataSource.readJobProfile()).thenAnswer((_) async => tJobProfileModel);
-        //act
-        await repository.readJobProfiles();
-        //assert
-        verify(mockRemoteDataSource.readJobProfile());
-        // verify(mockLocalDataSource.cacheNumberTrivia(tNumberTriviaModel));
-      });
-      test('should return serverfailure when the call to remote data source is successful', () async {
-        //arrange
-        when(mockRemoteDataSource.readJobProfile()).thenThrow(ServerException());
-        //act
-        final result = await repository.readJobProfiles();
-        //assert
-        verify(mockRemoteDataSource.readJobProfile());
-        verifyZeroInteractions(mockLocalDataSource);
-        expect(result, equals(Left(ServerFailure())));
-      });
+    test('should return Right with data from local data source when there is no internet connection', () async {
+      // Arrange
+      when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
+      when(mockLocalDataSource.readLastJobProfiles()).thenAnswer((_) async => [tJobProfileModel]);
+
+      // Act
+      final result = await repository.readJobProfiles();
+
+      // Assert
+      //expect(result, Right(tJobProfileList));
+      expect(result, isA<Right<Failure, List<JobProfile>>>());
+      verify(mockNetworkInfo.isConnected);
+      verify(mockLocalDataSource.readLastJobProfiles());
+      verifyNoMoreInteractions(mockNetworkInfo);
+      verifyNoMoreInteractions(mockLocalDataSource);
+    });
+
+    test('should return Left(CacheFailure) when both remote and local data sources fail', () async {
+      // Arrange
+      when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
+      when(mockRemoteDataSource.readJobProfile()).thenThrow(CacheException());
+
+      // Act
+      final result = await repository.readJobProfiles();
+
+      // Assert
+      expect(result, Left(CacheFailure()));
+      verify(mockNetworkInfo.isConnected);
+      verify(mockRemoteDataSource.readJobProfile());
+      verifyNoMoreInteractions(mockNetworkInfo);
+      verifyNoMoreInteractions(mockRemoteDataSource);
+    });
+  });
+
+  group('updateJobProfile', () {
+    test('should return Right when the call to remote data source is successful', () async {
+      // Arrange
+      when(mockRemoteDataSource.updateJobProfile(any)).thenAnswer((_) async => 1);
+
+      // Act
+      final result = await repository.updateJobProfile(tJobProfile);
+
+      // Assert
+      expect(result, const Right(1));
+      verify(mockRemoteDataSource.updateJobProfile(any));
+      verifyNoMoreInteractions(mockRemoteDataSource);
+    });
+
+    test('should return Left(CacheFailure) when the call to remote data source fails', () async {
+      // Arrange
+      when(mockRemoteDataSource.updateJobProfile(any)).thenThrow(CacheException());
+
+      // Act
+      final result = await repository.updateJobProfile(tJobProfile);
+
+      // Assert
+      expect(result, Left(CacheFailure()));
+      verify(mockRemoteDataSource.updateJobProfile(any));
+      verifyNoMoreInteractions(mockRemoteDataSource);
+    });
+  });
+
+  group('deleteJobProfile', () {
+    test('should return Right when the call to remote data source is successful', () async {
+      // Arrange
+      when(mockRemoteDataSource.deleteJobProfile(any)).thenAnswer((_) async => 1);
+
+      // Act
+      final result = await repository.deleteJobProfile(tJobProfile);
+
+      // Assert
+      expect(result, const Right(1));
+      verify(mockRemoteDataSource.deleteJobProfile(any));
+      verifyNoMoreInteractions(mockRemoteDataSource);
+    });
+
+    test('should return Left(CacheFailure) when the call to remote data source fails', () async {
+      // Arrange
+      when(mockRemoteDataSource.deleteJobProfile(any)).thenThrow(CacheException());
+
+      // Act
+      final result = await repository.deleteJobProfile(tJobProfile);
+
+      // Assert
+      expect(result, Left(CacheFailure()));
+      verify(mockRemoteDataSource.deleteJobProfile(any));
+      verifyNoMoreInteractions(mockRemoteDataSource);
     });
   });
 }

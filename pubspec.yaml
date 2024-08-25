@@ -58,8 +58,10 @@ dev_dependencies:
     sdk: flutter
   flutter_test:
     sdk: flutter
-  mockito: ^5.4.2
+  mockito: ^5.3.2
   build_runner: ^2.4.2
+  bloc_test: ^9.0.4
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

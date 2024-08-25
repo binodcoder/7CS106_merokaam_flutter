@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:merokaam/core/errors/failures.dart';
 import 'package:merokaam/core/models/job_profile_model.dart';
 import 'package:merokaam/layers/domain/job_profile/usecases/create_job_profile.dart';
+import 'package:merokaam/layers/domain/job_profile/usecases/delete_job_profile.dart';
 import 'package:merokaam/layers/domain/job_profile/usecases/read_job_profile.dart';
 import 'package:merokaam/layers/presentation/JobProfile/read_job_profile/bloc/read_job_profile_bloc.dart';
 import 'package:merokaam/layers/presentation/JobProfile/read_job_profile/bloc/read_job_profile_event.dart';
@@ -16,14 +17,15 @@ import 'job_profile_bloc_test.mocks.dart';
 
 @GenerateMocks([ReadJobProfile])
 @GenerateMocks([CreateJobProfile])
+@GenerateMocks([DeleteJobProfile])
 void main() {
   late ReadJobProfileBloc bloc;
-  late MockReadJobProfiles mockGetJobProfile;
+  late MockReadJobProfile mockGetJobProfile;
   late MockDeleteJobProfile mockDeleteJobProfile;
 
   setUp(() {
-    mockGetJobProfile = MockReadJobProfiles();
-    mockDeleteJobProfile = MockDeleteJobProfile(1);
+    mockGetJobProfile = MockReadJobProfile();
+    mockDeleteJobProfile = MockDeleteJobProfile();
 
     bloc = ReadJobProfileBloc(getJobProfiles: mockGetJobProfile, deleteJobProfile: mockDeleteJobProfile);
   });

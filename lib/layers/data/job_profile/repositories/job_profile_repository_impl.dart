@@ -33,6 +33,7 @@ class JobProfileRepositoryImpl implements JobProfileRepository {
       resume: '',
       profilePhoto: '',
       photosImagePath: '',
+      duration: 0.1,
     );
     try {
       int response = await jobProfileRemoteDataSources.createJobProfile(jobProfileModel);
@@ -75,6 +76,7 @@ class JobProfileRepositoryImpl implements JobProfileRepository {
       resume: '',
       profilePhoto: '',
       photosImagePath: '',
+      duration: 0.1,
     );
     try {
       int response = await jobProfileRemoteDataSources.updateJobProfile(jobProfileModel);

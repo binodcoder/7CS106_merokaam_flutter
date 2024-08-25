@@ -1,122 +1,121 @@
+import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get_it/get_it.dart';
+import 'package:merokaam/core/entities/login.dart';
+import 'package:merokaam/layers/presentation/JobProfile/read_job_profile/ui/read_job_profile_page.dart';
 import 'package:merokaam/layers/presentation/login/bloc/login_bloc.dart';
+import 'package:merokaam/layers/presentation/login/bloc/login_event.dart';
+import 'package:merokaam/layers/presentation/login/bloc/login_state.dart';
 import 'package:merokaam/layers/presentation/login/ui/login_screen.dart';
 import 'package:merokaam/layers/presentation/login/widgets/sign_in_button.dart';
-import 'package:mockito/annotations.dart';
-import 'login_screen_test.mocks.dart';
+import 'package:mockito/mockito.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:bloc_test/bloc_test.dart';
 
-@GenerateMocks([LoginBloc])
+// Mock classes
+class MockLoginBloc extends MockBloc<LoginEvent, LoginState> implements LoginBloc {}
+
 void main() {
-  final sl = GetIt.instance;
+  group('LoginPage Tests', () {
+    late LoginBloc loginBloc;
 
-  setUp(() {
-    // Registering the mock LoginBloc
+    setUp(() {
+      loginBloc = MockLoginBloc();
+    });
 
-    sl.registerFactory<LoginBloc>(() => MockLoginBloc());
-  });
+    tearDown(() {
+      loginBloc.close();
+    });
 
-  tearDown(() {
-    // Reset the GetIt instance after each test
-    sl.reset();
-  });
-  testWidgets("Should have a title", (WidgetTester tester) async {
-    // ARRANGE
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: LoginPage(),
-      ),
-    );
-    // Ensures the widget tree has fully built
-    await tester.pumpAndSettle();
-    // ACT
-    Finder title = find.text("Login");
-    // ASSERT
-    expect(title, findsOneWidget);
-  });
+    testWidgets('Renders LoginPage UI components', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        BlocProvider.value(
+          value: loginBloc,
+          child: const MaterialApp(home: LoginPage()),
+        ),
+      );
 
-  testWidgets("Should have one text field form to collect user email id", (WidgetTester tester) async {
-    // ARRANGE
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: LoginPage(),
-      ),
-    );
-    // ACT
-    Finder userNameTextField = find.byKey(const ValueKey("email_id"));
+      // Check if all UI components are present
+      expect(find.text('Merokaam'), findsOneWidget);
+      expect(find.byType(TextFormField), findsNWidgets(2));
+      expect(find.byType(FlareActor), findsOneWidget);
+      expect(find.byType(SigninButton), findsOneWidget);
+    });
 
-    // ASSERT
-    expect(userNameTextField, findsOneWidget);
-  });
+    testWidgets('Displays error message on invalid input', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        BlocProvider.value(
+          value: loginBloc,
+          child: const MaterialApp(home: LoginPage()),
+        ),
+      );
 
-  testWidgets("Should have one text field form to collect user password", (WidgetTester tester) async {
-    // ARRANGE
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: LoginPage(),
-      ),
-    );
-    // ACT
-    Finder passwordTextField = find.byKey(const ValueKey("password"));
+      // Enter invalid email and password
+      await tester.enterText(find.byKey(const ValueKey('email_id')), '');
+      await tester.enterText(find.byKey(const ValueKey('password')), '');
 
-    // ASSERT
-    expect(passwordTextField, findsOneWidget);
-  });
+      // Tap the login button
+      await tester.tap(find.byType(SigninButton));
+      await tester.pump();
 
-  testWidgets("Should have one login button", (WidgetTester tester) async {
-    // ARRANGE
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: LoginPage(),
-      ),
-    );
-    // ACT
-    Finder loginButton = find.byType(SigninButton);
+      // Check if validation error is displayed
+      expect(find.text('Please enter your username'), findsOneWidget);
+      expect(find.text('Please enter your password'), findsOneWidget);
+    });
 
-    // ASSERT
-    expect(loginButton, findsOneWidget);
-  });
+    testWidgets('Triggers LoginButtonPressEvent on valid input', (WidgetTester tester) async {
+      when(loginBloc.state).thenReturn(LoginInitialState());
 
-  testWidgets("Should show Required Fields error message if user email id and password is empty", (WidgetTester tester) async {
-    // ARRANGE
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: LoginPage(),
-      ),
-    );
-    // ACT
-    Finder loginButton = find.byType(SigninButton);
-    await tester.tap(loginButton);
-    await tester.pumpAndSettle();
-    Finder errorTexts = find.text("Required Field");
+      await tester.pumpWidget(
+        BlocProvider.value(
+          value: loginBloc,
+          child: const MaterialApp(home: LoginPage()),
+        ),
+      );
 
-    // ASSERT
-    expect(errorTexts, findsNWidgets(2));
-  });
+      // Enter valid email and password
+      await tester.enterText(find.byKey(const ValueKey('email_id')), 'test@example.com');
+      await tester.enterText(find.byKey(const ValueKey('password')), 'password123');
 
-  // tests for validation errors
+      // Tap the login button
+      await tester.tap(find.byType(SigninButton));
+      await tester.pump();
 
-  // tests for success case
-  testWidgets("Should submit form when user email id and password is valid", (WidgetTester tester) async {
-    // ARRANGE
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: LoginPage(),
-      ),
-    );
+      // Verify that LoginButtonPressEvent is added
+      verify(loginBloc.add(LoginButtonPressEvent(LoginModel(
+        email: 'test@example.com',
+        password: 'password123',
+      )))).called(1);
+    });
 
-    // ACT
-    Finder userNameTextField = find.byKey(const ValueKey("email_id"));
-    Finder passwordTextField = find.byKey(const ValueKey("password"));
-    await tester.enterText(userNameTextField, "binod@gmail.com");
-    await tester.enterText(passwordTextField, "P@ssw0rd123!");
-    Finder loginButton = find.byType(SigninButton);
-    await tester.tap(loginButton);
-    await tester.pumpAndSettle();
-    Finder errorTexts = find.text("Required Field");
+    testWidgets('Shows CircularProgressIndicator when in loading state', (WidgetTester tester) async {
+      when(loginBloc.state).thenReturn(LoginLoadingState());
 
-    // ASSERT
-    expect(errorTexts, findsNothing);
+      await tester.pumpWidget(
+        BlocProvider.value(
+          value: loginBloc,
+          child: const MaterialApp(home: LoginPage()),
+        ),
+      );
+
+      // Verify that the CircularProgressIndicator is shown
+      expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    });
+
+    testWidgets('Navigates to ReadJobProfilePage on successful login', (WidgetTester tester) async {
+      when(loginBloc.state).thenReturn(LoggedState());
+
+      await tester.pumpWidget(
+        BlocProvider.value(
+          value: loginBloc,
+          child: const MaterialApp(home: LoginPage()),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      // Verify that the navigation to ReadJobProfilePage occurred
+      expect(find.byType(ReadJobProfilePage), findsOneWidget);
+    });
   });
 }

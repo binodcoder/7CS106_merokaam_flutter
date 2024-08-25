@@ -3,16 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:merokaam/resources/assets_manager.dart';
 import '../../../../core/entities/login.dart';
 import '../../../../injection_container.dart';
 import '../../../../resources/colour_manager.dart';
 import '../../../../resources/font_manager.dart';
+import '../../../../resources/strings_manager.dart';
 import '../../../../resources/styles_manager.dart';
 import '../../../../resources/values_manager.dart';
 import '../../JobProfile/read_job_profile/ui/read_job_profile_page.dart';
 import '../../register/ui/register_page.dart';
 import '../bloc/login_bloc.dart';
-
 import '../bloc/login_event.dart';
 import '../bloc/login_state.dart';
 import '../widgets/bear_log_in_controller.dart';
@@ -27,13 +28,13 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final formKey = GlobalKey<FormState>();
-
+  final _formKey = GlobalKey<FormState>();
   bool _passwordVisible = false;
-  TextEditingController userNameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  final TextEditingController _userNameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   late BearLogInController bearLogInController;
   Offset? caretView;
+  final LoginBloc _loginBloc = sl<LoginBloc>();
 
   @override
   void initState() {
@@ -41,16 +42,13 @@ class _LoginPageState extends State<LoginPage> {
     bearLogInController = BearLogInController();
   }
 
-  final LoginBloc loginBloc = sl<LoginBloc>();
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
     EdgeInsets devicePadding = MediaQuery.of(context).padding;
 
     return BlocConsumer<LoginBloc, LoginState>(
-      bloc: loginBloc,
+      bloc: _loginBloc,
       listenWhen: (previous, current) => current is LoginActionState,
       buildWhen: (previous, current) => current is! LoginActionState,
       listener: (context, state) {
@@ -62,8 +60,8 @@ class _LoginPageState extends State<LoginPage> {
             },
           );
         } else if (state is LoggedState) {
-          userNameController.clear();
-          passwordController.clear();
+          _userNameController.clear();
+          _passwordController.clear();
 
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
@@ -81,14 +79,14 @@ class _LoginPageState extends State<LoginPage> {
         }
       },
       builder: (context, state) {
-        return WillPopScope(
-          onWillPop: showExitPopup,
+        return PopScope(
+          canPop: false,
+          onPopInvoked: (didPop) => showExitPopup,
           child: AnnotatedRegion<SystemUiOverlayStyle>(
             value: const SystemUiOverlayStyle(
               statusBarColor: Colors.transparent,
             ),
             child: Scaffold(
-              appBar: AppBar(title: const Text("Login")),
               body: GestureDetector(
                 onTap: () {
                   FocusScope.of(context).requestFocus(FocusNode());
@@ -119,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
                           children: <Widget>[
                             Center(
                               child: Text(
-                                "Merokaam",
+                                AppStrings.appTitle,
                                 style: getBoldStyle(
                                   fontSize: FontSize.s30,
                                   color: ColorManager.white,
@@ -130,7 +128,7 @@ class _LoginPageState extends State<LoginPage> {
                               height: size.height * 0.2,
                               padding: EdgeInsets.only(left: AppWidth.w30, right: AppWidth.w30),
                               child: FlareActor(
-                                "assets/images/Teddy.flr",
+                                ImageAssets.teddy,
                                 shouldClip: false,
                                 alignment: Alignment.bottomCenter,
                                 fit: BoxFit.contain,
@@ -145,7 +143,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                               child: Form(
-                                key: formKey,
+                                key: _formKey,
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(horizontal: AppWidth.w20),
                                   child: Container(
@@ -164,7 +162,7 @@ class _LoginPageState extends State<LoginPage> {
                                           height: AppHeight.h20,
                                         ),
                                         Text(
-                                          "UserName",
+                                          AppStrings.userName,
                                           style: getBoldStyle(
                                             fontSize: FontSize.s15,
                                             color: ColorManager.primary,
@@ -175,8 +173,8 @@ class _LoginPageState extends State<LoginPage> {
                                         ),
                                         TrackingTextInput(
                                           key: const ValueKey("email_id"),
-                                          hint: "UserName",
-                                          textEditingController: userNameController,
+                                          hint: AppStrings.userName,
+                                          textEditingController: _userNameController,
                                           isObscured: false,
                                           icon: IconButton(
                                             onPressed: () {},
@@ -193,7 +191,7 @@ class _LoginPageState extends State<LoginPage> {
                                           },
                                         ),
                                         Text(
-                                          "Password",
+                                          AppStrings.password,
                                           style: getBoldStyle(
                                             fontSize: FontSize.s15,
                                             color: ColorManager.primary,
@@ -206,7 +204,7 @@ class _LoginPageState extends State<LoginPage> {
                                           key: const ValueKey("password"),
                                           hint: "Password",
                                           isObscured: !_passwordVisible,
-                                          textEditingController: passwordController,
+                                          textEditingController: _passwordController,
                                           icon: IconButton(
                                             icon: Icon(
                                               _passwordVisible ? Icons.visibility : Icons.visibility_off,
@@ -243,7 +241,7 @@ class _LoginPageState extends State<LoginPage> {
                                             ),
                                           ),
                                           onPressed: () {
-                                            _onLogin(loginBloc);
+                                            _onLogin(_loginBloc);
                                           },
                                         ),
                                         SizedBox(
@@ -285,10 +283,10 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _onLogin(LoginBloc loginBloc) async {
-    if (formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate()) {
       LoginModel loginModel = LoginModel(
-        email: userNameController.text,
-        password: passwordController.text,
+        email: _userNameController.text,
+        password: _passwordController.text,
       );
       loginBloc.add(LoginButtonPressEvent(loginModel));
     }

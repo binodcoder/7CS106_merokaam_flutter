@@ -1,4 +1,8 @@
 class AppStrings {
+  static const String appTitle = "Merokaam";
+
+  static const String userName = "Username";
+  static const String password = "Password";
   static const String jobProfileDetails = "JobProfileDetails";
   static const String login = "Login";
   static const String logOut = "Log out";
@@ -6,12 +10,7 @@ class AppStrings {
   static const String softwareCompany = "BinodSoft";
   static const String noRouteFound = "No Route Found";
   static const String required = '*Required';
-  static const String titleLabel = "Fitness App";
-  static const String titleRoutineLabel = "Routines";
-  static const String titleWalkLabel = "Purposed Walks";
-  static const String titleAppointmentLabel = "Appointments";
-  static const String titleWalkMediaLabel = "Walk Media";
-  static const String titleLiveTrainingLabel = "Live Trainings";
+
   static const String title = "Title";
   static const String areYouSure = "Are you sure?";
   static const String yes = "Yes";
@@ -23,15 +22,7 @@ class AppStrings {
   static const String imageURL = "Image URL";
   static const String register = "Register";
   static const String updateUser = "Update";
-  static const String addAppointments = "Add Appointment";
-  static const String addLiveTraining = "Add Live Training";
-  static const String addRoutine = "Add Routine";
-  static const String updateRoutine = "Update Routine";
-  static const String addWalk = "Add Walk";
-  static const String updateWalk = "Update Walk";
-  static const String addWalkMedia = "Add Walk Media";
-  static const String updateWalkMedia = "Update Walk Media";
-  static const String routineDetails = "Routine Details";
+
   static const String error = "Error";
   static const String edit = "Edit";
   static const String delete = "Delete";
@@ -49,7 +40,7 @@ class AppStrings {
   static const String myYoutube = "https://www.youtube.com/@code4you36";
   static const String myTel = 'tel: 014168260';
   static const String myNumber = '014168260';
-  static const String poweredBybinodcoder = "Powered By group 4";
+  static const String poweredBybinodcoder = "Powered By binodcoder";
   static const String youtube = "Youtube";
   static const String facebook = "Facebook";
   static const String website = "Website";
@@ -62,10 +53,10 @@ class AppStrings {
 
   //splash screen
 
-  static const String onBoardingTItle1 = "FITNESS CONTENT";
-  static const String onBoardingTItle2 = "LIVE TRAINING";
-  static const String onBoardingTItle3 = "APPOINTMENT";
-  static const String onBoardingTItle4 = "WALK FEATURE";
+  static const String onBoardingTItle1 = "Title 1";
+  static const String onBoardingTItle2 = "Title 2";
+  static const String onBoardingTItle3 = "Title 3";
+  static const String onBoardingTItle4 = "Title 4";
 
   static const String onBoardingSubTitle1 = "The app provides pre-loaded fitness routines";
   static const String onBoardingSubTitle2 = "Users can join real-time workout sessions led by either group trainers or book individual trainers";

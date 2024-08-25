@@ -2,6 +2,9 @@ const String imagePath = "assets/images";
 
 class ImageAssets {
   static const String logo = "$imagePath/logo.png";
+
+  static const String teddy = "$imagePath/Teddy.flr";
+
   static const String drawerHeaderLogo = "$imagePath/image.jpg";
   static const String appIcon = "$imagePath/appicon.png";
   static const String background = "$imagePath/image.jpg";

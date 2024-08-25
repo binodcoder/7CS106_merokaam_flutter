@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         onGenerateRoute: RouteGenerator.getRoute,
         debugShowCheckedModeBanner: false,
-        title: AppStrings.titleLabel,
+        title: AppStrings.appTitle,
         initialRoute: Routes.loginRoute,
       ),
     );
