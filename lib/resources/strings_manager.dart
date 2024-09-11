@@ -11,14 +11,20 @@ class AppStrings {
   static const String noRouteFound = "No Route Found";
   static const String required = '*Required';
 
-  static const String title = "Title";
+  static const String firstName = "First Name";
   static const String areYouSure = "Are you sure?";
   static const String yes = "Yes";
   static const String no = "No";
 
   static const String addJobProfile = "Add Job Profile";
   static const String updateJobProfile = "Update Job Profile";
-  static const String content = "Content";
+  static const String lastName = "Last Name";
+  static const String city = "City";
+  static const String state = "State";
+  static const String country = "Country";
+  static const String workAuthorisation = "Work Authorisation";
+  static const String employmentType = "Employment Type";
+
   static const String imageURL = "Image URL";
   static const String register = "Register";
   static const String updateUser = "Update";

@@ -26,15 +26,28 @@ class CreateJobProfilePage extends StatefulWidget {
 }
 
 class _CreateJobProfilePageState extends State<CreateJobProfilePage> {
-  final TextEditingController titleController = TextEditingController();
-  final TextEditingController contentController = TextEditingController();
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController cityController = TextEditingController();
+  final TextEditingController stateController = TextEditingController();
+  final TextEditingController countryController = TextEditingController();
+  final TextEditingController workAuthorizationController = TextEditingController();
+  final TextEditingController employmentTypeController = TextEditingController();
+  late int id;
 
   @override
   void initState() {
     if (widget.jobProfile != null) {
-      titleController.text = widget.jobProfile!.firstName;
-      contentController.text = widget.jobProfile!.lastName;
-      createJobProfileBloc.add(JobProfileAddReadyToUpdateEvent(widget.jobProfile!));
+      id = widget.jobProfile!.userAccountId;
+
+      firstNameController.text = widget.jobProfile!.firstName;
+      lastNameController.text = widget.jobProfile!.lastName;
+      cityController.text = widget.jobProfile!.city;
+      stateController.text = widget.jobProfile!.state;
+      countryController.text = widget.jobProfile!.country;
+      workAuthorizationController.text = widget.jobProfile!.workAuthorization;
+      employmentTypeController.text = widget.jobProfile!.employmentType;
+      // createJobProfileBloc.add(JobProfileAddReadyToUpdateEvent(widget.jobProfile!));
     } else {
       createJobProfileBloc.add(JobProfileAddInitialEvent());
     }
@@ -54,12 +67,22 @@ class _CreateJobProfilePageState extends State<CreateJobProfilePage> {
       buildWhen: (previous, current) => current is! JobProfileAddActionState,
       listener: (context, state) {
         if (state is AddJobProfileSavedState) {
-          titleController.clear();
-          contentController.clear();
+          firstNameController.clear();
+          lastNameController.clear();
+          cityController.clear();
+          stateController.clear();
+          countryController.clear();
+          countryController.clear();
+          workAuthorizationController.clear();
           Navigator.pop(context);
         } else if (state is AddJobProfileUpdatedState) {
-          titleController.clear();
-          contentController.clear();
+          firstNameController.clear();
+          lastNameController.clear();
+          cityController.clear();
+          stateController.clear();
+          countryController.clear();
+          countryController.clear();
+          workAuthorizationController.clear();
           Navigator.pop(context);
         }
       },
@@ -79,8 +102,8 @@ class _CreateJobProfilePageState extends State<CreateJobProfilePage> {
                 CustomTextFormField(
                   maxLines: 2,
                   minLines: 1,
-                  controller: titleController,
-                  hintText: AppStrings.title,
+                  controller: firstNameController,
+                  hintText: AppStrings.firstName,
                   validator: (value) {
                     if (value == null || value == '') {
                       return AppStrings.required;
@@ -92,8 +115,8 @@ class _CreateJobProfilePageState extends State<CreateJobProfilePage> {
                 CustomTextFormField(
                   maxLines: 5,
                   minLines: 1,
-                  controller: contentController,
-                  hintText: AppStrings.content,
+                  controller: lastNameController,
+                  hintText: AppStrings.lastName,
                   validator: (value) {
                     if (value == null || value == '') {
                       return AppStrings.required;
@@ -102,46 +125,112 @@ class _CreateJobProfilePageState extends State<CreateJobProfilePage> {
                   },
                 ),
                 SizedBox(height: size.height * 0.02),
+                CustomTextFormField(
+                  maxLines: 5,
+                  minLines: 1,
+                  controller: cityController,
+                  hintText: AppStrings.city,
+                  validator: (value) {
+                    if (value == null || value == '') {
+                      return AppStrings.required;
+                    }
+                    return null;
+                  },
+                ),
                 SizedBox(height: size.height * 0.02),
+                CustomTextFormField(
+                  maxLines: 5,
+                  minLines: 1,
+                  controller: stateController,
+                  hintText: AppStrings.state,
+                  validator: (value) {
+                    if (value == null || value == '') {
+                      return AppStrings.required;
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: size.height * 0.02),
+                CustomTextFormField(
+                  maxLines: 5,
+                  minLines: 1,
+                  controller: countryController,
+                  hintText: AppStrings.country,
+                  validator: (value) {
+                    if (value == null || value == '') {
+                      return AppStrings.required;
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: size.height * 0.02),
+                CustomTextFormField(
+                  maxLines: 5,
+                  minLines: 1,
+                  controller: workAuthorizationController,
+                  hintText: AppStrings.workAuthorisation,
+                  validator: (value) {
+                    if (value == null || value == '') {
+                      return AppStrings.required;
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: size.height * 0.02),
+                CustomTextFormField(
+                  maxLines: 5,
+                  minLines: 1,
+                  controller: employmentTypeController,
+                  hintText: AppStrings.employmentType,
+                  validator: (value) {
+                    if (value == null || value == '') {
+                      return AppStrings.required;
+                    }
+                    return null;
+                  },
+                ),
                 SizedBox(height: size.height * 0.02),
                 CustomButton(
                   onTap: () {
                     if (_formKey.currentState!.validate()) {
-                      var title = titleController.text;
-                      var content = contentController.text;
+                      var firstName = firstNameController.text;
+                      var lastName = lastNameController.text;
+                      var city = cityController.text;
+                      var state = stateController.text;
+                      var country = countryController.text;
+                      var workAuthorisation = workAuthorizationController.text;
+                      var employmentType = employmentTypeController.text;
 
-                      if (title.isNotEmpty && content.isNotEmpty) {
-                        if (widget.jobProfile != null) {
-                          var updatedJobProfile = JobProfileModel(
-                            userAccountId: 0,
-                            firstName: '',
-                            lastName: '',
-                            city: '',
-                            state: '',
-                            country: '',
-                            workAuthorization: '',
-                            employmentType: '',
-                            resume: '',
-                            profilePhoto: '',
-                            photosImagePath: '',
-                          );
-                          createJobProfileBloc.add(JobProfileAddUpdateButtonPressEvent(updatedJobProfile));
-                        } else {
-                          var newJobProfile = JobProfileModel(
-                            userAccountId: 0,
-                            firstName: '',
-                            lastName: '',
-                            city: '',
-                            state: '',
-                            country: '',
-                            workAuthorization: '',
-                            employmentType: '',
-                            resume: '',
-                            profilePhoto: '',
-                            photosImagePath: '',
-                          );
-                          createJobProfileBloc.add(JobProfileAddSaveButtonPressEvent(newJobProfile));
-                        }
+                      if (widget.jobProfile != null) {
+                        var updatedJobProfile = JobProfileModel(
+                          userAccountId: id,
+                          firstName: firstName,
+                          lastName: lastName,
+                          city: city,
+                          state: state,
+                          country: country,
+                          workAuthorization: workAuthorisation,
+                          employmentType: employmentType,
+                          resume: '',
+                          profilePhoto: '',
+                          photosImagePath: '',
+                        );
+                        createJobProfileBloc.add(JobProfileAddUpdateButtonPressEvent(updatedJobProfile));
+                      } else {
+                        var newJobProfile = JobProfileModel(
+                          userAccountId: 0,
+                          firstName: firstName,
+                          lastName: lastName,
+                          city: city,
+                          state: state,
+                          country: country,
+                          workAuthorization: workAuthorisation,
+                          employmentType: employmentType,
+                          resume: '',
+                          profilePhoto: '',
+                          photosImagePath: '',
+                        );
+                        createJobProfileBloc.add(JobProfileAddSaveButtonPressEvent(newJobProfile));
                       }
                     }
                   },
