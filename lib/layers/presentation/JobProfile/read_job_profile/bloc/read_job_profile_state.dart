@@ -16,11 +16,11 @@ class JobProfileInitialState extends ReadJobProfileState {}
 class JobProfileLoadingState extends ReadJobProfileState {}
 
 class JobProfileLoadedSuccessState extends ReadJobProfileState {
-  final List<JobProfile> jobProfileList;
+  final JobProfile jobProfile;
 
-  const JobProfileLoadedSuccessState(this.jobProfileList);
-  JobProfileLoadedSuccessState copyWith({List<JobProfile>? jobProfileList}) {
-    return JobProfileLoadedSuccessState(jobProfileList ?? this.jobProfileList);
+  const JobProfileLoadedSuccessState(this.jobProfile);
+  JobProfileLoadedSuccessState copyWith({JobProfile? jobProfile}) {
+    return JobProfileLoadedSuccessState(jobProfile ?? this.jobProfile);
   }
 }
 

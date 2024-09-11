@@ -44,18 +44,18 @@ class JobProfileRepositoryImpl implements JobProfileRepository {
   }
 
   @override
-  Future<Either<Failure, List<JobProfile>>> readJobProfiles() async {
+  Future<Either<Failure, JobProfile>> readJobProfile(int id) async {
     if (await networkInfo.isConnected) {
       try {
-        List<JobProfile> jobProfiles = await jobProfileRemoteDataSources.readJobProfile();
+        JobProfile jobProfiles = await jobProfileRemoteDataSources.readJobProfile(id);
         return Right(jobProfiles);
       } on CacheException {
         return Left(CacheFailure());
       }
     } else {
       try {
-        List<JobProfile> jobProfiles = await jobProfilesLocalDataSource.readLastJobProfiles();
-        return Right(jobProfiles);
+        JobProfile jobProfile = await jobProfilesLocalDataSource.readLastJobProfile(id);
+        return Right(jobProfile);
       } on CacheException {
         return Left(CacheFailure());
       }

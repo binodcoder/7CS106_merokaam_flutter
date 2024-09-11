@@ -46,24 +46,21 @@ class DatabaseHelper {
     return await db!.insert('JobProfile', jobProfileModel.toJson());
   }
 
-  Future<List<JobProfileModel>> readJobProfiles() async {
+  Future<JobProfileModel> readJobProfile(int id) async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db!.query('JobProfile');
+    Map<String, dynamic>? jobProfile;
+    final List<Map<String, dynamic>> result = await db!.query(
+      'JobProfile',
+      where: 'id = ?',
+      whereArgs: [id],
+      limit: 1, // Optional, to ensure only one record is fetched
+    );
 
-    return List.generate(maps.length, (i) {
-      return JobProfileModel(
-        userAccountId: 0,
-        firstName: '',
-        lastName: '',
-        city: '',
-        state: '',
-        country: '',
-        workAuthorization: '',
-        employmentType: '',
-        resume: '',
-        profilePhoto: '',
-        photosImagePath: '',
-      );
-    });
+    if (result.isNotEmpty) {
+      jobProfile = result.first;
+      // Process the job profile record
+    }
+
+    return JobProfileModel.fromJson(jobProfile!);
   }
 }

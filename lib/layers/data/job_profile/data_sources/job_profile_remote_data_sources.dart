@@ -1,10 +1,12 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:merokaam/core/models/job_profile_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/errors/exceptions.dart';
 
 abstract class JobProfileRemoteDataSource {
-  Future<List<JobProfileModel>> readJobProfile();
+  Future<JobProfileModel> readJobProfile(int id);
 
   Future<int> deleteJobProfile(int userAccountId);
 
@@ -32,7 +34,7 @@ class JobProfileRemoteDataSourceImpl implements JobProfileRemoteDataSource {
     }
   }
 
-  Future<List<JobProfileModel>> _readJobProfile(String url) async {
+  Future<JobProfileModel> _readJobProfile(String url) async {
     final response = await client.get(
       Uri.parse(url),
       headers: {
@@ -41,7 +43,7 @@ class JobProfileRemoteDataSourceImpl implements JobProfileRemoteDataSource {
       },
     );
     if (response.statusCode == 200) {
-      return jobProfileModelsFromMap(response.body);
+      return JobProfileModel.fromJson(json.decode(response.body));
     } else {
       throw ServerException();
     }
@@ -76,7 +78,7 @@ class JobProfileRemoteDataSourceImpl implements JobProfileRemoteDataSource {
   Future<int> createJobProfile(JobProfileModel jobProfileModel) => _createJobProfile("", jobProfileModel);
 
   @override
-  Future<List<JobProfileModel>> readJobProfile() => _readJobProfile("http://192.168.1.180:8080/api/job-profile/profile");
+  Future<JobProfileModel> readJobProfile(int id) => _readJobProfile("http://192.168.1.180:5000/api/job-profile/profile/$id");
 
   @override
   Future<int> updateJobProfile(JobProfileModel jobProfileModel) => _updateJobProfile("", jobProfileModel);

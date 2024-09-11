@@ -39,12 +39,12 @@ class ReadJobProfileBloc extends Bloc<ReadJobProfileEvent, ReadJobProfileState> 
 
   FutureOr<void> jobProfileInitialEvent(JobProfileInitialEvent event, Emitter<ReadJobProfileState> emit) async {
     emit(JobProfileLoadingState());
-    final jobProfileModelList = await getJobProfiles(NoParams());
+    final jobProfileModel = await getJobProfiles(event.id);
 
-    jobProfileModelList!.fold((failure) {
+    jobProfileModel!.fold((failure) {
       emit(JobProfileErrorState(message: mapFailureToMessage(failure)));
-    }, (jobProfileList) {
-      emit(JobProfileLoadedSuccessState(jobProfileList));
+    }, (jobProfile) {
+      emit(JobProfileLoadedSuccessState(jobProfile));
     });
   }
 

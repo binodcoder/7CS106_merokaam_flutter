@@ -24,15 +24,17 @@ class ReadJobProfilePage extends StatefulWidget {
 
 class _ReadJobProfilePageState extends State<ReadJobProfilePage> {
   TextEditingController searchMenuController = TextEditingController();
+  late final int id;
 
   @override
   void initState() {
-    jobProfileBloc.add(JobProfileInitialEvent());
+    id = sharedPreferences.getInt("id")!;
+    jobProfileBloc.add(JobProfileInitialEvent(id));
     super.initState();
   }
 
   void refreshPage() {
-    jobProfileBloc.add(JobProfileInitialEvent());
+    jobProfileBloc.add(JobProfileInitialEvent(id));
   }
 
   ReadJobProfileBloc jobProfileBloc = sl<ReadJobProfileBloc>();
@@ -68,11 +70,11 @@ class _ReadJobProfilePageState extends State<ReadJobProfilePage> {
           ).then((value) => refreshPage());
         } else if (state is JobProfileItemSelectedActionState) {
         } else if (state is JobProfileItemDeletedActionState) {
-          jobProfileBloc.add(JobProfileInitialEvent());
+          jobProfileBloc.add(JobProfileInitialEvent(id));
         } else if (state is JobProfileItemsDeletedActionState) {
-          jobProfileBloc.add(JobProfileInitialEvent());
+          jobProfileBloc.add(JobProfileInitialEvent(id));
         } else if (state is JobProfileItemsUpdatedState) {
-          jobProfileBloc.add(JobProfileInitialEvent());
+          jobProfileBloc.add(JobProfileInitialEvent(id));
         }
       },
       builder: (context, state) {
@@ -84,130 +86,78 @@ class _ReadJobProfilePageState extends State<ReadJobProfilePage> {
             ));
           case JobProfileLoadedSuccessState:
             final successState = state as JobProfileLoadedSuccessState;
+            var jobProfileModel = successState.jobProfile;
             return Scaffold(
-              backgroundColor: Colors.transparent,
-              extendBodyBehindAppBar: true,
               extendBody: true,
               drawer: const MyDrawer(),
-              floatingActionButton: sharedPreferences.getString("role") == "admin"
-                  ? FloatingActionButton(
-                      child: const Icon(Icons.add),
-                      onPressed: () {
-                        jobProfileBloc.add(JobProfileAddButtonClickedEvent());
-                      },
-                    )
-                  : null,
               appBar: AppBar(
-                title: Text("Merokaam"),
+                title: const Text(AppStrings.appTitle),
               ),
-              body: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Color.fromARGB(255, 185, 223, 254),
-                      Color(0xFF90CAF9),
-                      Color(0xFFBBDEFB),
-                      Color(0xFFE3F2FD),
+              body: Card(
+                child: ListTile(
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "${jobProfileModel.firstName.toUpperCase()} ${jobProfileModel.lastName.toUpperCase()}",
+                        style: const TextStyle(
+                          fontSize: FontSize.s18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        overflow: TextOverflow.clip,
+                      ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.edit),
+                      ),
                     ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    stops: [0.1, 0.4, 0.7, 1.0],
                   ),
-                ),
-                child: ListView.builder(
-                  itemCount: successState.jobProfileList.length,
-                  itemBuilder: (context, index) {
-                    var jobProfileModel = successState.jobProfileList[index];
-                    return Card(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15.0),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: size.height * 0.01,
                       ),
-                      margin: const EdgeInsets.all(15),
-                      elevation: 5,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: ColorManager.white,
-                          ),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        margin: const EdgeInsets.all(15),
-                        child: Slidable(
-                          enabled: sharedPreferences.getString("role") == "admin" ? true : false,
-                          endActionPane: ActionPane(
-                            extentRatio: 0.60,
-                            motion: const ScrollMotion(),
-                            children: [
-                              SlidableAction(
-                                onPressed: (context) {
-                                  jobProfileBloc.add(JobProfileEditButtonClickedEvent(jobProfileModel));
-                                },
-                                backgroundColor: const Color.fromARGB(255, 113, 205, 217),
-                                foregroundColor: Colors.white,
-                                icon: Icons.edit,
-                                label: AppStrings.edit,
-                              ),
-                              SlidableAction(
-                                onPressed: (context) {
-                                  jobProfileBloc.add(JobProfileDeleteButtonClickedEvent(jobProfileModel));
-                                },
-                                backgroundColor: const Color.fromARGB(255, 201, 32, 46),
-                                foregroundColor: Colors.white,
-                                icon: Icons.delete,
-                                label: AppStrings.delete,
-                              )
-                            ],
-                          ),
-                          child: ListTile(
-                            onTap: () {
-                              //  Navigator.pushNamed(context, Routes.JobProfileDetailRoute)
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (BuildContext context) => JobProfileDetailsPage(
-                                    jobProfile: jobProfileModel,
-                                  ),
-                                ),
-                              );
-                            },
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    jobProfileModel.firstName.toUpperCase(),
-                                    style: const TextStyle(
-                                      fontSize: FontSize.s18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    overflow: TextOverflow.clip,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  height: size.height * 0.01,
-                                ),
-                                Text(
-                                  jobProfileModel.lastName,
-                                  style: TextStyle(
-                                    fontSize: FontSize.s14,
-                                    color: ColorManager.black,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: size.height * 0.01,
-                                ),
-                              ],
-                            ),
-                          ),
+                      Text(
+                        jobProfileModel.city,
+                        style: TextStyle(
+                          fontSize: FontSize.s14,
+                          color: ColorManager.black,
                         ),
                       ),
-                    );
-                  },
+                      Text(
+                        jobProfileModel.state,
+                        style: TextStyle(
+                          fontSize: FontSize.s14,
+                          color: ColorManager.black,
+                        ),
+                      ),
+                      Text(
+                        jobProfileModel.country,
+                        style: TextStyle(
+                          fontSize: FontSize.s14,
+                          color: ColorManager.black,
+                        ),
+                      ),
+                      Text(
+                        jobProfileModel.workAuthorization,
+                        style: TextStyle(
+                          fontSize: FontSize.s14,
+                          color: ColorManager.black,
+                        ),
+                      ),
+                      Text(
+                        jobProfileModel.employmentType,
+                        style: TextStyle(
+                          fontSize: FontSize.s14,
+                          color: ColorManager.black,
+                        ),
+                      ),
+                      SizedBox(
+                        height: size.height * 0.01,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             );
