@@ -1,5 +1,5 @@
 class JobProfile {
-  int userAccountId;
+  int? userAccountId;
   String firstName;
   String lastName;
   String city;
@@ -7,13 +7,13 @@ class JobProfile {
   String country;
   String workAuthorization;
   String employmentType;
-  String resume;
-  String profilePhoto;
-  String photosImagePath;
+  String? resume;
+  String? profilePhoto;
+  String? photosImagePath;
   double? duration;
 
   JobProfile({
-    required this.userAccountId,
+    this.userAccountId,
     required this.firstName,
     required this.lastName,
     required this.city,
@@ -21,9 +21,9 @@ class JobProfile {
     required this.country,
     required this.workAuthorization,
     required this.employmentType,
-    required this.resume,
-    required this.profilePhoto,
-    required this.photosImagePath,
+    this.resume,
+    this.profilePhoto,
+    this.photosImagePath,
     this.duration,
   });
 }

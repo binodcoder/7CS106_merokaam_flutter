@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:merokaam/layers/data/job_profile/data_sources/job_profile_local_data_source.dart';
+import 'package:merokaam/layers/presentation/register/bloc/user_add_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/db/db_helper.dart';
@@ -72,6 +73,10 @@ Future<void> init() async {
 
   sl.registerLazySingleton(() => InputConverter());
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
+
+  //register
+  //login
+  sl.registerFactory(() => UserAddBloc());
 
   //! External
   final sharedPreferences = await SharedPreferences.getInstance();

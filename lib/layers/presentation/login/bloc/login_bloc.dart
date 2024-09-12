@@ -35,7 +35,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   saveUserData(UserInfoResponse userInfoResponse) {
+    sharedPreferences.setBool('login', true);
     sharedPreferences.setString('jwt_token', userInfoResponse.jwtToken);
-    sharedPreferences.setInt("id", userInfoResponse.id);
+    sharedPreferences.setInt("id", userInfoResponse.id ?? 1);
   }
 }

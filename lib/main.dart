@@ -11,20 +11,21 @@ import 'layers/presentation/register/bloc/user_add_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await di.init().then((value) => runApp(const MyApp()));
+  await di.init().then((value) => runApp(MyApp()));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
+  final SharedPreferences sharedPreferences = sl<SharedPreferences>();
 
   @override
   Widget build(BuildContext context) {
-    return const ScreenUtilInit(
+    return ScreenUtilInit(
       child: MaterialApp(
         onGenerateRoute: RouteGenerator.getRoute,
         debugShowCheckedModeBanner: false,
         title: AppStrings.appTitle,
-        initialRoute: Routes.loginRoute,
+        initialRoute: sharedPreferences.getBool("login") == null ? Routes.loginRoute : Routes.jobProfileRoute,
       ),
     );
   }

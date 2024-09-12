@@ -65,31 +65,26 @@ class JobProfileRepositoryImpl implements JobProfileRepository {
   @override
   Future<Either<Failure, int>>? updateJobProfile(JobProfile jobProfile) async {
     JobProfileModel jobProfileModel = JobProfileModel(
-      userAccountId: jobProfile.userAccountId,
-      firstName: '',
-      lastName: '',
-      city: "",
-      state: '',
-      country: '',
-      workAuthorization: '',
-      employmentType: '',
-      resume: '',
-      profilePhoto: '',
-      photosImagePath: '',
-      duration: 0.1,
+      firstName: jobProfile.firstName,
+      lastName: jobProfile.lastName,
+      city: jobProfile.city,
+      state: jobProfile.state,
+      country: jobProfile.country,
+      workAuthorization: jobProfile.workAuthorization,
+      employmentType: jobProfile.employmentType,
     );
     try {
       int response = await jobProfileRemoteDataSources.updateJobProfile(jobProfileModel);
       return Right(response);
-    } on CacheException {
-      return Left(CacheFailure());
+    } on ServerException {
+      return Left(ServerFailure());
     }
   }
 
   @override
   Future<Either<Failure, int>>? deleteJobProfile(JobProfile jobProfile) async {
     try {
-      int postList = await jobProfileRemoteDataSources.deleteJobProfile(jobProfile.userAccountId);
+      int postList = await jobProfileRemoteDataSources.deleteJobProfile(jobProfile.userAccountId!);
       return Right(postList);
     } on CacheException {
       return Left(CacheFailure());

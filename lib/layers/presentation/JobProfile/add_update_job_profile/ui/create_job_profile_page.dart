@@ -38,7 +38,7 @@ class _CreateJobProfilePageState extends State<CreateJobProfilePage> {
   @override
   void initState() {
     if (widget.jobProfile != null) {
-      id = widget.jobProfile!.userAccountId;
+      id = widget.jobProfile!.userAccountId!;
 
       firstNameController.text = widget.jobProfile!.firstName;
       lastNameController.text = widget.jobProfile!.lastName;
@@ -211,9 +211,9 @@ class _CreateJobProfilePageState extends State<CreateJobProfilePage> {
                           country: country,
                           workAuthorization: workAuthorisation,
                           employmentType: employmentType,
-                          resume: '',
-                          profilePhoto: '',
-                          photosImagePath: '',
+                          resume: null,
+                          profilePhoto: null,
+                          photosImagePath: null,
                         );
                         createJobProfileBloc.add(JobProfileAddUpdateButtonPressEvent(updatedJobProfile));
                       } else {
@@ -226,9 +226,9 @@ class _CreateJobProfilePageState extends State<CreateJobProfilePage> {
                           country: country,
                           workAuthorization: workAuthorisation,
                           employmentType: employmentType,
-                          resume: '',
-                          profilePhoto: '',
-                          photosImagePath: '',
+                          resume: null,
+                          profilePhoto: null,
+                          photosImagePath: null,
                         );
                         createJobProfileBloc.add(JobProfileAddSaveButtonPressEvent(newJobProfile));
                       }

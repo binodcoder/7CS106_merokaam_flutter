@@ -7,7 +7,7 @@ class AppStrings {
   static const String login = "Login";
   static const String logOut = "Log out";
   static const String aboutUs = "About Us";
-  static const String softwareCompany = "BinodSoft";
+  static const String softwareCompany = "MeroKaam";
   static const String noRouteFound = "No Route Found";
   static const String required = '*Required';
 
@@ -38,7 +38,7 @@ class AppStrings {
   static const String walk = "Walk";
   static const String pickGalary = "Pick Galary";
   static const String camera = "Camera";
-  static const String email = "group4@wlv.ac.uk";
+  static const String email = "B.Bhandari5@wlv.ac.uk";
 
   //about us
   static const String myWebsite = "https://binodcoder.github.io/binodcoder/";

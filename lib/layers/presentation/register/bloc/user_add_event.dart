@@ -7,21 +7,12 @@ class UserAddPickFromGalaryButtonPressEvent extends UserAddEvent {}
 class UserAddPickFromCameraButtonPressEvent extends UserAddEvent {}
 
 class UserAddSaveButtonPressEvent extends UserAddEvent {
-  String age;
   String email;
-  String gender;
-  String institutionEmail;
-  String name;
   String password;
-  String role;
+
   UserAddSaveButtonPressEvent(
-    this.age,
     this.email,
-    this.gender,
-    this.institutionEmail,
-    this.name,
     this.password,
-    this.role,
   );
 }
 
