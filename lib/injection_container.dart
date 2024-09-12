@@ -76,7 +76,7 @@ Future<void> init() async {
 
   //register
   //login
-  sl.registerFactory(() => UserAddBloc());
+  sl.registerFactory(() => UserAddBloc(addUser: sl()));
 
   //! External
   final sharedPreferences = await SharedPreferences.getInstance();
