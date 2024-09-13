@@ -7,10 +7,8 @@ import 'dart:async' as _i3;
 
 import 'package:merokaam/core/models/job_profile_model.dart' as _i4;
 import 'package:merokaam/core/network/network_info.dart' as _i6;
-import 'package:merokaam/layers/data/job_profile/data_sources/job_profile_local_data_source.dart'
-    as _i2;
-import 'package:merokaam/layers/data/job_profile/data_sources/job_profile_remote_data_sources.dart'
-    as _i5;
+import 'package:merokaam/layers/data/job_profile/data_sources/job_profile_local_data_source.dart' as _i2;
+import 'package:merokaam/layers/data/job_profile/data_sources/job_profile_remote_data_sources.dart' as _i5;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -29,26 +27,22 @@ import 'package:mockito/mockito.dart' as _i1;
 /// A class which mocks [JobProfilesLocalDataSource].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockJobProfilesLocalDataSource extends _i1.Mock
-    implements _i2.JobProfilesLocalDataSource {
+class MockJobProfilesLocalDataSource extends _i1.Mock implements _i2.JobProfilesLocalDataSource {
   MockJobProfilesLocalDataSource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i3.Future<List<_i4.JobProfileModel>> readLastJobProfiles() =>
-      (super.noSuchMethod(
+  _i3.Future<List<_i4.JobProfileModel>> readLastJobProfiles() => (super.noSuchMethod(
         Invocation.method(
           #readLastJobProfiles,
           [],
         ),
-        returnValue: _i3.Future<List<_i4.JobProfileModel>>.value(
-            <_i4.JobProfileModel>[]),
+        returnValue: _i3.Future<List<_i4.JobProfileModel>>.value(<_i4.JobProfileModel>[]),
       ) as _i3.Future<List<_i4.JobProfileModel>>);
 
   @override
-  _i3.Future<void>? cacheJobProfile(_i4.JobProfileModel? jobProfileModel) =>
-      (super.noSuchMethod(
+  _i3.Future<void>? cacheJobProfile(_i4.JobProfileModel? jobProfileModel) => (super.noSuchMethod(
         Invocation.method(
           #cacheJobProfile,
           [jobProfileModel],
@@ -60,20 +54,18 @@ class MockJobProfilesLocalDataSource extends _i1.Mock
 /// A class which mocks [JobProfileRemoteDataSource].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockJobProfileRemoteDataSource extends _i1.Mock
-    implements _i5.JobProfileRemoteDataSource {
+class MockJobProfileRemoteDataSource extends _i1.Mock implements _i5.JobProfileRemoteDataSource {
   MockJobProfileRemoteDataSource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i3.Future<List<_i4.JobProfileModel>> readJobProfile() => (super.noSuchMethod(
+  _i3.Future<List<_i4.JobProfileModel>> readJobProfiles() => (super.noSuchMethod(
         Invocation.method(
           #readJobProfile,
           [],
         ),
-        returnValue: _i3.Future<List<_i4.JobProfileModel>>.value(
-            <_i4.JobProfileModel>[]),
+        returnValue: _i3.Future<List<_i4.JobProfileModel>>.value(<_i4.JobProfileModel>[]),
       ) as _i3.Future<List<_i4.JobProfileModel>>);
 
   @override
@@ -86,8 +78,7 @@ class MockJobProfileRemoteDataSource extends _i1.Mock
       ) as _i3.Future<int>);
 
   @override
-  _i3.Future<int> createJobProfile(_i4.JobProfileModel? postModel) =>
-      (super.noSuchMethod(
+  _i3.Future<int> createJobProfile(_i4.JobProfileModel? postModel) => (super.noSuchMethod(
         Invocation.method(
           #createJobProfile,
           [postModel],
@@ -96,8 +87,7 @@ class MockJobProfileRemoteDataSource extends _i1.Mock
       ) as _i3.Future<int>);
 
   @override
-  _i3.Future<int> updateJobProfile(_i4.JobProfileModel? postModel) =>
-      (super.noSuchMethod(
+  _i3.Future<int> updateJobProfile(_i4.JobProfileModel? postModel) => (super.noSuchMethod(
         Invocation.method(
           #updateJobProfile,
           [postModel],

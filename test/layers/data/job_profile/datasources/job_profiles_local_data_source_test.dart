@@ -39,7 +39,7 @@ void main() {
       when(mockDatabaseHelper.readJobProfiles()).thenAnswer((_) async => tJobProfileList);
 
       // Act
-      final result = await dataSource.readLastJobProfiles();
+      final result = await dataSource.readLastJobProfile(1);
 
       // Assert
       expect(result, equals(tJobProfileList));
@@ -50,7 +50,7 @@ void main() {
       when(mockDatabaseHelper.readJobProfiles()).thenThrow(CacheException());
 
       // Act
-      final call = dataSource.readLastJobProfiles();
+      final call = dataSource.readLastJobProfile(1);
 
       // Assert
       expect(() => call, throwsA(isA<CacheException>()));

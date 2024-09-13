@@ -99,17 +99,17 @@ void main() {
     test('should return Right with data from remote data source when there is internet connection', () async {
       // Arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      when(mockRemoteDataSource.readJobProfile()).thenAnswer((_) async => [tJobProfileModel]);
+      when(mockRemoteDataSource.readJobProfile(1)).thenAnswer((_) async => tJobProfileModel);
 
       // Act
-      final result = await repository.readJobProfiles();
+      final result = await repository.readJobProfile(1);
 
       // Assert
       // expect(result, Right<Failure, List<JobProfile>>([tJobProfileModel] as List<JobProfile>));
       expect(result, isA<Right<Failure, List<JobProfile>>>());
 
       verify(mockNetworkInfo.isConnected);
-      verify(mockRemoteDataSource.readJobProfile());
+      verify(mockRemoteDataSource.readJobProfile(1));
       verifyNoMoreInteractions(mockNetworkInfo);
       verifyNoMoreInteractions(mockRemoteDataSource);
     });
@@ -120,7 +120,7 @@ void main() {
       when(mockLocalDataSource.readLastJobProfiles()).thenAnswer((_) async => [tJobProfileModel]);
 
       // Act
-      final result = await repository.readJobProfiles();
+      final result = await repository.readJobProfile(1);
 
       // Assert
       //expect(result, Right(tJobProfileList));
@@ -134,15 +134,15 @@ void main() {
     test('should return Left(CacheFailure) when both remote and local data sources fail', () async {
       // Arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => true);
-      when(mockRemoteDataSource.readJobProfile()).thenThrow(CacheException());
+      when(mockRemoteDataSource.readJobProfile(1)).thenThrow(CacheException());
 
       // Act
-      final result = await repository.readJobProfiles();
+      final result = await repository.readJobProfile(1);
 
       // Assert
       expect(result, Left(CacheFailure()));
       verify(mockNetworkInfo.isConnected);
-      verify(mockRemoteDataSource.readJobProfile());
+      verify(mockRemoteDataSource.readJobProfile(1));
       verifyNoMoreInteractions(mockNetworkInfo);
       verifyNoMoreInteractions(mockRemoteDataSource);
     });

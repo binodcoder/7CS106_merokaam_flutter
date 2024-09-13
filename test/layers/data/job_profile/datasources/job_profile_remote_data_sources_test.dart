@@ -77,7 +77,7 @@ void main() {
       when(mockSharedPreferences.getString("jwt_token")).thenReturn('token;');
 
       // Act
-      final result = await dataSource.readJobProfile();
+      final result = await dataSource.readJobProfile(1);
 
       // Assert
       expect(result, isA<List<JobProfileModel>>());
@@ -90,7 +90,7 @@ void main() {
       when(mockSharedPreferences.getString("jwt_token")).thenReturn('token;');
 
       // Act
-      final call = dataSource.readJobProfile();
+      final call = dataSource.readJobProfile(1);
 
       // Assert
       expect(() => call, throwsA(isA<ServerException>()));

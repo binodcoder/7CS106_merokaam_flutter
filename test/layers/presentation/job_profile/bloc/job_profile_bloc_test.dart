@@ -36,28 +36,26 @@ void main() {
   });
 
   group('GetJobProfile', () {
-    final tJobProfileModel = [
-      JobProfileModel(
-        userAccountId: 0,
-        firstName: '',
-        lastName: '',
-        city: '',
-        state: '',
-        country: '',
-        workAuthorization: '',
-        employmentType: '',
-        resume: '',
-        profilePhoto: '',
-        photosImagePath: '',
-      )
-    ];
+    final tJobProfileModel = JobProfileModel(
+      userAccountId: 0,
+      firstName: '',
+      lastName: '',
+      city: '',
+      state: '',
+      country: '',
+      workAuthorization: '',
+      employmentType: '',
+      resume: '',
+      profilePhoto: '',
+      photosImagePath: '',
+    );
 
     test('should get data from the JobProfile usecase', () async* {
       //arrange
 
       when(mockGetJobProfile(any)).thenAnswer((_) async => Right(tJobProfileModel));
       //act
-      bloc.add(JobProfileInitialEvent());
+      bloc.add(JobProfileInitialEvent(1));
       await untilCalled(mockGetJobProfile(any));
 
       //assert
@@ -80,7 +78,7 @@ void main() {
       when(mockGetJobProfile(any)).thenAnswer((_) async => Left(ServerFailure()));
 
       //assert later
-      final expected = [JobProfileInitialState(), JobProfileLoadingState(), JobProfileErrorState(message: AppStrings.serverFailureMessage)];
+      final expected = [JobProfileInitialState(), JobProfileLoadingState(), const JobProfileErrorState(message: AppStrings.serverFailureMessage)];
       expectLater(bloc, emitsInOrder(expected));
       //act
       bloc.add(JobProfileInitialEvent());
@@ -92,10 +90,10 @@ void main() {
       when(mockGetJobProfile(any)).thenAnswer((_) async => Left(CacheFailure()));
 
       //assert later
-      final expected = [JobProfileInitialState(), JobProfileLoadingState(), JobProfileErrorState(message: AppStrings.cacheFailureMessage)];
+      final expected = [JobProfileInitialState(), JobProfileLoadingState(), const JobProfileErrorState(message: AppStrings.cacheFailureMessage)];
       expectLater(bloc, emitsInOrder(expected));
       //act
-      bloc.add(JobProfileInitialEvent());
+      bloc.add(JobProfileInitialEvent(1));
     });
   });
 
@@ -129,11 +127,7 @@ void main() {
       when(mockDeleteJobProfile(tJobProfileModel!)).thenAnswer((_) async => const Right(1));
 
       //assert later
-      final expected = [
-        JobProfileInitialState(),
-        JobProfileLoadingState(),
-        JobProfileLoadedSuccessState([tJobProfileModel])
-      ];
+      final expected = [JobProfileInitialState(), JobProfileLoadingState(), JobProfileLoadedSuccessState(tJobProfileModel)];
       expectLater(bloc, emitsInOrder(expected));
       //act
       bloc.add(JobProfileDeleteButtonClickedEvent(tJobProfileModel));
@@ -143,7 +137,7 @@ void main() {
       when(mockDeleteJobProfile(tJobProfileModel!)).thenAnswer((_) async => Left(ServerFailure()));
 
       //assert later
-      final expected = [JobProfileInitialState(), JobProfileLoadingState(), JobProfileErrorState(message: AppStrings.serverFailureMessage)];
+      final expected = [JobProfileInitialState(), JobProfileLoadingState(), const JobProfileErrorState(message: AppStrings.serverFailureMessage)];
       expectLater(bloc, emitsInOrder(expected));
       //act
       bloc.add(JobProfileDeleteButtonClickedEvent(tJobProfileModel));
@@ -154,7 +148,7 @@ void main() {
       when(mockDeleteJobProfile(tJobProfileModel!)).thenAnswer((_) async => Left(CacheFailure()));
 
       //assert later
-      final expected = [JobProfileInitialState(), JobProfileLoadingState(), JobProfileErrorState(message: AppStrings.cacheFailureMessage)];
+      final expected = [JobProfileInitialState(), JobProfileLoadingState(), const JobProfileErrorState(message: AppStrings.cacheFailureMessage)];
       expectLater(bloc, emitsInOrder(expected));
       //act
       bloc.add(JobProfileDeleteButtonClickedEvent(tJobProfileModel));
