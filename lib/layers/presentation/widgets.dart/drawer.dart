@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:merokaam/layers/presentation/terms/terms.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../injection_container.dart';
 import '../../../resources/assets_manager.dart';
@@ -113,6 +114,29 @@ class _MyDrawerState extends State<MyDrawer> {
                 context,
                 MaterialPageRoute(
                   builder: (BuildContext context) => const About(),
+                  fullscreenDialog: true,
+                ),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(
+              CupertinoIcons.book,
+              color: ColorManager.primary,
+            ),
+            title: Text(
+              AppStrings.terms,
+              textScaleFactor: 1.2,
+              style: getMediumStyle(
+                color: ColorManager.primary,
+                fontSize: FontSize.s14,
+              ),
+            ),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => TermsAndConditionsWidget(),
                   fullscreenDialog: true,
                 ),
               );

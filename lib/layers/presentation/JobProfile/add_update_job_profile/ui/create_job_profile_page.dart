@@ -35,6 +35,12 @@ class _CreateJobProfilePageState extends State<CreateJobProfilePage> {
   final TextEditingController employmentTypeController = TextEditingController();
   late int id;
 
+  final List<String> workAuthorization = <String>["Nepali Citizen", "TN permit", "Indian Citizen", "Pakistani Citizen"];
+  String selectedWorkAuthorization = "Nepali Citizen";
+
+  final List<String> employmentType = <String>["Seeking Employment", "Full-time", "Part-time", "Freelance"];
+  String selectedEmploymentType = "Seeking Employment";
+
   @override
   void initState() {
     if (widget.jobProfile != null) {
@@ -164,30 +170,100 @@ class _CreateJobProfilePageState extends State<CreateJobProfilePage> {
                   },
                 ),
                 SizedBox(height: size.height * 0.02),
-                CustomTextFormField(
-                  maxLines: 5,
-                  minLines: 1,
-                  controller: workAuthorizationController,
-                  hintText: AppStrings.workAuthorisation,
-                  validator: (value) {
-                    if (value == null || value == '') {
-                      return AppStrings.required;
-                    }
-                    return null;
+                // CustomTextFormField(
+                //   maxLines: 5,
+                //   minLines: 1,
+                //   controller: workAuthorizationController,
+                //   hintText: AppStrings.workAuthorisation,
+                //   validator: (value) {
+                //     if (value == null || value == '') {
+                //       return AppStrings.required;
+                //     }
+                //     return null;
+                //   },
+                // ),
+                DropdownButtonFormField<String>(
+                  decoration: InputDecoration(
+                    fillColor: Colors.grey[10],
+                    filled: true,
+                    contentPadding: EdgeInsets.symmetric(horizontal: AppWidth.w4, vertical: AppHeight.h12),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      //BorderSide(color: ColorManager.white, width: 0, style: BorderStyle.none),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(AppRadius.r10),
+                      ),
+                    ),
+                  ),
+                  isExpanded: true,
+                  icon: const Icon(Icons.arrow_drop_down),
+                  iconEnabledColor: ColorManager.blue,
+                  iconSize: 30,
+                  items: workAuthorization.map((item) {
+                    return DropdownMenuItem<String>(
+                      value: item,
+                      child: Container(
+                        margin: const EdgeInsets.only(left: 1),
+                        padding: const EdgeInsets.only(left: 10),
+                        height: 55,
+                        width: double.infinity,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            item,
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectedWorkAuthorization = newValue!;
+                    });
                   },
+                  value: selectedWorkAuthorization,
                 ),
                 SizedBox(height: size.height * 0.02),
-                CustomTextFormField(
-                  maxLines: 5,
-                  minLines: 1,
-                  controller: employmentTypeController,
-                  hintText: AppStrings.employmentType,
-                  validator: (value) {
-                    if (value == null || value == '') {
-                      return AppStrings.required;
-                    }
-                    return null;
+                DropdownButtonFormField<String>(
+                  decoration: InputDecoration(
+                    fillColor: Colors.grey[10],
+                    filled: true,
+                    contentPadding: EdgeInsets.symmetric(horizontal: AppWidth.w4, vertical: AppHeight.h12),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide.none,
+                      //BorderSide(color: ColorManager.white, width: 0, style: BorderStyle.none),
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(AppRadius.r10),
+                      ),
+                    ),
+                  ),
+                  isExpanded: true,
+                  icon: const Icon(Icons.arrow_drop_down),
+                  iconEnabledColor: ColorManager.blue,
+                  iconSize: 30,
+                  items: employmentType.map((item) {
+                    return DropdownMenuItem<String>(
+                      value: item,
+                      child: Container(
+                        margin: const EdgeInsets.only(left: 1),
+                        padding: const EdgeInsets.only(left: 10),
+                        height: 55,
+                        width: double.infinity,
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            item,
+                          ),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (newValue) {
+                    setState(() {
+                      selectedEmploymentType = newValue!;
+                    });
                   },
+                  value: selectedEmploymentType,
                 ),
                 SizedBox(height: size.height * 0.02),
                 CustomButton(
@@ -198,8 +274,8 @@ class _CreateJobProfilePageState extends State<CreateJobProfilePage> {
                       var city = cityController.text;
                       var state = stateController.text;
                       var country = countryController.text;
-                      var workAuthorisation = workAuthorizationController.text;
-                      var employmentType = employmentTypeController.text;
+                      var workAuthorisation = selectedWorkAuthorization;
+                      var employmentType = selectedEmploymentType;
 
                       if (widget.jobProfile != null) {
                         var updatedJobProfile = JobProfileModel(

@@ -170,13 +170,17 @@ class _ReadJobProfilePageState extends State<ReadJobProfilePage> {
 
           case JobProfileErrorState:
             return Scaffold(
+                drawer: const MyDrawer(),
+                appBar: AppBar(
+                  title: const Text(AppStrings.appTitle),
+                ),
                 body: Center(
                     child: ElevatedButton(
-              onPressed: () {
-                jobProfileBloc.add(JobProfileAddButtonClickedEvent());
-              },
-              child: const Text("Add Profile"),
-            )));
+                  onPressed: () {
+                    jobProfileBloc.add(JobProfileAddButtonClickedEvent());
+                  },
+                  child: const Text("Add Profile"),
+                )));
 
           default:
             return const Scaffold(body: SizedBox());

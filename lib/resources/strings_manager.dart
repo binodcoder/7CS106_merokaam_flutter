@@ -7,6 +7,7 @@ class AppStrings {
   static const String login = "Login";
   static const String logOut = "Log out";
   static const String aboutUs = "About Us";
+  static const String terms = "Terms & Conditions";
   static const String softwareCompany = "MeroKaam";
   static const String noRouteFound = "No Route Found";
   static const String required = '*Required';
