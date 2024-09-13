@@ -7,9 +7,12 @@ import 'package:merokaam/resources/strings_manager.dart';
 import '../injection_container.dart';
 import '../layers/presentation/JobProfile/add_update_job_profile/ui/create_job_profile_page.dart';
 import '../layers/presentation/JobProfile/read_job_profile/ui/read_job_profile_page.dart';
+import '../layers/presentation/onboarding/onboarding.dart';
+import '../layers/presentation/splash/splash.dart';
 
 class Routes {
   static const String splashRoute = "/";
+  static const String onBoardingRoute = "/onboarding";
   static const String loginRoute = "/login";
   static const String registerRoute = "/register";
   static const String createJobProfileRoute = "/create_job_profile";
@@ -19,6 +22,10 @@ class Routes {
 class RouteGenerator {
   static Route<dynamic> getRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
+      case Routes.splashRoute:
+        return MaterialPageRoute(builder: (context) => const SplashView());
+      case Routes.onBoardingRoute:
+        return MaterialPageRoute(builder: (context) => const OnBoardingView());
       case Routes.loginRoute:
         return MaterialPageRoute(
             builder: (context) => LoginPage(

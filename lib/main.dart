@@ -20,12 +20,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
+    return const ScreenUtilInit(
       child: MaterialApp(
         onGenerateRoute: RouteGenerator.getRoute,
         debugShowCheckedModeBanner: false,
         title: AppStrings.appTitle,
-        initialRoute: sharedPreferences.getBool("login") == null ? Routes.loginRoute : Routes.jobProfileRoute,
+        initialRoute: Routes.splashRoute,
+        //sharedPreferences.getBool("login") == null ? Routes.loginRoute : Routes.jobProfileRoute,
       ),
     );
   }

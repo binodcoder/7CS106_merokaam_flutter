@@ -59,16 +59,16 @@ class AppStrings {
 
   //splash screen
 
-  static const String onBoardingTItle1 = "Title 1";
-  static const String onBoardingTItle2 = "Title 2";
-  static const String onBoardingTItle3 = "Title 3";
-  static const String onBoardingTItle4 = "Title 4";
-
-  static const String onBoardingSubTitle1 = "The app provides pre-loaded fitness routines";
-  static const String onBoardingSubTitle2 = "Users can join real-time workout sessions led by either group trainers or book individual trainers";
-  static const String onBoardingSubTitle3 = "A calendar feature for users to schedule one-on-one sessions with personal trainers";
+  static const String onBoardingTItle1 = "CREATE JOB PROFILE";
+  static const String onBoardingTItle2 = "READ JOB PROFILE";
+  static const String onBoardingTItle3 = "UPDATE JOB PROFILE";
+  static const String onBoardingTItle4 = "DELETE JOB PROFILE";
+  static const String onBoardingSubTitle1 = "Start your journey by creating your very first job profile";
+  static const String onBoardingSubTitle2 = "View your profile and embark on a journey of discovery";
+  static const String onBoardingSubTitle3 =
+      "Stay in the loop!\nDiscover the latest updates, insights, and stories freshly added to your profile. Dive in now and stay inspired";
   static const String onBoardingSubTitle4 =
-      "Users can design routes on a map, set times, and starting points. Others can view and express interest in joining";
+      "Ready for a clean slate?\nSay goodbye to old profile and start fresh. Delete profile with ease, clearing the path for new beginnings.";
 
   static const String skip = "Skip";
 }
