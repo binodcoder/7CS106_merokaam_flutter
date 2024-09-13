@@ -85,13 +85,13 @@ class _ReadJobProfilePageState extends State<ReadJobProfilePage> {
             final successState = state as JobProfileLoadedSuccessState;
             var jobProfileModel = successState.jobProfile;
             return Scaffold(
-              floatingActionButton: FloatingActionButton(
-                backgroundColor: ColorManager.primary,
-                child: const Icon(Icons.add),
-                onPressed: () {
-                  jobProfileBloc.add(JobProfileAddButtonClickedEvent());
-                },
-              ),
+              // floatingActionButton: FloatingActionButton(
+              //   backgroundColor: ColorManager.primary,
+              //   child: const Icon(Icons.add),
+              //   onPressed: () {
+              //     jobProfileBloc.add(JobProfileAddButtonClickedEvent());
+              //   },
+              // ),
               extendBody: true,
               drawer: const MyDrawer(),
               appBar: AppBar(

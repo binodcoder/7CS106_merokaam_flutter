@@ -32,12 +32,10 @@ class AppStrings {
   static const String error = "Error";
   static const String edit = "Edit";
   static const String delete = "Delete";
-  static const String editPost = "Edit Post";
+
   static const String cancel = "Cancel";
   static const String save = "Save";
-  static const String walk = "Walk";
-  static const String pickGalary = "Pick Galary";
-  static const String camera = "Camera";
+
   static const String email = "B.Bhandari5@wlv.ac.uk";
 
   //about us

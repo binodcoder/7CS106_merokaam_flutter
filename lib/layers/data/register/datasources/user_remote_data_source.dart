@@ -19,7 +19,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       headers: {'Content-Type': 'application/json'},
       body: json.encode(userModel.toMap()),
     );
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       return 1;
     } else {
       throw ServerException();

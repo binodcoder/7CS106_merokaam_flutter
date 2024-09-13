@@ -30,7 +30,7 @@ class JobProfileRemoteDataSourceImpl implements JobProfileRemoteDataSource {
       },
       body: json.encode(jobProfileModel.toJson()),
     );
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       return 1;
     } else {
       throw ServerException();
