@@ -24,9 +24,9 @@ class JobProfileLoadedSuccessState extends ReadJobProfileState {
   }
 }
 
-class JobProfileErrorState extends JobProfileActionState {
+class JobProfileErrorState extends ReadJobProfileState {
   final String message;
-  JobProfileErrorState({required this.message});
+  const JobProfileErrorState({required this.message});
 }
 
 class JobProfileNavigateToAddJobProfileActionState extends JobProfileActionState {}

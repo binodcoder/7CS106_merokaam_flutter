@@ -1,6 +1,10 @@
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:merokaam/layers/data/job_profile/data_sources/job_profile_local_data_source.dart';
+import 'package:merokaam/layers/data/register/datasources/user_remote_data_source.dart';
+import 'package:merokaam/layers/data/register/repositories/user_repositories_impl.dart';
+import 'package:merokaam/layers/domain/register/repositories/user_repositories.dart';
+import 'package:merokaam/layers/domain/register/usecases/add_user.dart';
 import 'package:merokaam/layers/presentation/register/bloc/user_add_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -77,6 +81,14 @@ Future<void> init() async {
   //register
   //login
   sl.registerFactory(() => UserAddBloc(addUser: sl()));
+  sl.registerLazySingleton(() => AddUser(sl()));
+
+  sl.registerLazySingleton<UserRepository>(
+    () => UserRepositoriesImpl(addUserRemoteDataSource: sl()),
+  );
+  sl.registerLazySingleton<UserRemoteDataSource>(() => UserRemoteDataSourceImpl(
+        client: sl(),
+      ));
 
   //! External
   final sharedPreferences = await SharedPreferences.getInstance();

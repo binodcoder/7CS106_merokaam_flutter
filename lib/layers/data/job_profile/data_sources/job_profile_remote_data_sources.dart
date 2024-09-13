@@ -24,8 +24,11 @@ class JobProfileRemoteDataSourceImpl implements JobProfileRemoteDataSource {
   Future<int> _createJobProfile(String url, JobProfileModel jobProfileModel) async {
     final response = await client.post(
       Uri.parse(url),
-      headers: {'Content-Type': 'application/json'},
-      body: jobProfileModel.toJson(),
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': sharedPreferences.getString("jwt_token")!.split(';').first,
+      },
+      body: json.encode(jobProfileModel.toJson()),
     );
     if (response.statusCode == 201) {
       return 1;
@@ -78,7 +81,8 @@ class JobProfileRemoteDataSourceImpl implements JobProfileRemoteDataSource {
   }
 
   @override
-  Future<int> createJobProfile(JobProfileModel jobProfileModel) => _createJobProfile("", jobProfileModel);
+  Future<int> createJobProfile(JobProfileModel jobProfileModel) =>
+      _createJobProfile("http://192.168.1.180:5000/api/job-profile/create", jobProfileModel);
 
   @override
   Future<JobProfileModel> readJobProfile(int id) => _readJobProfile("http://192.168.1.180:5000/api/job-profile/profile/$id");

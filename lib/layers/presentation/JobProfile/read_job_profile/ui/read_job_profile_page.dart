@@ -68,10 +68,7 @@ class _ReadJobProfilePageState extends State<ReadJobProfilePage> {
               fullscreenDialog: true,
             ),
           ).then((value) => refreshPage());
-        } else if (state is JobProfileItemSelectedActionState) {
         } else if (state is JobProfileItemDeletedActionState) {
-          jobProfileBloc.add(JobProfileInitialEvent(id));
-        } else if (state is JobProfileItemsDeletedActionState) {
           jobProfileBloc.add(JobProfileInitialEvent(id));
         } else if (state is JobProfileItemsUpdatedState) {
           jobProfileBloc.add(JobProfileInitialEvent(id));
@@ -170,10 +167,19 @@ class _ReadJobProfilePageState extends State<ReadJobProfilePage> {
                 ),
               ),
             );
+
           case JobProfileErrorState:
-            return const Scaffold(body: Center(child: Text(AppStrings.error)));
+            return Scaffold(
+                body: Center(
+                    child: ElevatedButton(
+              onPressed: () {
+                jobProfileBloc.add(JobProfileAddButtonClickedEvent());
+              },
+              child: const Text("Add Profile"),
+            )));
+
           default:
-            return const SizedBox();
+            return const Scaffold(body: SizedBox());
         }
       },
     );

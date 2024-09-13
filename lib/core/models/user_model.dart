@@ -16,8 +16,8 @@ class UserModel extends User {
 
   Map<String, dynamic> toMap() {
     return {
-      'email': email,
-      'password': password,
+      "email": email,
+      "password": password,
     };
   }
 

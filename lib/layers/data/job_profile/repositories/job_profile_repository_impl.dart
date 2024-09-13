@@ -22,24 +22,19 @@ class JobProfileRepositoryImpl implements JobProfileRepository {
   @override
   Future<Either<Failure, int>>? createJobProfile(JobProfile jobProfile) async {
     JobProfileModel jobProfileModel = JobProfileModel(
-      userAccountId: jobProfile.userAccountId,
-      firstName: '',
-      lastName: '',
-      city: "",
-      state: '',
-      country: '',
-      workAuthorization: '',
-      employmentType: '',
-      resume: '',
-      profilePhoto: '',
-      photosImagePath: '',
-      duration: 0.1,
+      firstName: jobProfile.firstName,
+      lastName: jobProfile.lastName,
+      city: jobProfile.city,
+      state: jobProfile.state,
+      country: jobProfile.country,
+      workAuthorization: jobProfile.workAuthorization,
+      employmentType: jobProfile.employmentType,
     );
     try {
       int response = await jobProfileRemoteDataSources.createJobProfile(jobProfileModel);
       return Right(response);
-    } on CacheException {
-      return Left(CacheFailure());
+    } on ServerException {
+      return Left(ServerFailure());
     }
   }
 
@@ -49,8 +44,8 @@ class JobProfileRepositoryImpl implements JobProfileRepository {
       try {
         JobProfile jobProfiles = await jobProfileRemoteDataSources.readJobProfile(id);
         return Right(jobProfiles);
-      } on CacheException {
-        return Left(CacheFailure());
+      } on ServerException {
+        return Left(ServerFailure());
       }
     } else {
       try {
