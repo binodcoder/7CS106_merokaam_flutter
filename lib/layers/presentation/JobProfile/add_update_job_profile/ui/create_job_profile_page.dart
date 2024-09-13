@@ -31,8 +31,7 @@ class _CreateJobProfilePageState extends State<CreateJobProfilePage> {
   final TextEditingController cityController = TextEditingController();
   final TextEditingController stateController = TextEditingController();
   final TextEditingController countryController = TextEditingController();
-  final TextEditingController workAuthorizationController = TextEditingController();
-  final TextEditingController employmentTypeController = TextEditingController();
+
   late int id;
 
   final List<String> workAuthorization = <String>["Nepali Citizen", "TN permit", "Indian Citizen", "Pakistani Citizen"];
@@ -51,8 +50,8 @@ class _CreateJobProfilePageState extends State<CreateJobProfilePage> {
       cityController.text = widget.jobProfile!.city;
       stateController.text = widget.jobProfile!.state;
       countryController.text = widget.jobProfile!.country;
-      workAuthorizationController.text = widget.jobProfile!.workAuthorization;
-      employmentTypeController.text = widget.jobProfile!.employmentType;
+      selectedWorkAuthorization = widget.jobProfile!.workAuthorization;
+      selectedEmploymentType = widget.jobProfile!.employmentType;
       // createJobProfileBloc.add(JobProfileAddReadyToUpdateEvent(widget.jobProfile!));
     } else {
       createJobProfileBloc.add(JobProfileAddInitialEvent());
@@ -79,7 +78,6 @@ class _CreateJobProfilePageState extends State<CreateJobProfilePage> {
           stateController.clear();
           countryController.clear();
           countryController.clear();
-          workAuthorizationController.clear();
           Navigator.pop(context);
         } else if (state is AddJobProfileUpdatedState) {
           firstNameController.clear();
@@ -88,7 +86,6 @@ class _CreateJobProfilePageState extends State<CreateJobProfilePage> {
           stateController.clear();
           countryController.clear();
           countryController.clear();
-          workAuthorizationController.clear();
           Navigator.pop(context);
         }
       },
