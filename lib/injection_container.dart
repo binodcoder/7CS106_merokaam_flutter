@@ -69,7 +69,10 @@ Future<void> init() async {
 
   sl.registerLazySingleton(() => Login(sl()));
   sl.registerLazySingleton<LoginRepository>(
-    () => LoginRepositoryImpl(remoteDataSource: sl()),
+    () => LoginRepositoryImpl(
+      remoteDataSource: sl(),
+      networkInfo: sl(),
+    ),
   );
 
   sl.registerLazySingleton<LoginRemoteDataSource>(() => LoginRemoteDataSourceImpl(client: sl()));
