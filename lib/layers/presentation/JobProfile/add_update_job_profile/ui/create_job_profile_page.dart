@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:merokaam/core/entities/job_profile.dart';
 import '../../../../../core/models/job_profile_model.dart';
 import '../../../../../injection_container.dart';
@@ -86,6 +87,13 @@ class _CreateJobProfilePageState extends State<CreateJobProfilePage> {
           countryController.clear();
           countryController.clear();
           Navigator.pop(context);
+        } else if (state is AddJobProfileErrorState) {
+          Fluttertoast.showToast(
+            msg: state.message,
+            toastLength: Toast.LENGTH_LONG,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: ColorManager.error,
+          );
         }
       },
       builder: (context, state) {

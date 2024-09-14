@@ -19,6 +19,11 @@ class LoginFailure extends Failure {
   List<Object?> get props => [];
 }
 
+class NetworkFailure extends Failure {
+  @override
+  List<Object?> get props => [];
+}
+
 class UnknownFailure extends Failure {
   @override
   // TODO: implement props

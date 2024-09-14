@@ -14,10 +14,8 @@ import 'create_job_profile_bloc_state.dart';
 class CreateJobProfileBloc extends Bloc<CreateJobProfileEvent, CreateJobProfileState> {
   final CreateJobProfile createJobProfile;
   final UpdateJobProfile updateJobProfile;
-  final ReadJobProfile readJobProfile;
 
-  CreateJobProfileBloc({required this.createJobProfile, required this.updateJobProfile, required this.readJobProfile})
-      : super(JobProfileAddInitialState()) {
+  CreateJobProfileBloc({required this.createJobProfile, required this.updateJobProfile}) : super(JobProfileAddInitialState()) {
     on<JobProfileAddInitialEvent>(postAddInitialEvent);
     on<JobProfileAddSaveButtonPressEvent>(addJobProfileSaveButtonPressEvent);
     on<JobProfileAddUpdateButtonPressEvent>(jobProfileAddUpdateButtonPressEvent);
@@ -38,7 +36,13 @@ class CreateJobProfileBloc extends Bloc<CreateJobProfileEvent, CreateJobProfileS
   }
 
   FutureOr<void> jobProfileAddUpdateButtonPressEvent(JobProfileAddUpdateButtonPressEvent event, Emitter<CreateJobProfileState> emit) async {
-    await updateJobProfile(event.updatedJobProfile);
-    emit(AddJobProfileUpdatedState());
+    emit(AddJobProfileLoadingState());
+    final result = await updateJobProfile(event.updatedJobProfile);
+
+    result!.fold((failure) {
+      emit(AddJobProfileErrorState(message: mapFailureToMessage(failure)));
+    }, (result) {
+      emit(AddJobProfileUpdatedState());
+    });
   }
 }

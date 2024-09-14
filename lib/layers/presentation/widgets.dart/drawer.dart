@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:merokaam/core/db/db_helper.dart';
 import 'package:merokaam/layers/presentation/terms/terms.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../injection_container.dart';
@@ -49,53 +50,30 @@ class _MyDrawerState extends State<MyDrawer> {
               currentAccountPicture: const CircleAvatar(backgroundImage: AssetImage(ImageAssets.drawerHeaderLogo)),
             ),
           ),
-          sharedPreferences.getBool("login") == null
-              ? ListTile(
-                  leading: Icon(
-                    Icons.logout_outlined,
-                    color: ColorManager.primary,
-                  ),
-                  title: Text(AppStrings.login,
-                      style: getMediumStyle(
-                        color: ColorManager.black,
-                        fontSize: FontSize.s14,
-                      )),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => const LoginPage(),
-                        fullscreenDialog: true,
-                      ),
-                    );
-                  },
-                )
-              : const SizedBox(),
-          sharedPreferences.getBool("login") == true
-              ? ListTile(
-                  leading: Icon(
-                    Icons.logout_outlined,
-                    color: ColorManager.primary,
-                  ),
-                  title: Text(
-                    AppStrings.logOut,
-                    style: getMediumStyle(
-                      color: ColorManager.black,
-                      fontSize: FontSize.s14,
-                    ),
-                  ),
-                  onTap: () {
-                    sharedPreferences.clear();
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => const LoginPage(),
-                        fullscreenDialog: true,
-                      ),
-                    );
-                  },
-                )
-              : const SizedBox(),
+          ListTile(
+            leading: Icon(
+              Icons.logout_outlined,
+              color: ColorManager.primary,
+            ),
+            title: Text(
+              AppStrings.logOut,
+              style: getMediumStyle(
+                color: ColorManager.black,
+                fontSize: FontSize.s14,
+              ),
+            ),
+            onTap: () {
+              sharedPreferences.clear();
+              DatabaseHelper.deleteAllJobProfiles();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) => const LoginPage(),
+                  fullscreenDialog: true,
+                ),
+              );
+            },
+          ),
           ListTile(
             leading: Icon(
               CupertinoIcons.building_2_fill,

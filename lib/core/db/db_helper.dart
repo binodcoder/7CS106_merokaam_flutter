@@ -43,28 +43,31 @@ class DatabaseHelper {
     }
   }
 
-  static Future<JobProfileModel> readJobProfile(int id) async {
+  static Future<JobProfileModel?> readJobProfile(int id) async {
     final db = await DatabaseHelper.db();
-    Map<String, dynamic>? jobProfile;
+
+    if (db == null) {
+      throw Exception('Database is not initialized');
+    }
 
     try {
-      final List<Map<String, dynamic>> result = await db!.query(
+      final List<Map<String, dynamic>> result = await db.query(
         'jobprofile',
         where: 'userAccountId = ?',
         whereArgs: [id],
-        limit: 1, // Optional, to ensure only one record is fetched
+        limit: 1, // Ensures only one record is fetched
       );
 
       if (result.isNotEmpty) {
-        jobProfile = result.first;
+        return JobProfileModel.fromJson(result.first);
       } else {
-        throw CacheException();
+        // You can return null or throw a more specific exception if no record is found
+        return null;
       }
     } catch (e) {
-      rethrow;
+      // Log the error or handle it as needed
+      throw Exception('Failed to load job profile: $e');
     }
-
-    return JobProfileModel.fromJson(jobProfile!);
   }
 
   static Future<int> updateJobProfile(JobProfileModel jobProfileModel) async {
@@ -76,6 +79,15 @@ class DatabaseHelper {
         where: 'userAccountId = ?',
         whereArgs: [jobProfileModel.userAccountId],
       );
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  static Future<int> deleteAllJobProfiles() async {
+    try {
+      final db = await DatabaseHelper.db();
+      return await db.delete('jobprofile');
     } catch (e) {
       rethrow;
     }

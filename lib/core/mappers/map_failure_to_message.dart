@@ -9,6 +9,8 @@ String mapFailureToMessage(Failure failure) {
       return AppStrings.cacheFailureMessage;
     case LoginFailure:
       return AppStrings.loginFailureMessage;
+    case NetworkFailure:
+      return AppStrings.networkFailureMessage;
     default:
       return 'Unexpected error';
   }

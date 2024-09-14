@@ -43,7 +43,6 @@ Future<void> init() async {
   sl.registerFactory(() => CreateJobProfileBloc(
         createJobProfile: sl(),
         updateJobProfile: sl(),
-        readJobProfile: sl(),
       ));
 
   sl.registerLazySingleton(() => CreateJobProfile(sl()));

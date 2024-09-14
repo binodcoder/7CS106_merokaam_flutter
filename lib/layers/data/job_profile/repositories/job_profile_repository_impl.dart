@@ -38,12 +38,7 @@ class JobProfileRepositoryImpl implements JobProfileRepository {
         return Left(ServerFailure());
       }
     } else {
-      try {
-        int? response = await jobProfilesLocalDataSource.cacheJobProfile(jobProfileModel);
-        return Right(response!);
-      } on CacheException {
-        return Left(CacheFailure());
-      }
+      return Left(NetworkFailure());
     }
   }
 
@@ -68,11 +63,13 @@ class JobProfileRepositoryImpl implements JobProfileRepository {
         return Right(jobProfile);
       } on ServerException {
         return Left(ServerFailure());
+      } on CacheException {
+        return Left(CacheFailure());
       }
     } else {
       try {
-        JobProfile jobProfile = await jobProfilesLocalDataSource.readLastJobProfile(id);
-        return Right(jobProfile);
+        JobProfile? jobProfile = await jobProfilesLocalDataSource.readLastJobProfile(id);
+        return Right(jobProfile!);
       } on CacheException {
         return Left(CacheFailure());
       }
@@ -90,11 +87,16 @@ class JobProfileRepositoryImpl implements JobProfileRepository {
       workAuthorization: jobProfile.workAuthorization,
       employmentType: jobProfile.employmentType,
     );
-    try {
-      int response = await jobProfileRemoteDataSources.updateJobProfile(jobProfileModel);
-      return Right(response);
-    } on ServerException {
-      return Left(ServerFailure());
+
+    if (await networkInfo.isConnected) {
+      try {
+        int response = await jobProfileRemoteDataSources.updateJobProfile(jobProfileModel);
+        return Right(response);
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(NetworkFailure());
     }
   }
 

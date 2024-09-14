@@ -58,6 +58,7 @@ class AppStrings {
   static const String cacheFailureMessage = 'Cache Failure';
   static const String loginFailureMessage = 'Invalid Username or Password';
   static const String invalidInputFailureMessage = 'Invalid Input - The number must be a positive integer.';
+  static String networkFailureMessage = 'No internet connection.';
 
   //splash screen
 

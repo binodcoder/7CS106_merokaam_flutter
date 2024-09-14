@@ -49,16 +49,6 @@ class _ReadJobProfilePageState extends State<ReadJobProfilePage> {
       listener: (context, state) {
         if (state is JobProfileNavigateToAddJobProfileActionState) {
           Navigator.pushNamed(context, Routes.createJobProfileRoute).then((value) => refreshPage());
-        } else if (state is JobProfileNavigateToDetailPageActionState) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => CreateJobProfilePage(
-                jobProfile: state.jobProfile,
-              ),
-              fullscreenDialog: true,
-            ),
-          ).then((value) => refreshPage());
         } else if (state is JobProfileNavigateToUpdatePageActionState) {
           Navigator.push(
             context,
@@ -67,10 +57,10 @@ class _ReadJobProfilePageState extends State<ReadJobProfilePage> {
               fullscreenDialog: true,
             ),
           ).then((value) => refreshPage());
-        } else if (state is JobProfileItemDeletedActionState) {
-          jobProfileBloc.add(JobProfileInitialEvent(id));
         } else if (state is JobProfileItemsUpdatedState) {
           jobProfileBloc.add(JobProfileInitialEvent(id));
+        } else if (state is JobProfileErrorState) {
+          Navigator.pushNamed(context, Routes.createJobProfileRoute).then((value) => refreshPage());
         }
       },
       builder: (context, state) {
@@ -163,19 +153,19 @@ class _ReadJobProfilePageState extends State<ReadJobProfilePage> {
               ),
             );
 
-          case JobProfileErrorState:
-            return Scaffold(
-                drawer: const MyDrawer(),
-                appBar: AppBar(
-                  title: const Text(AppStrings.appTitle),
-                ),
-                body: Center(
-                    child: ElevatedButton(
-                  onPressed: () {
-                    jobProfileBloc.add(JobProfileAddButtonClickedEvent());
-                  },
-                  child: const Text("Add Profile"),
-                )));
+          // case JobProfileErrorState:
+          //   return Scaffold(
+          //       drawer: const MyDrawer(),
+          //       appBar: AppBar(
+          //         title: const Text(AppStrings.appTitle),
+          //       ),
+          //       body: Center(
+          //           child: ElevatedButton(
+          //         onPressed: () {
+          //           jobProfileBloc.add(JobProfileAddButtonClickedEvent());
+          //         },
+          //         child: const Text("Add Profile"),
+          //       )));
 
           default:
             return const Scaffold(body: SizedBox());
