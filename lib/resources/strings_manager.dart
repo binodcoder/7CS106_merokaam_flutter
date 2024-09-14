@@ -1,5 +1,9 @@
 class AppStrings {
-  static const String appTitle = "Merokaam";
+  static const String appTitle = "MeroKaam";
+
+  static const String terms = "Terms & Conditions";
+  static const String decline = "Decline";
+  static const String accept = "Accept";
 
   static const String userName = "Username";
   static const String password = "Password";
@@ -7,8 +11,7 @@ class AppStrings {
   static const String login = "Login";
   static const String logOut = "Log out";
   static const String aboutUs = "About Us";
-  static const String terms = "Terms & Conditions";
-  static const String softwareCompany = "MeroKaam";
+
   static const String noRouteFound = "No Route Found";
   static const String required = '*Required';
 

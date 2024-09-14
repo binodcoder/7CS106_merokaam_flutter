@@ -1,34 +1,24 @@
 import 'dart:async';
 
+import 'package:merokaam/core/errors/exceptions.dart';
 import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:sqflite/sqflite.dart' as sql;
 
 import '../models/job_profile_model.dart';
 
 class DatabaseHelper {
-  static final DatabaseHelper _instance = DatabaseHelper._internal();
-
-  factory DatabaseHelper() => _instance;
-
-  DatabaseHelper._internal();
-
-  Database? _database;
-
-  Future<Database?> get database async {
-    if (_database != null) return _database;
-
-    _database = await initDatabase();
-    return _database;
+  static Future<sql.Database> db() async {
+    return sql.openDatabase('blog.db', version: 1, onCreate: (
+      sql.Database database,
+      int version,
+    ) async {
+      await createTables(database);
+    });
   }
 
-  Future<Database> initDatabase() async {
-    final databasesPath = await getDatabasesPath();
-    final path = join(databasesPath, 'fitness.db');
-
-    return await openDatabase(path, version: 1, onCreate: (Database db, int version) async {
-      await db.execute('''
-          CREATE TABLE job_profile (
-            userAccountId INTEGER PRIMARY KEY,
+  static Future<void> createTables(sql.Database database) async {
+    await database.execute("""CREATE TABLE jobprofile(
+      userAccountId INTEGER PRIMARY KEY NOT NULL,
             firstName TEXT,
             lastName TEXT,
             city TEXT,
@@ -36,31 +26,58 @@ class DatabaseHelper {
             country TEXT,
             workAuthorization TEXT,
             employmentType TEXT,
-                    )
-        ''');
-    });
+            resume TEXT,
+            profilePhoto TEXT,
+            photosImagePath TEXT,
+            duration INTEGER,
+      createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    )""");
   }
 
-  Future<int> insertJobProfile(JobProfileModel jobProfileModel) async {
-    final db = await database;
-    return await db!.insert('JobProfile', jobProfileModel.toJson());
+  static Future<int> insertJobProfile(JobProfileModel jobProfileModel) async {
+    try {
+      final db = await DatabaseHelper.db();
+      return await db.insert('jobprofile', jobProfileModel.toJson());
+    } catch (e) {
+      rethrow;
+    }
   }
 
-  Future<JobProfileModel> readJobProfile(int id) async {
-    final db = await database;
+  static Future<JobProfileModel> readJobProfile(int id) async {
+    final db = await DatabaseHelper.db();
     Map<String, dynamic>? jobProfile;
-    final List<Map<String, dynamic>> result = await db!.query(
-      'JobProfile',
-      where: 'id = ?',
-      whereArgs: [id],
-      limit: 1, // Optional, to ensure only one record is fetched
-    );
 
-    if (result.isNotEmpty) {
-      jobProfile = result.first;
-      // Process the job profile record
+    try {
+      final List<Map<String, dynamic>> result = await db!.query(
+        'jobprofile',
+        where: 'userAccountId = ?',
+        whereArgs: [id],
+        limit: 1, // Optional, to ensure only one record is fetched
+      );
+
+      if (result.isNotEmpty) {
+        jobProfile = result.first;
+      } else {
+        throw CacheException();
+      }
+    } catch (e) {
+      rethrow;
     }
 
     return JobProfileModel.fromJson(jobProfile!);
+  }
+
+  static Future<int> updateJobProfile(JobProfileModel jobProfileModel) async {
+    try {
+      final db = await DatabaseHelper.db();
+      return await db.update(
+        'jobprofile',
+        jobProfileModel.toJson(),
+        where: 'userAccountId = ?',
+        whereArgs: [jobProfileModel.userAccountId],
+      );
+    } catch (e) {
+      rethrow;
+    }
   }
 }

@@ -34,17 +34,16 @@ class _CreateJobProfilePageState extends State<CreateJobProfilePage> {
 
   late int id;
 
-  final List<String> workAuthorization = <String>["Nepali Citizen", "TN permit", "Indian Citizen", "Pakistani Citizen"];
+  final List<String> workAuthorization = <String>["Nepali Citizen", "TN permit", "Indian Citizen", "Pakistani Citizen", "Canadian Citizen"];
   String selectedWorkAuthorization = "Nepali Citizen";
 
-  final List<String> employmentType = <String>["Seeking Employment", "Full-time", "Part-time", "Freelance"];
+  final List<String> employmentType = <String>["Seeking Employment", "Full-time", "Part-time", "Freelance", "Part-Time"];
   String selectedEmploymentType = "Seeking Employment";
 
   @override
   void initState() {
     if (widget.jobProfile != null) {
       id = widget.jobProfile!.userAccountId!;
-
       firstNameController.text = widget.jobProfile!.firstName;
       lastNameController.text = widget.jobProfile!.lastName;
       cityController.text = widget.jobProfile!.city;

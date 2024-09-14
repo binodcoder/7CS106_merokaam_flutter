@@ -30,11 +30,20 @@ class JobProfileRepositoryImpl implements JobProfileRepository {
       workAuthorization: jobProfile.workAuthorization,
       employmentType: jobProfile.employmentType,
     );
-    try {
-      int response = await jobProfileRemoteDataSources.createJobProfile(jobProfileModel);
-      return Right(response);
-    } on ServerException {
-      return Left(ServerFailure());
+    if (await networkInfo.isConnected) {
+      try {
+        int response = await jobProfileRemoteDataSources.createJobProfile(jobProfileModel);
+        return Right(response);
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      try {
+        int? response = await jobProfilesLocalDataSource.cacheJobProfile(jobProfileModel);
+        return Right(response!);
+      } on CacheException {
+        return Left(CacheFailure());
+      }
     }
   }
 
@@ -42,8 +51,21 @@ class JobProfileRepositoryImpl implements JobProfileRepository {
   Future<Either<Failure, JobProfile>> readJobProfile(int id) async {
     if (await networkInfo.isConnected) {
       try {
-        JobProfile jobProfiles = await jobProfileRemoteDataSources.readJobProfile(id);
-        return Right(jobProfiles);
+        JobProfile jobProfile = await jobProfileRemoteDataSources.readJobProfile(id);
+
+        JobProfileModel jobProfileModel = JobProfileModel(
+          userAccountId: jobProfile.userAccountId,
+          firstName: jobProfile.firstName,
+          lastName: jobProfile.lastName,
+          city: jobProfile.city,
+          state: jobProfile.state,
+          country: jobProfile.country,
+          workAuthorization: jobProfile.workAuthorization,
+          employmentType: jobProfile.employmentType,
+        );
+
+        int? response = await jobProfilesLocalDataSource.cacheJobProfile(jobProfileModel);
+        return Right(jobProfile);
       } on ServerException {
         return Left(ServerFailure());
       }

@@ -57,7 +57,7 @@ class _MyDrawerState extends State<MyDrawer> {
                   ),
                   title: Text(AppStrings.login,
                       style: getMediumStyle(
-                        color: ColorManager.primary,
+                        color: ColorManager.black,
                         fontSize: FontSize.s14,
                       )),
                   onTap: () {
@@ -80,7 +80,7 @@ class _MyDrawerState extends State<MyDrawer> {
                   title: Text(
                     AppStrings.logOut,
                     style: getMediumStyle(
-                      color: ColorManager.primary,
+                      color: ColorManager.black,
                       fontSize: FontSize.s14,
                     ),
                   ),
@@ -103,9 +103,8 @@ class _MyDrawerState extends State<MyDrawer> {
             ),
             title: Text(
               AppStrings.aboutUs,
-              textScaleFactor: 1.2,
               style: getMediumStyle(
-                color: ColorManager.primary,
+                color: ColorManager.black,
                 fontSize: FontSize.s14,
               ),
             ),
@@ -126,9 +125,8 @@ class _MyDrawerState extends State<MyDrawer> {
             ),
             title: Text(
               AppStrings.terms,
-              textScaleFactor: 1.2,
               style: getMediumStyle(
-                color: ColorManager.primary,
+                color: ColorManager.black,
                 fontSize: FontSize.s14,
               ),
             ),

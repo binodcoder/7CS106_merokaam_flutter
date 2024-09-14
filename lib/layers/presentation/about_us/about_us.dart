@@ -68,7 +68,7 @@ class About extends StatelessWidget {
                   Align(
                     alignment: Alignment.center,
                     child: Text(
-                      AppStrings.softwareCompany,
+                      AppStrings.appTitle,
                       style: getBoldStyle(
                         fontSize: FontSize.s17,
                         color: ColorManager.middleBlue,
