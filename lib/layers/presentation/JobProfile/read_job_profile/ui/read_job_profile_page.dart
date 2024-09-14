@@ -13,7 +13,6 @@ import '../../add_update_job_profile/ui/create_job_profile_page.dart';
 import '../bloc/read_job_profile_bloc.dart';
 import '../bloc/read_job_profile_event.dart';
 import '../bloc/read_job_profile_state.dart';
-import 'job_profile_details_page.dart';
 
 class ReadJobProfilePage extends StatefulWidget {
   const ReadJobProfilePage({super.key});
