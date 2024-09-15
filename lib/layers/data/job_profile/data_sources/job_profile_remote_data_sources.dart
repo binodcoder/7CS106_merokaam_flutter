@@ -47,6 +47,10 @@ class JobProfileRemoteDataSourceImpl implements JobProfileRemoteDataSource {
     );
     if (response.statusCode == 200) {
       return JobProfileModel.fromJson(json.decode(response.body));
+    } else if (response.statusCode == 404) {
+      throw NotFoundException();
+    } else if (response.statusCode == 401) {
+      throw UnauthorizedException();
     } else {
       throw ServerException();
     }

@@ -29,6 +29,16 @@ class BadRequestFailure extends Failure {
   List<Object?> get props => [];
 }
 
+class NotFoundFailure extends Failure {
+  @override
+  List<Object?> get props => [];
+}
+
+class UnauthorizedFailure extends Failure {
+  @override
+  List<Object?> get props => [];
+}
+
 class UnknownFailure extends Failure {
   @override
   // TODO: implement props

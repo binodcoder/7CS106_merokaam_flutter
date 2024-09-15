@@ -32,7 +32,7 @@ class _MyDrawerState extends State<MyDrawer> {
             child: UserAccountsDrawerHeader(
               decoration: BoxDecoration(color: ColorManager.primary),
               accountEmail: Text(
-                sharedPreferences.getString("user_email") ?? '',
+                sharedPreferences.getString("email") ?? '',
                 style: getRegularStyle(
                   color: ColorManager.white,
                   fontSize: FontSize.s12,

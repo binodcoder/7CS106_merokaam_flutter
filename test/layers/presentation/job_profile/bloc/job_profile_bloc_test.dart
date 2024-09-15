@@ -27,7 +27,7 @@ void main() {
     mockGetJobProfile = MockReadJobProfile();
     mockDeleteJobProfile = MockDeleteJobProfile();
 
-    bloc = ReadJobProfileBloc(getJobProfiles: mockGetJobProfile, deleteJobProfile: mockDeleteJobProfile);
+    bloc = ReadJobProfileBloc(readJobProfiles: mockGetJobProfile, deleteJobProfile: mockDeleteJobProfile);
   });
 
   test('initialState should be JobProfileInitialState', () async {

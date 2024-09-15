@@ -13,6 +13,10 @@ String mapFailureToMessage(Failure failure) {
       return AppStrings.networkFailureMessage;
     case BadRequestFailure:
       return AppStrings.badRequestFailureMessage;
+    case NotFoundFailure:
+      return AppStrings.notFoundFailureMessage;
+    case UnauthorizedFailure:
+      return AppStrings.unauthorizedFailureMessage;
     default:
       return 'Unexpected error';
   }

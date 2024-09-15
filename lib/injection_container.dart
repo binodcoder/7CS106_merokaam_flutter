@@ -36,8 +36,7 @@ final sl = GetIt.instance;
 
 Future<void> init() async {
   sl.registerFactory(() => ReadJobProfileBloc(
-        getJobProfiles: sl(),
-        deleteJobProfile: sl(),
+        readJobProfiles: sl(),
       ));
 
   sl.registerFactory(() => CreateJobProfileBloc(

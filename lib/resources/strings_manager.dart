@@ -61,6 +61,10 @@ class AppStrings {
   static String networkFailureMessage = 'No internet connection.';
   static String badRequestFailureMessage = 'Email is already registered.';
 
+  static String notFoundFailureMessage = 'Not Found';
+
+  static String unauthorizedFailureMessage = 'Not Found';
+
   //splash screen
 
   static const String onBoardingTItle1 = "CREATE JOB PROFILE";

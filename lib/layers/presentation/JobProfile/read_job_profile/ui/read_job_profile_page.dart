@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../../core/db/db_helper.dart';
 import '../../../../../injection_container.dart';
 import '../../../../../resources/colour_manager.dart';
 import '../../../../../resources/font_manager.dart';
@@ -59,8 +60,12 @@ class _ReadJobProfilePageState extends State<ReadJobProfilePage> {
           ).then((value) => refreshPage());
         } else if (state is JobProfileItemsUpdatedState) {
           jobProfileBloc.add(JobProfileInitialEvent(id));
-        } else if (state is JobProfileErrorState) {
-          Navigator.pushNamed(context, Routes.createJobProfileRoute).then((value) => refreshPage());
+        } else if (state is JobProfileNotFoundState) {
+          Navigator.pushReplacementNamed(context, Routes.createJobProfileRoute).then((value) => refreshPage());
+        } else if (state is JobProfileUnauthorizedState) {
+          sharedPreferences.clear();
+          DatabaseHelper.deleteAllJobProfiles();
+          Navigator.pushReplacementNamed(context, Routes.loginRoute);
         }
       },
       builder: (context, state) {

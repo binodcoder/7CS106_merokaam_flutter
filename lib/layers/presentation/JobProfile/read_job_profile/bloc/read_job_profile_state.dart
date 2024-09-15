@@ -29,29 +29,16 @@ class JobProfileErrorState extends JobProfileActionState {
   JobProfileErrorState({required this.message});
 }
 
+class JobProfileNotFoundState extends JobProfileActionState {}
+
+class JobProfileUnauthorizedState extends JobProfileActionState {}
+
 class JobProfileNavigateToAddJobProfileActionState extends JobProfileActionState {}
-
-class JobProfileNavigateToDetailPageActionState extends JobProfileActionState {
-  final JobProfile jobProfile;
-
-  JobProfileNavigateToDetailPageActionState(this.jobProfile);
-}
 
 class JobProfileNavigateToUpdatePageActionState extends JobProfileActionState {
   final JobProfile jobProfile;
 
   JobProfileNavigateToUpdatePageActionState(this.jobProfile);
-}
-
-class JobProfileItemDeletedActionState extends JobProfileActionState {}
-
-class JobProfileItemSelectedActionState extends JobProfileActionState {}
-
-class JobProfileItemsDeletedActionState extends JobProfileActionState {}
-
-class JobProfileearchIconClickedState extends JobProfileActionState {
-  final bool isSearch;
-  JobProfileearchIconClickedState(this.isSearch);
 }
 
 class JobProfileItemsUpdatedState extends JobProfileActionState {}

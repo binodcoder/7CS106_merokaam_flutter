@@ -65,6 +65,10 @@ class JobProfileRepositoryImpl implements JobProfileRepository {
         return Left(ServerFailure());
       } on CacheException {
         return Left(CacheFailure());
+      } on NotFoundException {
+        return Left(NotFoundFailure());
+      } on UnauthorizedException {
+        return Left(UnauthorizedFailure());
       }
     } else {
       try {

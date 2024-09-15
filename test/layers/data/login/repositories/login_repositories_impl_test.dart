@@ -9,16 +9,19 @@ import 'package:merokaam/layers/data/login/repositories/login_repositories_impl.
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 
+import '../../job_profile/repositories/job_profile_repositories_impl_test.mocks.dart';
 import 'login_repositories_impl_test.mocks.dart';
 
 @GenerateMocks([LoginRemoteDataSource])
 void main() {
   late LoginRepositoryImpl repository;
   late MockLoginRemoteDataSource mockRemoteDataSource;
+  late MockNetworkInfo mockNetworkInfo;
 
   setUp(() {
     mockRemoteDataSource = MockLoginRemoteDataSource();
-    repository = LoginRepositoryImpl(remoteDataSource: mockRemoteDataSource);
+    mockNetworkInfo = MockNetworkInfo();
+    repository = LoginRepositoryImpl(remoteDataSource: mockRemoteDataSource, networkInfo: mockNetworkInfo);
   });
 
   group('login', () {
