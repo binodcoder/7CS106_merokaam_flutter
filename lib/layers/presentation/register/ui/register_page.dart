@@ -65,7 +65,6 @@ class _RegisterPageState extends State<RegisterPage> {
           // descriptionController.clear();
           Navigator.pop(context);
         } else if (state is AddUserErrorState) {
-          Navigator.pop(context);
           Fluttertoast.showToast(
             msg: state.message,
             toastLength: Toast.LENGTH_LONG,

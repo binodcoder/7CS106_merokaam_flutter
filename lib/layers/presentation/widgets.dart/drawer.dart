@@ -65,6 +65,7 @@ class _MyDrawerState extends State<MyDrawer> {
             onTap: () {
               sharedPreferences.clear();
               DatabaseHelper.deleteAllJobProfiles();
+
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(

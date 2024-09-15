@@ -86,7 +86,10 @@ Future<void> init() async {
   sl.registerLazySingleton(() => AddUser(sl()));
 
   sl.registerLazySingleton<UserRepository>(
-    () => UserRepositoriesImpl(addUserRemoteDataSource: sl()),
+    () => UserRepositoriesImpl(
+      addUserRemoteDataSource: sl(),
+      networkInfo: sl(),
+    ),
   );
   sl.registerLazySingleton<UserRemoteDataSource>(() => UserRemoteDataSourceImpl(
         client: sl(),

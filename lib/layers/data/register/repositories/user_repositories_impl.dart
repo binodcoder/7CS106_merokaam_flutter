@@ -22,6 +22,8 @@ class UserRepositoriesImpl implements UserRepository {
         return Right(response);
       } on ServerException {
         return Left(ServerFailure());
+      } on BadRequestException {
+        return Left(BadRequestFailure());
       }
     } else {
       return Left(NetworkFailure());

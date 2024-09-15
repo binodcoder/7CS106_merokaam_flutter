@@ -5,3 +5,5 @@ class LoginException implements Exception {}
 class ServerException implements Exception {}
 
 class NetworkException implements Exception {}
+
+class BadRequestException implements Exception {}

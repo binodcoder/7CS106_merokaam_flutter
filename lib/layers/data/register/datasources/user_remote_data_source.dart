@@ -21,6 +21,8 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
     );
     if (response.statusCode == 200) {
       return 1;
+    } else if (response.statusCode == 400) {
+      throw BadRequestException();
     } else {
       throw ServerException();
     }
