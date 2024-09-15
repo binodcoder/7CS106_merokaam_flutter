@@ -42,20 +42,13 @@ class JobProfilesLocalDataSourceImpl implements JobProfilesLocalDataSource {
     }
   }
 
-  Future<JobProfileModel?> _readJobProfileFromLocal(int id) async {
+  Future<JobProfileModel> _readJobProfileFromLocal(int id) async {
     try {
       // Attempt to read job profile from the database
-      JobProfileModel? jobProfileModel = await DatabaseHelper.readJobProfile(id);
-
-      // Return the result if found, otherwise handle null case
-      if (jobProfileModel != null) {
-        return jobProfileModel;
-      } else {
-        // If no job profile is found, we throw a CacheException
-        throw NotFoundException();
-      }
+      JobProfileModel jobProfileModel = await DatabaseHelper.readJobProfile(id);
+      return jobProfileModel;
     } on NotFoundException {
-      throw NotFoundException();
+      rethrow;
     } catch (e) {
       // Handle any unexpected errors (optional)
       print('Error reading job profile from local: $e');

@@ -43,7 +43,7 @@ class DatabaseHelper {
     }
   }
 
-  static Future<JobProfileModel?> readJobProfile(int id) async {
+  static Future<JobProfileModel> readJobProfile(int id) async {
     final db = await DatabaseHelper.db();
 
     if (db == null) {
@@ -60,11 +60,17 @@ class DatabaseHelper {
 
       if (result.isNotEmpty) {
         return JobProfileModel.fromJson(result.first);
+      } else {
+        throw NotFoundException();
       }
-      return null;
     } catch (e) {
-      // Log the error or handle it as needed
-      throw Exception('Failed to load job profile: $e');
+      if (e is NotFoundException) {
+        // Rethrow NotFoundException to be handled further up the call stack
+        rethrow;
+      } else {
+        // Handle other exceptions as needed
+        throw Exception('Failed to load job profile: $e');
+      }
     }
   }
 
