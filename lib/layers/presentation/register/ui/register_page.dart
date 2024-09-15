@@ -60,10 +60,6 @@ class _RegisterPageState extends State<RegisterPage> {
               fullscreenDialog: true,
             ),
           );
-        } else if (state is AddUserUpdatedState) {
-          // sourceController.clear();
-          // descriptionController.clear();
-          Navigator.pop(context);
         } else if (state is AddUserErrorState) {
           Fluttertoast.showToast(
             msg: state.message,
