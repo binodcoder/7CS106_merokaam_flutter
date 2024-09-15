@@ -60,10 +60,8 @@ class DatabaseHelper {
 
       if (result.isNotEmpty) {
         return JobProfileModel.fromJson(result.first);
-      } else {
-        // You can return null or throw a more specific exception if no record is found
-        return null;
       }
+      return null;
     } catch (e) {
       // Log the error or handle it as needed
       throw Exception('Failed to load job profile: $e');
