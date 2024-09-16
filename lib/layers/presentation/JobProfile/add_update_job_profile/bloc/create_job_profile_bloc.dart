@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../../core/errors/failures.dart';
 import '../../../../../core/mappers/map_failure_to_message.dart';
 import '../../../../domain/job_profile/usecases/create_job_profile.dart';
 import '../../../../domain/job_profile/usecases/read_job_profile.dart';
@@ -25,7 +26,11 @@ class CreateJobProfileBloc extends Bloc<CreateJobProfileEvent, CreateJobProfileS
     emit(AddJobProfileLoadingState());
     final result = await createJobProfile(event.newJobProfile);
     result!.fold((failure) {
-      emit(AddJobProfileErrorState(message: mapFailureToMessage(failure)));
+      if (failure is UnauthorizedFailure) {
+        emit(AddProfileUnauthorizedState());
+      } else {
+        emit(AddJobProfileErrorState(message: mapFailureToMessage(failure)));
+      }
     }, (result) {
       emit(AddJobProfileSavedState());
     });

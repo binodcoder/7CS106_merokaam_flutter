@@ -77,12 +77,19 @@ class DatabaseHelper {
   static Future<int> updateJobProfile(JobProfileModel jobProfileModel) async {
     try {
       final db = await DatabaseHelper.db();
-      return await db.update(
+      final result = await db.update(
         'jobprofile',
         jobProfileModel.toJson(),
         where: 'userAccountId = ?',
         whereArgs: [jobProfileModel.userAccountId],
       );
+
+      // Check if any rows were affected by the update
+      if (result == 0) {
+        // If no rows were updated, throw NotFoundException
+        throw NotFoundException();
+      }
+      return result;
     } catch (e) {
       rethrow;
     }

@@ -10,4 +10,6 @@ class BadRequestException implements Exception {}
 
 class NotFoundException implements Exception {}
 
+class TimeoutException implements Exception {}
+
 class UnauthorizedException implements Exception {}

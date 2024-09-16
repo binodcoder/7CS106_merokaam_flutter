@@ -32,27 +32,35 @@ class JobProfileRemoteDataSourceImpl implements JobProfileRemoteDataSource {
     );
     if (response.statusCode == 200) {
       return 1;
+    } else if (response.statusCode == 401) {
+      throw UnauthorizedException();
     } else {
       throw ServerException();
     }
   }
 
   Future<JobProfileModel> _readJobProfile(String url) async {
-    final response = await client.get(
-      Uri.parse(url),
-      headers: {
-        'Content-Type': 'application/json',
-        'Cookie': sharedPreferences.getString("jwt_token")!.split(';').first,
-      },
-    );
-    if (response.statusCode == 200) {
-      return JobProfileModel.fromJson(json.decode(response.body));
-    } else if (response.statusCode == 404) {
-      throw NotFoundException();
-    } else if (response.statusCode == 401) {
-      throw UnauthorizedException();
-    } else {
-      throw ServerException();
+    try {
+      final response = await client.get(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json',
+          'Cookie': sharedPreferences.getString("jwt_token")!.split(';').first,
+        },
+      ).timeout(const Duration(seconds: 5));
+      if (response.statusCode == 200) {
+        return JobProfileModel.fromJson(json.decode(response.body));
+      } else if (response.statusCode == 404) {
+        throw NotFoundException();
+      } else if (response.statusCode == 401) {
+        throw UnauthorizedException();
+      } else {
+        throw ServerException();
+      }
+    } on TimeoutException {
+      throw TimeoutException();
+    } catch (e) {
+      rethrow;
     }
   }
 

@@ -15,3 +15,5 @@ class AddJobProfileErrorState extends JobProfileAddActionState {
 
   AddJobProfileErrorState({required this.message});
 }
+
+class AddProfileUnauthorizedState extends JobProfileAddActionState {}

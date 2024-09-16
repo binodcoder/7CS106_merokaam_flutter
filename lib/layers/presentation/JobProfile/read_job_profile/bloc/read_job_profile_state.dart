@@ -33,6 +33,8 @@ class JobProfileNotFoundState extends JobProfileActionState {}
 
 class JobProfileUnauthorizedState extends JobProfileActionState {}
 
+class JobProfileTimeoutState extends JobProfileActionState {}
+
 class JobProfileNavigateToAddJobProfileActionState extends JobProfileActionState {}
 
 class JobProfileNavigateToUpdatePageActionState extends JobProfileActionState {

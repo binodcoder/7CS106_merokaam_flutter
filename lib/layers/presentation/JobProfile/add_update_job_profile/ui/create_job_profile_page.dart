@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:merokaam/core/entities/job_profile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../../core/db/db_helper.dart';
 import '../../../../../core/models/job_profile_model.dart';
 import '../../../../../injection_container.dart';
 import '../../../../../resources/colour_manager.dart';
+import '../../../../../resources/routes_manager.dart';
 import '../../../../../resources/strings_manager.dart';
 import '../../../../../resources/values_manager.dart';
 import '../../../widgets.dart/custom_button.dart';
@@ -63,6 +66,8 @@ class _CreateJobProfilePageState extends State<CreateJobProfilePage> {
 
   final _formKey = GlobalKey<FormState>();
 
+  SharedPreferences sharedPreferences = sl<SharedPreferences>();
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -71,7 +76,9 @@ class _CreateJobProfilePageState extends State<CreateJobProfilePage> {
       listenWhen: (previous, current) => current is JobProfileAddActionState,
       buildWhen: (previous, current) => current is! JobProfileAddActionState,
       listener: (context, state) {
-        if (state is AddJobProfileSavedState) {
+        if (state is AddJobProfileLoadingState) {
+          _showLoadingDialog(context);
+        } else if (state is AddJobProfileSavedState) {
           firstNameController.clear();
           lastNameController.clear();
           cityController.clear();
@@ -88,12 +95,17 @@ class _CreateJobProfilePageState extends State<CreateJobProfilePage> {
           countryController.clear();
           Navigator.pop(context);
         } else if (state is AddJobProfileErrorState) {
+          Navigator.pop(context);
           Fluttertoast.showToast(
             msg: state.message,
             toastLength: Toast.LENGTH_LONG,
             gravity: ToastGravity.BOTTOM,
             backgroundColor: ColorManager.error,
           );
+        } else if (state is AddProfileUnauthorizedState) {
+          sharedPreferences.clear();
+          DatabaseHelper.deleteAllJobProfiles();
+          Navigator.pushReplacementNamed(context, Routes.loginRoute);
         }
       },
       builder: (context, state) {
@@ -321,6 +333,15 @@ class _CreateJobProfilePageState extends State<CreateJobProfilePage> {
             ),
           ),
         );
+      },
+    );
+  }
+
+  void _showLoadingDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return const Center(child: CircularProgressIndicator());
       },
     );
   }

@@ -28,13 +28,18 @@ class JobProfilesLocalDataSourceImpl implements JobProfilesLocalDataSource {
 
     try {
       // Check if the job profile already exists in the local database
-      JobProfileModel? existingProfile = await DatabaseHelper.readJobProfile(jobProfileModel.userAccountId!);
+      //   JobProfileModel? existingProfile = await DatabaseHelper.readJobProfile(jobProfileModel.userAccountId!);
       // If it exists, update it; otherwise, insert a new profile
-      if (existingProfile != null) {
-        return await DatabaseHelper.updateJobProfile(jobProfileModel);
-      } else {
-        return await DatabaseHelper.insertJobProfile(jobProfileModel);
-      }
+      // if (existingProfile != null) {
+      await DatabaseHelper.updateJobProfile(jobProfileModel);
+      return 1;
+      // } else {
+      // await DatabaseHelper.insertJobProfile(jobProfileModel);
+
+      // }
+    } on NotFoundException {
+      // Handle the case when the profile is not found by inserting a new one
+      return await DatabaseHelper.insertJobProfile(jobProfileModel);
     } catch (e) {
       // Handle any unforeseen exceptions (optional)
       print("Error caching job profile: $e");

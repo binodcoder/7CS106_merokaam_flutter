@@ -34,6 +34,8 @@ class JobProfileRepositoryImpl implements JobProfileRepository {
       try {
         int response = await jobProfileRemoteDataSources.createJobProfile(jobProfileModel);
         return Right(response);
+      } on UnauthorizedException {
+        return Left(UnauthorizedFailure());
       } on ServerException {
         return Left(ServerFailure());
       }
@@ -72,6 +74,8 @@ class JobProfileRepositoryImpl implements JobProfileRepository {
         return Left(UnauthorizedFailure());
       } on CacheException {
         return Left(CacheFailure());
+      } on TimeoutException {
+        return Left(TimeoutFailure());
       } catch (e) {
         return Left(UnknownFailure());
       }
