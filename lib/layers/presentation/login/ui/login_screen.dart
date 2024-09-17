@@ -95,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
     } else if (state is LoginErrorState) {
       Navigator.pop(context);
       Fluttertoast.showToast(
-        msg: state.message,
+        msg: state.failure.message,
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.BOTTOM,
         backgroundColor: ColorManager.error,

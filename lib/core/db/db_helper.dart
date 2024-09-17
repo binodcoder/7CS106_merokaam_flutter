@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:merokaam/core/errors/exceptions.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart' as sql;
+import 'package:sqflite/sqflite.dart';
 
 import '../models/job_profile_model.dart';
 
@@ -35,11 +36,17 @@ class DatabaseHelper {
   }
 
   static Future<int> insertJobProfile(JobProfileModel jobProfileModel) async {
+    final db = await DatabaseHelper.db();
+    if (db == null) {
+      throw DatabaseInitializationException('Database is not initialized.');
+    }
     try {
-      final db = await DatabaseHelper.db();
-      return await db.insert('jobprofile', jobProfileModel.toJson());
+      final result = await db.insert('jobprofile', jobProfileModel.toJson());
+      return result;
+    } on DatabaseException catch (e) {
+      throw DatabaseOperationException('Failed to insert job profile.', e);
     } catch (e) {
-      rethrow;
+      throw UnknownException('An unexpected error occurred while inserting the job profile.', e);
     }
   }
 
@@ -47,7 +54,7 @@ class DatabaseHelper {
     final db = await DatabaseHelper.db();
 
     if (db == null) {
-      throw Exception('Database is not initialized');
+      throw DatabaseInitializationException('Database is not initialized.');
     }
 
     try {
@@ -59,24 +66,29 @@ class DatabaseHelper {
       );
 
       if (result.isNotEmpty) {
-        return JobProfileModel.fromJson(result.first);
+        try {
+          return JobProfileModel.fromJson(result.first);
+        } on FormatException catch (e) {
+          throw DataFormatException('Invalid data format.', e);
+        }
       } else {
-        throw NotFoundException();
+        throw NotFoundException('Job profile not found for userAccountId: $id.');
       }
+    } on DatabaseException catch (e) {
+      // Handle database-related exceptions
+      throw DatabaseOperationException('Database query failed.', e);
     } catch (e) {
-      if (e is NotFoundException) {
-        // Rethrow NotFoundException to be handled further up the call stack
-        rethrow;
-      } else {
-        // Handle other exceptions as needed
-        throw Exception('Failed to load job profile: $e');
-      }
+      // Handle any other exceptions
+      throw UnknownException('An unexpected error occurred.', e);
     }
   }
 
   static Future<int> updateJobProfile(JobProfileModel jobProfileModel) async {
+    final db = await DatabaseHelper.db();
+    if (db == null) {
+      throw DatabaseInitializationException('Database is not initialized.');
+    }
     try {
-      final db = await DatabaseHelper.db();
       final result = await db.update(
         'jobprofile',
         jobProfileModel.toJson(),
@@ -87,20 +99,30 @@ class DatabaseHelper {
       // Check if any rows were affected by the update
       if (result == 0) {
         // If no rows were updated, throw NotFoundException
-        throw NotFoundException();
+        throw NotFoundException('Job profile not found for userAccountId: ${jobProfileModel.userAccountId}.');
       }
       return result;
+    } on DatabaseException catch (e) {
+      // Handle database-related exceptions
+      throw DatabaseOperationException('Failed to update job profile.', e);
     } catch (e) {
-      rethrow;
+      // Handle any other exceptions
+      throw UnknownException('An unexpected error occurred while updating the job profile.', e);
     }
   }
 
   static Future<int> deleteAllJobProfiles() async {
+    final db = await DatabaseHelper.db();
+    if (db == null) {
+      throw DatabaseInitializationException('Database is not initialized.');
+    }
     try {
-      final db = await DatabaseHelper.db();
-      return await db.delete('jobprofile');
+      final result = await db.delete('jobprofile');
+      return result;
+    } on DatabaseException catch (e) {
+      throw DatabaseOperationException('Failed to delete job profiles.', e);
     } catch (e) {
-      rethrow;
+      throw UnknownException('An unexpected error occurred while deleting job profiles.', e);
     }
   }
 }

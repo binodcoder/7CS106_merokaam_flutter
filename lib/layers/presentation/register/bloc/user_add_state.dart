@@ -1,3 +1,5 @@
+import '../../../../core/errors/failures.dart';
+
 abstract class UserAddState {}
 
 abstract class UserAddActionState extends UserAddState {}
@@ -9,7 +11,7 @@ class AddUserLoadingState extends UserAddActionState {}
 class AddUserSavedState extends UserAddActionState {}
 
 class AddUserErrorState extends UserAddActionState {
-  final String message;
+  final Failure failure;
 
-  AddUserErrorState({required this.message});
+  AddUserErrorState(this.failure);
 }

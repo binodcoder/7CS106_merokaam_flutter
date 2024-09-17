@@ -1,3 +1,5 @@
+import 'package:merokaam/core/errors/failures.dart';
+
 abstract class LoginState {}
 
 abstract class LoginActionState extends LoginState {}
@@ -11,7 +13,7 @@ class ReadyToLoginState extends LoginState {}
 class LoggedState extends LoginActionState {}
 
 class LoginErrorState extends LoginActionState {
-  final String message;
+  final Failure failure;
 
-  LoginErrorState({required this.message});
+  LoginErrorState(this.failure);
 }

@@ -62,7 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
           );
         } else if (state is AddUserErrorState) {
           Fluttertoast.showToast(
-            msg: state.message,
+            msg: state.failure.message,
             toastLength: Toast.LENGTH_LONG,
             gravity: ToastGravity.BOTTOM,
             backgroundColor: ColorManager.error,

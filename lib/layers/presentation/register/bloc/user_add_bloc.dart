@@ -28,7 +28,7 @@ class UserAddBloc extends Bloc<UserAddEvent, UserAddState> {
     emit(AddUserLoadingState());
     final failureOrSuccess = await addUser(newUser);
     failureOrSuccess!.fold((failure) {
-      emit(AddUserErrorState(message: mapFailureToMessage(failure)));
+      emit(AddUserErrorState(failure));
     }, (success) {
       emit(AddUserSavedState());
     });

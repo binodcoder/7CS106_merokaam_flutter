@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/errors/failures.dart';
+import '../../../../core/mappers/map_failure_to_message.dart';
 import '../../../../core/models/user_model.dart';
 import '../../../../core/network/network_info.dart';
 import '../../../domain/register/repositories/user_repositories.dart';
@@ -20,13 +21,11 @@ class UserRepositoriesImpl implements UserRepository {
       try {
         int response = await addUserRemoteDataSource.addUser(userModel);
         return Right(response);
-      } on ServerException {
-        return Left(ServerFailure());
-      } on BadRequestException {
-        return Left(BadRequestFailure());
+      } on AppException catch (e) {
+        return Left(mapExceptionToFailure(e));
       }
     } else {
-      return Left(NetworkFailure());
+      return const Left(NetworkFailure());
     }
   }
 }

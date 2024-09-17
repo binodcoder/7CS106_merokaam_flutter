@@ -4,6 +4,7 @@ import '../../../../core/entities/user.dart';
 import '../../../../core/entities/user_info_response.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/errors/failures.dart';
+import '../../../../core/mappers/map_failure_to_message.dart';
 import '../../../../core/network/network_info.dart';
 import '../../../domain/login/repositories/login_repositories.dart';
 import '../datasources/login_remote_data_source.dart';
@@ -25,11 +26,11 @@ when login is success Right side will return otherwise left.
       try {
         UserInfoResponse response = await remoteDataSource.login(loginModel);
         return Right(response);
-      } on LoginException {
-        return Left(LoginFailure());
+      } on AppException catch (e) {
+        return Left(mapExceptionToFailure(e));
       }
     } else {
-      return Left(NetworkFailure());
+      return const Left(NetworkFailure());
     }
   }
 }

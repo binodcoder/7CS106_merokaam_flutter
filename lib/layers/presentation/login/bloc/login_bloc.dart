@@ -27,7 +27,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     emit(LoginLoadingState());
     final result = await login(event.loginModel);
     result!.fold((failure) {
-      emit(LoginErrorState(message: mapFailureToMessage(failure)));
+      emit(LoginErrorState(failure));
     }, (result) {
       emit(LoggedState());
       saveUserData(result);
