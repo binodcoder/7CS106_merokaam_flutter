@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:async';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:merokaam/core/models/job_profile_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,30 +23,62 @@ class JobProfileRemoteDataSourceImpl implements JobProfileRemoteDataSource {
   JobProfileRemoteDataSourceImpl({required this.client, required this.sharedPreferences});
 
   Future<int> _createJobProfile(String url, JobProfileModel jobProfileModel) async {
-    final response = await client.post(
-      Uri.parse(url),
-      headers: {
-        'Content-Type': 'application/json',
-        'Cookie': sharedPreferences.getString("jwt_token")!.split(';').first,
-      },
-      body: json.encode(jobProfileModel.toJson()),
-    );
-    if (response.statusCode == 200) {
-      return 1;
-    } else if (response.statusCode == 401) {
-      throw UnauthorizedException();
-    } else {
-      throw ServerException();
+    try {
+      final jwtToken = sharedPreferences.getString("jwt_token");
+      if (jwtToken == null || jwtToken.isEmpty) {
+        throw UnauthorizedException('JWT token not found or empty.');
+      }
+      final cookie = jwtToken.split(';').first;
+
+      final response = await client
+          .post(
+            Uri.parse(url),
+            headers: {
+              'Content-Type': 'application/json',
+              'Cookie': cookie,
+            },
+            body: json.encode(jobProfileModel.toJson()),
+          )
+          .timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        return 1;
+      } else if (response.statusCode == 401) {
+        throw UnauthorizedException('Unauthorized access.');
+      } else if (response.statusCode == 400) {
+        throw BadRequestException('Bad request.');
+      } else if (response.statusCode == 404) {
+        throw NotFoundException('Resource not found.');
+      } else {
+        throw ServerException('Server error: ${response.statusCode}.');
+      }
+    } on TimeoutException catch (e) {
+      throw CustomTimeoutException('Request timed out.', e);
+    } on SocketException catch (e) {
+      throw NetworkException('No Internet connection.', e);
+    } on FormatException catch (e) {
+      throw InvalidFormatException('Invalid response format.', e);
+    } on UnauthorizedException {
+      rethrow; // Already handled
+    } on BadRequestException {
+      rethrow; // Already handled
+    } on NotFoundException {
+      rethrow; // Already handled
+    } on ServerException {
+      rethrow; // Already handled
+    } catch (e) {
+      throw UnknownException('An unexpected error occurred.', e);
     }
   }
 
   Future<JobProfileModel> _readJobProfile(String url) async {
-    final jwtToken = sharedPreferences.getString("jwt_token");
-    if (jwtToken == null || jwtToken.isEmpty) {
-      throw UnauthorizedException();
-    }
-    final cookie = jwtToken.split(';').first;
     try {
+      final jwtToken = sharedPreferences.getString("jwt_token");
+      if (jwtToken == null || jwtToken.isEmpty) {
+        throw UnauthorizedException('JWT token not found or empty.');
+      }
+      final cookie = jwtToken.split(';').first;
+
       final response = await client.get(
         Uri.parse(url),
         headers: {
@@ -53,35 +86,86 @@ class JobProfileRemoteDataSourceImpl implements JobProfileRemoteDataSource {
           'Cookie': cookie,
         },
       ).timeout(const Duration(seconds: 10));
+
       if (response.statusCode == 200) {
-        return JobProfileModel.fromJson(json.decode(response.body));
+        try {
+          final data = json.decode(response.body);
+          return JobProfileModel.fromJson(data);
+        } on FormatException catch (e) {
+          throw InvalidFormatException('Invalid response format.', e);
+        }
       } else if (response.statusCode == 404) {
-        throw NotFoundException();
+        throw NotFoundException('Resource not found.');
       } else if (response.statusCode == 401) {
-        throw UnauthorizedException();
+        throw UnauthorizedException('Unauthorized access.');
+      } else if (response.statusCode == 400) {
+        throw BadRequestException('Bad request.');
       } else {
-        throw ServerException();
+        throw ServerException('Server error: ${response.statusCode}.');
       }
-    } on TimeoutException {
-      throw CustomTimeoutException();
+    } on TimeoutException catch (e) {
+      throw CustomTimeoutException('Request timed out.', e);
+    } on SocketException catch (e) {
+      throw NetworkException('No Internet connection.', e);
+    } on InvalidFormatException {
+      rethrow; // Already handled
+    } on UnauthorizedException {
+      rethrow; // Already handled
+    } on BadRequestException {
+      rethrow; // Already handled
+    } on NotFoundException {
+      rethrow; // Already handled
+    } on ServerException {
+      rethrow; // Already handled
     } catch (e) {
-      rethrow;
+      throw UnknownException('An unexpected error occurred.', e);
     }
   }
 
   Future<int> _updateJobProfile(String url, JobProfileModel jobProfileModel) async {
-    final response = await client.put(
-      Uri.parse(url),
-      headers: {
-        'Content-Type': 'application/json',
-        'Cookie': sharedPreferences.getString("jwt_token")!.split(';').first,
-      },
-      body: json.encode(jobProfileModel.toJson()),
-    );
-    if (response.statusCode == 200) {
-      return 1;
-    } else {
-      throw ServerException();
+    try {
+      final jwtToken = sharedPreferences.getString("jwt_token");
+      if (jwtToken == null || jwtToken.isEmpty) {
+        throw UnauthorizedException('JWT token not found or empty.');
+      }
+      final cookie = jwtToken.split(';').first;
+
+      final response = await client
+          .put(
+            Uri.parse(url),
+            headers: {
+              'Content-Type': 'application/json',
+              'Cookie': cookie,
+            },
+            body: json.encode(jobProfileModel.toJson()),
+          )
+          .timeout(const Duration(seconds: 10));
+
+      if (response.statusCode == 200) {
+        return 1;
+      } else if (response.statusCode == 401) {
+        throw UnauthorizedException('Unauthorized access.');
+      } else if (response.statusCode == 404) {
+        throw NotFoundException('Resource not found.');
+      } else if (response.statusCode == 400) {
+        throw BadRequestException('Bad request.');
+      } else {
+        throw ServerException('Server error: ${response.statusCode}.');
+      }
+    } on TimeoutException catch (e) {
+      throw CustomTimeoutException('Request timed out.', e);
+    } on SocketException catch (e) {
+      throw NetworkException('No Internet connection.', e);
+    } on UnauthorizedException {
+      rethrow; // Already handled
+    } on NotFoundException {
+      rethrow; // Already handled
+    } on BadRequestException {
+      rethrow; // Already handled
+    } on ServerException {
+      rethrow; // Already handled
+    } catch (e) {
+      throw UnknownException('An unexpected error occurred.', e);
     }
   }
 

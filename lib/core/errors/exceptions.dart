@@ -49,6 +49,10 @@ class DatabaseOperationException extends AppException {
   DatabaseOperationException([String message = 'Database operation error.', dynamic cause = ""]) : super(message, cause);
 }
 
+class InvalidFormatException extends AppException {
+  InvalidFormatException([String message = 'Invalid response format.', dynamic cause = ""]) : super(message, cause);
+}
+
 class UnknownException extends AppException {
   UnknownException([String message = 'An unknown error occurred.', dynamic cause = ""]) : super(message, cause);
 }
