@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:merokaam/layers/presentation/register/bloc/user_add_event.dart';
 import 'package:merokaam/layers/presentation/register/bloc/user_add_state.dart';
-
 import '../../../../core/mappers/map_failure_to_message.dart';
 import '../../../../core/models/user_model.dart';
 import '../../../domain/register/usecases/add_user.dart';

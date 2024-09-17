@@ -83,6 +83,7 @@ class JobProfileRepositoryImpl implements JobProfileRepository {
   Future<Either<Failure, int>> updateJobProfile(JobProfile jobProfile) async {
     // Convert JobProfile to JobProfileModel for updating
     JobProfileModel jobProfileModel = JobProfileModel(
+      userAccountId: jobProfile.userAccountId,
       firstName: jobProfile.firstName,
       lastName: jobProfile.lastName,
       city: jobProfile.city,

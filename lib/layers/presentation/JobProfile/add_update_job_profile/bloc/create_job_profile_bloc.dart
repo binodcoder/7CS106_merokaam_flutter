@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'dart:io';
-import 'dart:typed_data';
+
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
 
 import '../../../../../core/errors/failures.dart';
 import '../../../../../core/mappers/map_failure_to_message.dart';
@@ -26,11 +24,7 @@ class CreateJobProfileBloc extends Bloc<CreateJobProfileEvent, CreateJobProfileS
     emit(AddJobProfileLoadingState());
     final result = await createJobProfile(event.newJobProfile);
     result!.fold((failure) {
-      if (failure is UnauthorizedFailure) {
-        emit(AddProfileUnauthorizedState());
-      } else {
-        emit(AddJobProfileErrorState(message: mapFailureToMessage(failure)));
-      }
+      emit(AddJobProfileErrorState(failure));
     }, (result) {
       emit(AddJobProfileSavedState());
     });
@@ -43,9 +37,8 @@ class CreateJobProfileBloc extends Bloc<CreateJobProfileEvent, CreateJobProfileS
   FutureOr<void> jobProfileAddUpdateButtonPressEvent(JobProfileAddUpdateButtonPressEvent event, Emitter<CreateJobProfileState> emit) async {
     emit(AddJobProfileLoadingState());
     final result = await updateJobProfile(event.updatedJobProfile);
-
     result!.fold((failure) {
-      emit(AddJobProfileErrorState(message: mapFailureToMessage(failure)));
+      emit(AddJobProfileErrorState(failure));
     }, (result) {
       emit(AddJobProfileUpdatedState());
     });

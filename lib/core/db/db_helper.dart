@@ -74,9 +74,15 @@ class DatabaseHelper {
       } else {
         throw NotFoundException('Job profile not found for userAccountId: $id.');
       }
+    } on NotFoundException {
+      rethrow;
     } on DatabaseException catch (e) {
       // Handle database-related exceptions
       throw DatabaseOperationException('Database query failed.', e);
+    } on DataFormatException {
+      rethrow;
+    } on DatabaseInitializationException catch (e) {
+      rethrow;
     } catch (e) {
       // Handle any other exceptions
       throw UnknownException('An unexpected error occurred.', e);
@@ -102,9 +108,13 @@ class DatabaseHelper {
         throw NotFoundException('Job profile not found for userAccountId: ${jobProfileModel.userAccountId}.');
       }
       return result;
+    } on NotFoundException catch (e) {
+      rethrow;
     } on DatabaseException catch (e) {
       // Handle database-related exceptions
       throw DatabaseOperationException('Failed to update job profile.', e);
+    } on DatabaseInitializationException catch (e) {
+      rethrow;
     } catch (e) {
       // Handle any other exceptions
       throw UnknownException('An unexpected error occurred while updating the job profile.', e);
@@ -121,6 +131,8 @@ class DatabaseHelper {
       return result;
     } on DatabaseException catch (e) {
       throw DatabaseOperationException('Failed to delete job profiles.', e);
+    } on DatabaseInitializationException catch (e) {
+      rethrow;
     } catch (e) {
       throw UnknownException('An unexpected error occurred while deleting job profiles.', e);
     }

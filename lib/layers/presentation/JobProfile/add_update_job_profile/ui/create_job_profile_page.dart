@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:merokaam/core/entities/job_profile.dart';
+import 'package:merokaam/core/errors/failures.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../core/db/db_helper.dart';
 import '../../../../../core/models/job_profile_model.dart';
@@ -79,6 +80,7 @@ class _CreateJobProfilePageState extends State<CreateJobProfilePage> {
         if (state is AddJobProfileLoadingState) {
           _showLoadingDialog(context);
         } else if (state is AddJobProfileSavedState) {
+          Navigator.pop(context);
           firstNameController.clear();
           lastNameController.clear();
           cityController.clear();
@@ -87,6 +89,7 @@ class _CreateJobProfilePageState extends State<CreateJobProfilePage> {
           countryController.clear();
           Navigator.pop(context);
         } else if (state is AddJobProfileUpdatedState) {
+          Navigator.pop(context);
           firstNameController.clear();
           lastNameController.clear();
           cityController.clear();
@@ -95,17 +98,19 @@ class _CreateJobProfilePageState extends State<CreateJobProfilePage> {
           countryController.clear();
           Navigator.pop(context);
         } else if (state is AddJobProfileErrorState) {
-          Navigator.pop(context);
-          Fluttertoast.showToast(
-            msg: state.message,
-            toastLength: Toast.LENGTH_LONG,
-            gravity: ToastGravity.BOTTOM,
-            backgroundColor: ColorManager.error,
-          );
-        } else if (state is AddProfileUnauthorizedState) {
-          sharedPreferences.clear();
-          DatabaseHelper.deleteAllJobProfiles();
-          Navigator.pushReplacementNamed(context, Routes.loginRoute);
+          if (state.failure is UnauthorizedFailure) {
+            sharedPreferences.clear();
+            DatabaseHelper.deleteAllJobProfiles();
+            Navigator.pushReplacementNamed(context, Routes.loginRoute);
+          } else {
+            Navigator.pop(context);
+            Fluttertoast.showToast(
+              msg: state.failure.message,
+              toastLength: Toast.LENGTH_LONG,
+              gravity: ToastGravity.BOTTOM,
+              backgroundColor: ColorManager.error,
+            );
+          }
         }
       },
       builder: (context, state) {

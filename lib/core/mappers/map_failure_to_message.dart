@@ -1,46 +1,31 @@
-import '../../resources/strings_manager.dart';
 import '../errors/exceptions.dart';
 import '../errors/failures.dart';
 
-String mapFailureToMessage(Failure failure) {
-  switch (failure.runtimeType) {
-    case ServerFailure:
-      return AppStrings.serverFailureMessage;
-    case CacheFailure:
-      return AppStrings.cacheFailureMessage;
-    case LoginFailure:
-      return AppStrings.loginFailureMessage;
-    case NetworkFailure:
-      return AppStrings.networkFailureMessage;
-    case BadRequestFailure:
-      return AppStrings.badRequestFailureMessage;
-    case NotFoundFailure:
-      return AppStrings.notFoundFailureMessage;
-    case TimeoutFailure:
-      return AppStrings.timeoutFailureMessage;
-    case UnauthorizedFailure:
-      return AppStrings.unauthorizedFailureMessage;
-    default:
-      return 'Unexpected error';
-  }
-}
-
 Failure mapExceptionToFailure(AppException exception) {
-  if (exception is ServerException) {
-    return ServerFailure(exception.message);
-  } else if (exception is CacheException) {
-    return CacheFailure(exception.message);
-  } else if (exception is NetworkException) {
-    return NetworkFailure(exception.message);
-  } else if (exception is BadRequestException) {
-    return BadRequestFailure(exception.message);
-  } else if (exception is NotFoundException) {
-    return NotFoundFailure(exception.message);
-  } else if (exception is UnauthorizedException) {
-    return UnauthorizedFailure(exception.message);
-  } else if (exception is CustomTimeoutException) {
-    return TimeoutFailure(exception.message);
+  final exceptionToFailureMap = <Type, Failure Function(AppException)>{
+    ServerException: (e) => ServerFailure(e.message, e.cause),
+    CacheException: (e) => CacheFailure(e.message, e.cause),
+    NetworkException: (e) => NetworkFailure(e.message, e.cause),
+    BadRequestException: (e) => BadRequestFailure(e.message, e.cause),
+    NotFoundException: (e) => NotFoundFailure(e.message, e.cause),
+    UnauthorizedException: (e) => UnauthorizedFailure(e.message, e.cause),
+    CustomTimeoutException: (e) => TimeoutFailure(e.message, e.cause),
+    LoginException: (e) => LoginFailure(e.message, e.cause),
+    DatabaseInitializationException: (e) => DatabaseInitializationFailure(e.message, e.cause),
+    DataFormatException: (e) => DataFormatFailure(e.message, e.cause),
+    DatabaseOperationException: (e) => DatabaseOperationFailure(e.message, e.cause),
+    InvalidFormatException: (e) => InvalidFormatFailure(e.message, e.cause),
+    ParsingException: (e) => ParsingFailure(e.message, e.cause),
+    ArgumentException: (e) => ArgumentFailure(e.message, e.cause),
+    UnknownException: (e) => UnknownFailure(e.message, e.cause),
+  };
+
+  final failureConstructor = exceptionToFailureMap[exception.runtimeType];
+
+  if (failureConstructor != null) {
+    return failureConstructor(exception);
   } else {
-    return const UnknownFailure('An unknown error occurred.');
+    // Handle any other types of AppException
+    return UnknownFailure(exception.message, exception.cause);
   }
 }

@@ -53,6 +53,14 @@ class InvalidFormatException extends AppException {
   InvalidFormatException([String message = 'Invalid response format.', dynamic cause = ""]) : super(message, cause);
 }
 
+class ParsingException extends AppException {
+  ParsingException([String message = 'Invalid response format.', dynamic cause = ""]) : super(message, cause);
+}
+
+class ArgumentException extends AppException {
+  ArgumentException([String message = 'invalid argument.', dynamic cause = ""]) : super(message, cause);
+}
+
 class UnknownException extends AppException {
   UnknownException([String message = 'An unknown error occurred.', dynamic cause = ""]) : super(message, cause);
 }

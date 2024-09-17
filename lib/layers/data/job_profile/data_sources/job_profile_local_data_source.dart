@@ -23,7 +23,7 @@ class JobProfilesLocalDataSourceImpl implements JobProfilesLocalDataSource {
   Future<int> _cacheJobProfile(JobProfileModel jobProfileModel) async {
     // Ensure userAccountId is not null before proceeding
     if (jobProfileModel.userAccountId == null) {
-      throw ArgumentError("User Account ID cannot be null");
+      throw ArgumentException("User Account ID cannot be null");
     }
 
     try {
@@ -39,7 +39,10 @@ class JobProfilesLocalDataSourceImpl implements JobProfilesLocalDataSource {
       // }
     } on NotFoundException {
       // Handle the case when the profile is not found by inserting a new one
-      return await DatabaseHelper.insertJobProfile(jobProfileModel);
+      await DatabaseHelper.insertJobProfile(jobProfileModel);
+      return 1;
+    } on ArgumentException {
+      rethrow;
     } catch (e) {
       // Handle any unforeseen exceptions (optional)
       print("Error caching job profile: $e");

@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import '../../../../core/errors/exceptions.dart';
@@ -14,17 +16,60 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   UserRemoteDataSourceImpl({required this.client});
 
   Future<int> _addUser(String url, UserModel userModel) async {
-    final response = await client.post(
-      Uri.parse(url),
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode(userModel.toMap()),
-    );
-    if (response.statusCode == 200) {
-      return 1;
-    } else if (response.statusCode == 400) {
-      throw BadRequestException();
-    } else {
-      throw ServerException();
+    try {
+      final response = await client.post(
+        Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(userModel.toMap()),
+      );
+
+      switch (response.statusCode) {
+        case 200:
+        case 201:
+          // Assuming the user was successfully created
+          return 1;
+        case 400:
+          throw BadRequestException(json.decode(response.body)["message"] ?? "");
+        case 401:
+          throw UnauthorizedException(json.decode(response.body)["message"] ?? "");
+        case 403:
+          throw UnauthorizedException('Forbidden access.');
+        case 404:
+          throw NotFoundException('Endpoint not found.');
+        case 408:
+          throw CustomTimeoutException('Request timeout.');
+        case 500:
+          throw ServerException('Internal server error.');
+        default:
+          throw UnknownException(
+            'Unexpected error occurred. Status code: ${response.statusCode}',
+            response.body,
+          );
+      }
+    } on SocketException {
+      // Handles network issues
+      throw NetworkException('No internet connection.');
+    } on TimeoutException {
+      // Handles timeout exceptions
+      throw CustomTimeoutException('Connection timeout.');
+    } on FormatException catch (e) {
+      // Handles JSON format exceptions
+      throw DataFormatException('Invalid response format.', e);
+    } on BadRequestException catch (e) {
+      rethrow;
+    } on UnauthorizedException catch (e) {
+      rethrow;
+    } on NotFoundException catch (e) {
+      rethrow;
+    } on CustomTimeoutException catch (e) {
+      rethrow;
+    } on ServerException catch (e) {
+      rethrow;
+    } on UnknownException catch (e) {
+      rethrow;
+    } catch (e) {
+      // Catches any other exceptions
+      throw UnknownException('An unexpected error occurred.', e);
     }
   }
 

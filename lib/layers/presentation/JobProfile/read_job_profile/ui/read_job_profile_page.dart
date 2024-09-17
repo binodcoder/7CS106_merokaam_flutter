@@ -63,7 +63,7 @@ class _ReadJobProfilePageState extends State<ReadJobProfilePage> {
           jobProfileBloc.add(JobProfileInitialEvent(id));
         } else if (state is JobProfileErrorState) {
           if (state.failure is NotFoundFailure) {
-            Navigator.pushReplacementNamed(context, Routes.createJobProfileRoute).then((value) => refreshPage());
+            Navigator.pushNamed(context, Routes.createJobProfileRoute).then((value) => refreshPage());
           } else if (state.failure is UnauthorizedFailure) {
             sharedPreferences.clear();
             DatabaseHelper.deleteAllJobProfiles();
