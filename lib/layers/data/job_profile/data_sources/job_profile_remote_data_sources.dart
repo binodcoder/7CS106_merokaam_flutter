@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:merokaam/core/models/job_profile_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,14 +40,19 @@ class JobProfileRemoteDataSourceImpl implements JobProfileRemoteDataSource {
   }
 
   Future<JobProfileModel> _readJobProfile(String url) async {
+    final jwtToken = sharedPreferences.getString("jwt_token");
+    if (jwtToken == null || jwtToken.isEmpty) {
+      throw UnauthorizedException();
+    }
+    final cookie = jwtToken.split(';').first;
     try {
       final response = await client.get(
         Uri.parse(url),
         headers: {
           'Content-Type': 'application/json',
-          'Cookie': sharedPreferences.getString("jwt_token")!.split(';').first,
+          'Cookie': cookie,
         },
-      ).timeout(const Duration(seconds: 5));
+      ).timeout(const Duration(seconds: 10));
       if (response.statusCode == 200) {
         return JobProfileModel.fromJson(json.decode(response.body));
       } else if (response.statusCode == 404) {
@@ -58,7 +63,7 @@ class JobProfileRemoteDataSourceImpl implements JobProfileRemoteDataSource {
         throw ServerException();
       }
     } on TimeoutException {
-      throw TimeoutException();
+      throw CustomTimeoutException();
     } catch (e) {
       rethrow;
     }

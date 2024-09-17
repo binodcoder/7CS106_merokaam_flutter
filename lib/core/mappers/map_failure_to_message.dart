@@ -15,6 +15,8 @@ String mapFailureToMessage(Failure failure) {
       return AppStrings.badRequestFailureMessage;
     case NotFoundFailure:
       return AppStrings.notFoundFailureMessage;
+    case TimeoutFailure:
+      return AppStrings.timeoutFailureMessage;
     case UnauthorizedFailure:
       return AppStrings.unauthorizedFailureMessage;
     default:

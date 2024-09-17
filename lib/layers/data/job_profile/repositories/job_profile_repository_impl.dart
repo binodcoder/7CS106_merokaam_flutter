@@ -74,7 +74,7 @@ class JobProfileRepositoryImpl implements JobProfileRepository {
         return Left(UnauthorizedFailure());
       } on CacheException {
         return Left(CacheFailure());
-      } on TimeoutException {
+      } on CustomTimeoutException {
         return Left(TimeoutFailure());
       } catch (e) {
         return Left(UnknownFailure());

@@ -62,8 +62,9 @@ class AppStrings {
   static String badRequestFailureMessage = 'Email is already registered.';
 
   static String notFoundFailureMessage = 'Not Found';
+  static String timeoutFailureMessage = 'Timeout';
 
-  static String unauthorizedFailureMessage = 'Not Found';
+  static String unauthorizedFailureMessage = 'Unauthorized';
 
   //splash screen
 

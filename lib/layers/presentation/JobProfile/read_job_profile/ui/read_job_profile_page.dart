@@ -66,6 +66,26 @@ class _ReadJobProfilePageState extends State<ReadJobProfilePage> {
           sharedPreferences.clear();
           DatabaseHelper.deleteAllJobProfiles();
           Navigator.pushReplacementNamed(context, Routes.loginRoute);
+        } else if (state is JobProfileErrorState) {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text('Error'),
+                content: Text(state.message ?? 'Something went wrong. Please try again.'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      // Add your refresh logic here, e.g., triggering an event to refresh the data
+                      jobProfileBloc.add(JobProfileInitialEvent(id));
+                      Navigator.of(context).pop(); // Close the dialog
+                    },
+                    child: const Text('Refresh'),
+                  ),
+                ],
+              );
+            },
+          );
         }
       },
       builder: (context, state) {

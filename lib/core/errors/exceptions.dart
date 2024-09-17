@@ -1,15 +1,36 @@
-class CacheException implements Exception {}
+class AppException implements Exception {
+  final String message;
+  AppException([this.message = 'An unknown error occurred.']);
+}
 
-class LoginException implements Exception {}
+class CacheException extends AppException {
+  CacheException([String message = 'Cache Failure.']) : super(message);
+}
 
-class ServerException implements Exception {}
+class LoginException extends AppException {
+  LoginException([String message = 'Invalid Username or Password.']) : super(message);
+}
 
-class NetworkException implements Exception {}
+class ServerException extends AppException {
+  ServerException([String message = 'Server error occurred.']) : super(message);
+}
 
-class BadRequestException implements Exception {}
+class NetworkException extends AppException {
+  NetworkException([String message = 'No internet connection..']) : super(message);
+}
 
-class NotFoundException implements Exception {}
+class BadRequestException extends AppException {
+  BadRequestException([String message = 'Email is already registered.']) : super(message);
+}
 
-class TimeoutException implements Exception {}
+class NotFoundException extends AppException {
+  NotFoundException([String message = 'Not Found.']) : super(message);
+}
 
-class UnauthorizedException implements Exception {}
+class CustomTimeoutException extends AppException {
+  CustomTimeoutException([String message = 'Timeout.']) : super(message);
+}
+
+class UnauthorizedException extends AppException {
+  UnauthorizedException([String message = 'Unauthorized.']) : super(message);
+}
