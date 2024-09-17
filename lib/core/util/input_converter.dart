@@ -8,12 +8,13 @@ class InputConverter {
       if (integer < 0) throw const FormatException();
       return Right(integer);
     } on FormatException {
-      return Left(InvalidInputFailure());
+      return const Left(InvalidInputFailure());
     }
   }
 }
 
 class InvalidInputFailure extends Failure {
+  const InvalidInputFailure([String message = 'Server failure occurred.']) : super(message);
   @override
-  List<Object?> get props => [];
+  List<Object> get props => [message];
 }

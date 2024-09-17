@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:merokaam/core/entities/job_profile.dart';
+import 'package:merokaam/core/errors/failures.dart';
 
 //These are the set of states.
 abstract class ReadJobProfileState extends Equatable {
@@ -25,15 +26,9 @@ class JobProfileLoadedSuccessState extends ReadJobProfileState {
 }
 
 class JobProfileErrorState extends JobProfileActionState {
-  final String message;
-  JobProfileErrorState({required this.message});
+  final Failure failure;
+  JobProfileErrorState(this.failure);
 }
-
-class JobProfileNotFoundState extends JobProfileActionState {}
-
-class JobProfileUnauthorizedState extends JobProfileActionState {}
-
-class JobProfileTimeoutState extends JobProfileActionState {}
 
 class JobProfileNavigateToAddJobProfileActionState extends JobProfileActionState {}
 

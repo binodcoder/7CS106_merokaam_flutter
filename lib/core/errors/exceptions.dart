@@ -20,17 +20,17 @@ class NetworkException extends AppException {
 }
 
 class BadRequestException extends AppException {
-  BadRequestException([String message = 'Email is already registered.']) : super(message);
+  BadRequestException([String message = 'Invalid request.']) : super(message);
 }
 
 class NotFoundException extends AppException {
-  NotFoundException([String message = 'Not Found.']) : super(message);
+  NotFoundException([String message = 'Resource Not Found.']) : super(message);
 }
 
 class CustomTimeoutException extends AppException {
-  CustomTimeoutException([String message = 'Timeout.']) : super(message);
+  CustomTimeoutException([String message = 'Connection Timeout.']) : super(message);
 }
 
 class UnauthorizedException extends AppException {
-  UnauthorizedException([String message = 'Unauthorized.']) : super(message);
+  UnauthorizedException([String message = 'Unauthorized access.']) : super(message);
 }

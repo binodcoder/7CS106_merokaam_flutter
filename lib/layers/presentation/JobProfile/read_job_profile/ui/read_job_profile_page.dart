@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:merokaam/core/errors/failures.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../core/db/db_helper.dart';
 import '../../../../../injection_container.dart';
@@ -60,32 +61,34 @@ class _ReadJobProfilePageState extends State<ReadJobProfilePage> {
           ).then((value) => refreshPage());
         } else if (state is JobProfileItemsUpdatedState) {
           jobProfileBloc.add(JobProfileInitialEvent(id));
-        } else if (state is JobProfileNotFoundState) {
-          Navigator.pushReplacementNamed(context, Routes.createJobProfileRoute).then((value) => refreshPage());
-        } else if (state is JobProfileUnauthorizedState) {
-          sharedPreferences.clear();
-          DatabaseHelper.deleteAllJobProfiles();
-          Navigator.pushReplacementNamed(context, Routes.loginRoute);
         } else if (state is JobProfileErrorState) {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text('Error'),
-                content: Text(state.message ?? 'Something went wrong. Please try again.'),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      // Add your refresh logic here, e.g., triggering an event to refresh the data
-                      jobProfileBloc.add(JobProfileInitialEvent(id));
-                      Navigator.of(context).pop(); // Close the dialog
-                    },
-                    child: const Text('Refresh'),
-                  ),
-                ],
-              );
-            },
-          );
+          if (state.failure is NotFoundFailure) {
+            Navigator.pushReplacementNamed(context, Routes.createJobProfileRoute).then((value) => refreshPage());
+          } else if (state.failure is UnauthorizedFailure) {
+            sharedPreferences.clear();
+            DatabaseHelper.deleteAllJobProfiles();
+            Navigator.pushReplacementNamed(context, Routes.loginRoute);
+          } else {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('Error'),
+                  content: Text(state.failure.message ?? 'Something went wrong. Please try again.'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        // Add your refresh logic here, e.g., triggering an event to refresh the data
+                        jobProfileBloc.add(JobProfileInitialEvent(id));
+                        Navigator.of(context).pop(); // Close the dialog
+                      },
+                      child: const Text('Refresh'),
+                    ),
+                  ],
+                );
+              },
+            );
+          }
         }
       },
       builder: (context, state) {
@@ -177,20 +180,6 @@ class _ReadJobProfilePageState extends State<ReadJobProfilePage> {
                 ),
               ),
             );
-
-          // case JobProfileErrorState:
-          //   return Scaffold(
-          //       drawer: const MyDrawer(),
-          //       appBar: AppBar(
-          //         title: const Text(AppStrings.appTitle),
-          //       ),
-          //       body: Center(
-          //           child: ElevatedButton(
-          //         onPressed: () {
-          //           jobProfileBloc.add(JobProfileAddButtonClickedEvent());
-          //         },
-          //         child: const Text("Add Profile"),
-          //       )));
 
           default:
             return const Scaffold(body: SizedBox());

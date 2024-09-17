@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:merokaam/core/entities/job_profile.dart';
+import 'package:merokaam/core/mappers/map_failure_to_message.dart';
 import 'package:merokaam/core/models/job_profile_model.dart';
 import 'package:merokaam/layers/data/job_profile/data_sources/job_profile_local_data_source.dart';
 import 'package:merokaam/layers/data/job_profile/data_sources/job_profile_remote_data_sources.dart';
@@ -34,13 +35,11 @@ class JobProfileRepositoryImpl implements JobProfileRepository {
       try {
         int response = await jobProfileRemoteDataSources.createJobProfile(jobProfileModel);
         return Right(response);
-      } on UnauthorizedException {
-        return Left(UnauthorizedFailure());
-      } on ServerException {
-        return Left(ServerFailure());
+      } on AppException catch (e) {
+        return Left(mapExceptionToFailure(e));
       }
     } else {
-      return Left(NetworkFailure());
+      return const Left(NetworkFailure());
     }
   }
 
@@ -66,34 +65,16 @@ class JobProfileRepositoryImpl implements JobProfileRepository {
         await jobProfilesLocalDataSource.cacheJobProfile(jobProfileModel);
         // Return the job profile as a successful result
         return Right(jobProfile);
-      } on ServerException {
-        return Left(ServerFailure());
-      } on NotFoundException {
-        return Left(NotFoundFailure());
-      } on UnauthorizedException {
-        return Left(UnauthorizedFailure());
-      } on CacheException {
-        return Left(CacheFailure());
-      } on CustomTimeoutException {
-        return Left(TimeoutFailure());
-      } catch (e) {
-        return Left(UnknownFailure());
+      } on AppException catch (e) {
+        return Left(mapExceptionToFailure(e));
       }
     } else {
       // If no network, fallback to local cache
       try {
-        JobProfile? jobProfile = await jobProfilesLocalDataSource.readLastJobProfile(id);
-        if (jobProfile != null) {
-          return Right(jobProfile);
-        } else {
-          return Left(NotFoundFailure());
-        }
-      } on NotFoundException {
-        return Left(NotFoundFailure());
-      } on CacheException {
-        return Left(CacheFailure());
-      } catch (e) {
-        return Left(UnknownFailure());
+        final JobProfile jobProfile = await jobProfilesLocalDataSource.readLastJobProfile(id);
+        return Right(jobProfile);
+      } on AppException catch (e) {
+        return Left(mapExceptionToFailure(e));
       }
     }
   }
@@ -117,16 +98,11 @@ class JobProfileRepositoryImpl implements JobProfileRepository {
         //cache the updated profile locally after a successful remote update
         await jobProfilesLocalDataSource.cacheJobProfile(jobProfileModel);
         return Right(response);
-      } on ServerException {
-        return Left(ServerFailure());
-      } on CacheException {
-        // Handle local cache failures (if caching fails after remote update)
-        return Left(CacheFailure());
-      } catch (e) {
-        return Left(UnknownFailure());
+      } on AppException catch (e) {
+        return Left(mapExceptionToFailure(e));
       }
     } else {
-      return Left(NetworkFailure());
+      return const Left(NetworkFailure());
     }
   }
 
@@ -135,8 +111,8 @@ class JobProfileRepositoryImpl implements JobProfileRepository {
     try {
       int postList = await jobProfileRemoteDataSources.deleteJobProfile(jobProfile.userAccountId!);
       return Right(postList);
-    } on CacheException {
-      return Left(CacheFailure());
+    } on AppException catch (e) {
+      return Left(mapExceptionToFailure(e));
     }
   }
 }

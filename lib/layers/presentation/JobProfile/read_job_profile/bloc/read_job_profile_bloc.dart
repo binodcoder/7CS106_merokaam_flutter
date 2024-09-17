@@ -40,13 +40,13 @@ class ReadJobProfileBloc extends Bloc<ReadJobProfileEvent, ReadJobProfileState> 
     final jobProfileResult = await readJobProfiles(event.id);
 
     jobProfileResult!.fold((failure) {
-      if (failure is NotFoundFailure) {
-        emit(JobProfileNotFoundState());
-      } else if (failure is UnauthorizedFailure) {
-        emit(JobProfileUnauthorizedState());
-      } else {
-        emit(JobProfileErrorState(message: mapFailureToMessage(failure)));
-      }
+      // if (failure is NotFoundFailure) {
+      //   emit(JobProfileNotFoundState());
+      // } else if (failure is UnauthorizedFailure) {
+      //   emit(JobProfileUnauthorizedState());
+      // } else {
+      emit(JobProfileErrorState(failure));
+      // }
     }, (jobProfile) {
       emit(JobProfileLoadedSuccessState(jobProfile));
     });

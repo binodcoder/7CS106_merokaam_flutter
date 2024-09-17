@@ -4,7 +4,7 @@ import '../../../../core/db/db_helper.dart';
 import '../../../../core/models/job_profile_model.dart';
 
 abstract class JobProfilesLocalDataSource {
-  Future<JobProfileModel?> readLastJobProfile(int id);
+  Future<JobProfileModel> readLastJobProfile(int id);
 
   Future<int>? cacheJobProfile(JobProfileModel jobProfileModel);
 }
@@ -18,7 +18,7 @@ class JobProfilesLocalDataSourceImpl implements JobProfilesLocalDataSource {
   Future<int> cacheJobProfile(JobProfileModel jobProfileModel) => _cacheJobProfile(jobProfileModel);
 
   @override
-  Future<JobProfileModel?> readLastJobProfile(int id) => _readJobProfileFromLocal(id);
+  Future<JobProfileModel> readLastJobProfile(int id) => _readJobProfileFromLocal(id);
 
   Future<int> _cacheJobProfile(JobProfileModel jobProfileModel) async {
     // Ensure userAccountId is not null before proceeding

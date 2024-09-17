@@ -1,4 +1,5 @@
 import '../../resources/strings_manager.dart';
+import '../errors/exceptions.dart';
 import '../errors/failures.dart';
 
 String mapFailureToMessage(Failure failure) {
@@ -21,5 +22,25 @@ String mapFailureToMessage(Failure failure) {
       return AppStrings.unauthorizedFailureMessage;
     default:
       return 'Unexpected error';
+  }
+}
+
+Failure mapExceptionToFailure(AppException exception) {
+  if (exception is ServerException) {
+    return ServerFailure(exception.message);
+  } else if (exception is CacheException) {
+    return CacheFailure(exception.message);
+  } else if (exception is NetworkException) {
+    return NetworkFailure(exception.message);
+  } else if (exception is BadRequestException) {
+    return BadRequestFailure(exception.message);
+  } else if (exception is NotFoundException) {
+    return NotFoundFailure(exception.message);
+  } else if (exception is UnauthorizedException) {
+    return UnauthorizedFailure(exception.message);
+  } else if (exception is CustomTimeoutException) {
+    return TimeoutFailure(exception.message);
+  } else {
+    return const UnknownFailure('An unknown error occurred.');
   }
 }
