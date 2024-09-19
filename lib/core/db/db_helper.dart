@@ -8,8 +8,8 @@ import 'package:sqflite/sqflite.dart';
 import '../models/job_profile_model.dart';
 
 class DatabaseHelper {
-  static Future<sql.Database> db() async {
-    return sql.openDatabase('blog.db', version: 1, onCreate: (
+  Future<sql.Database> database() async {
+    return sql.openDatabase('merokaam.db', version: 1, onCreate: (
       sql.Database database,
       int version,
     ) async {
@@ -17,7 +17,7 @@ class DatabaseHelper {
     });
   }
 
-  static Future<void> createTables(sql.Database database) async {
+  Future<void> createTables(sql.Database database) async {
     await database.execute("""CREATE TABLE jobprofile(
       userAccountId INTEGER PRIMARY KEY NOT NULL,
             firstName TEXT,
@@ -35,8 +35,8 @@ class DatabaseHelper {
     )""");
   }
 
-  static Future<int> insertJobProfile(JobProfileModel jobProfileModel) async {
-    final db = await DatabaseHelper.db();
+  Future<int> insertJobProfile(JobProfileModel jobProfileModel) async {
+    final db = await database();
     if (db == null) {
       throw DatabaseInitializationException('Database is not initialized.');
     }
@@ -50,8 +50,8 @@ class DatabaseHelper {
     }
   }
 
-  static Future<JobProfileModel> readJobProfile(int id) async {
-    final db = await DatabaseHelper.db();
+  Future<JobProfileModel> readJobProfile(int id) async {
+    final db = await database();
 
     if (db == null) {
       throw DatabaseInitializationException('Database is not initialized.');
@@ -89,8 +89,8 @@ class DatabaseHelper {
     }
   }
 
-  static Future<int> updateJobProfile(JobProfileModel jobProfileModel) async {
-    final db = await DatabaseHelper.db();
+  Future<int> updateJobProfile(JobProfileModel jobProfileModel) async {
+    final db = await database();
     if (db == null) {
       throw DatabaseInitializationException('Database is not initialized.');
     }
@@ -121,8 +121,8 @@ class DatabaseHelper {
     }
   }
 
-  static Future<int> deleteAllJobProfiles() async {
-    final db = await DatabaseHelper.db();
+  Future<int> deleteAllJobProfiles() async {
+    final db = await database();
     if (db == null) {
       throw DatabaseInitializationException('Database is not initialized.');
     }

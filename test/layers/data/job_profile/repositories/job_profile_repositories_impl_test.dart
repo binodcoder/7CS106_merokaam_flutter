@@ -117,7 +117,7 @@ void main() {
     test('should return Right with data from local data source when there is no internet connection', () async {
       // Arrange
       when(mockNetworkInfo.isConnected).thenAnswer((_) async => false);
-      when(mockLocalDataSource.readLastJobProfile()).thenAnswer((_) async => tJobProfileModel);
+      when(mockLocalDataSource.readLastJobProfile(1)).thenAnswer((_) async => tJobProfileModel);
 
       // Act
       final result = await repository.readJobProfile(1);
@@ -126,7 +126,7 @@ void main() {
       //expect(result, Right(tJobProfileList));
       expect(result, isA<Right<Failure, List<JobProfile>>>());
       verify(mockNetworkInfo.isConnected);
-      verify(mockLocalDataSource.readLastJobProfile());
+      verify(mockLocalDataSource.readLastJobProfile(1));
       verifyNoMoreInteractions(mockNetworkInfo);
       verifyNoMoreInteractions(mockLocalDataSource);
     });
@@ -198,7 +198,7 @@ void main() {
       final result = await repository.deleteJobProfile(tJobProfile);
 
       // Assert
-      expect(result, Left(CacheFailure()));
+      expect(result, const Left(CacheFailure()));
       verify(mockRemoteDataSource.deleteJobProfile(any));
       verifyNoMoreInteractions(mockRemoteDataSource);
     });

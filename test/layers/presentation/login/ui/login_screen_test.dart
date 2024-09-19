@@ -2,6 +2,7 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:merokaam/core/errors/failures.dart';
 import 'package:merokaam/layers/presentation/JobProfile/read_job_profile/ui/read_job_profile_page.dart';
 import 'package:merokaam/layers/presentation/login/bloc/login_bloc.dart';
 import 'package:merokaam/layers/presentation/login/bloc/login_event.dart';
@@ -76,10 +77,10 @@ void main() {
     });
 
     testWidgets('should show error toast when in LoginErrorState', (WidgetTester tester) async {
-      const errorMessage = "Login failed";
+      const failure = LoginFailure();
       whenListen(
         mockLoginBloc,
-        Stream<LoginState>.fromIterable([LoginErrorState(message: errorMessage)]),
+        Stream<LoginState>.fromIterable([LoginErrorState(failure)]),
         initialState: LoginInitialState(),
       );
 
