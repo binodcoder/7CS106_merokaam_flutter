@@ -8,13 +8,12 @@ import 'dart:async' as _i4;
 import 'package:dartz/dartz.dart' as _i5;
 import 'package:merokaam/core/entities/job_profile.dart' as _i7;
 import 'package:merokaam/core/errors/failures.dart' as _i6;
-import 'package:merokaam/core/usecases/usecase.dart' as _i8;
 import 'package:merokaam/layers/domain/job_profile/repositories/job_profile_repositories.dart'
     as _i2;
 import 'package:merokaam/layers/domain/job_profile/usecases/create_job_profile.dart'
-    as _i9;
+    as _i8;
 import 'package:merokaam/layers/domain/job_profile/usecases/delete_job_profile.dart'
-    as _i10;
+    as _i9;
 import 'package:merokaam/layers/domain/job_profile/usecases/read_job_profile.dart'
     as _i3;
 import 'package:mockito/mockito.dart' as _i1;
@@ -61,22 +60,21 @@ class MockReadJobProfile extends _i1.Mock implements _i3.ReadJobProfile {
       ) as _i2.JobProfileRepository);
 
   @override
-  _i4.Future<_i5.Either<_i6.Failure, List<_i7.JobProfile>>?> call(
-          _i8.NoParams? noParams) =>
+  _i4.Future<_i5.Either<_i6.Failure, _i7.JobProfile>?> call(int? id) =>
       (super.noSuchMethod(
         Invocation.method(
           #call,
-          [noParams],
+          [id],
         ),
         returnValue:
-            _i4.Future<_i5.Either<_i6.Failure, List<_i7.JobProfile>>?>.value(),
-      ) as _i4.Future<_i5.Either<_i6.Failure, List<_i7.JobProfile>>?>);
+            _i4.Future<_i5.Either<_i6.Failure, _i7.JobProfile>?>.value(),
+      ) as _i4.Future<_i5.Either<_i6.Failure, _i7.JobProfile>?>);
 }
 
 /// A class which mocks [CreateJobProfile].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockCreateJobProfile extends _i1.Mock implements _i9.CreateJobProfile {
+class MockCreateJobProfile extends _i1.Mock implements _i8.CreateJobProfile {
   MockCreateJobProfile() {
     _i1.throwOnMissingStub(this);
   }
@@ -104,7 +102,7 @@ class MockCreateJobProfile extends _i1.Mock implements _i9.CreateJobProfile {
 /// A class which mocks [DeleteJobProfile].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockDeleteJobProfile extends _i1.Mock implements _i10.DeleteJobProfile {
+class MockDeleteJobProfile extends _i1.Mock implements _i9.DeleteJobProfile {
   MockDeleteJobProfile() {
     _i1.throwOnMissingStub(this);
   }

@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:merokaam/core/models/job_profile_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/errors/exceptions.dart';
+import '../../../../resources/url.dart';
 
 abstract class JobProfileRemoteDataSource {
   Future<JobProfileModel> readJobProfile(int id);
@@ -182,15 +183,14 @@ class JobProfileRemoteDataSourceImpl implements JobProfileRemoteDataSource {
   }
 
   @override
-  Future<int> createJobProfile(JobProfileModel jobProfileModel) =>
-      _createJobProfile("http://192.168.1.180:5000/api/job-profile/create", jobProfileModel);
+  Future<int> createJobProfile(JobProfileModel jobProfileModel) => _createJobProfile(AppUrl.create, jobProfileModel);
 
   @override
-  Future<JobProfileModel> readJobProfile(int id) => _readJobProfile("http://192.168.1.180:5000/api/job-profile/profile/$id");
+  Future<JobProfileModel> readJobProfile(int id) => _readJobProfile("${AppUrl.profile}$id");
 
   @override
   Future<int> updateJobProfile(JobProfileModel jobProfileModel) =>
-      _updateJobProfile("http://192.168.1.180:5000/api/job-profile/profile/${sharedPreferences.getInt("id")}", jobProfileModel);
+      _updateJobProfile("${AppUrl.profile}${sharedPreferences.getInt("id")}", jobProfileModel);
 
   @override
   Future<int> deleteJobProfile(int userAccountId) => _deleteJobProfile("");

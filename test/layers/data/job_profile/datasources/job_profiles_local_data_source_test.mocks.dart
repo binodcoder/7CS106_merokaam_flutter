@@ -3,12 +3,8 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i4;
-
-import 'package:merokaam/core/db/db_helper.dart' as _i3;
-import 'package:merokaam/core/models/job_profile_model.dart' as _i5;
+import 'package:merokaam/core/db/db_helper.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:sqflite/sqflite.dart' as _i2;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -23,63 +19,11 @@ import 'package:sqflite/sqflite.dart' as _i2;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeDatabase_0 extends _i1.SmartFake implements _i2.Database {
-  _FakeDatabase_0(
-    Object parent,
-    Invocation parentInvocation,
-  ) : super(
-          parent,
-          parentInvocation,
-        );
-}
-
 /// A class which mocks [DatabaseHelper].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockDatabaseHelper extends _i1.Mock implements _i3.DatabaseHelper {
+class MockDatabaseHelper extends _i1.Mock implements _i2.DatabaseHelper {
   MockDatabaseHelper() {
     _i1.throwOnMissingStub(this);
   }
-
-  @override
-  _i4.Future<_i2.Database?> get database => (super.noSuchMethod(
-        Invocation.getter(#database),
-        returnValue: _i4.Future<_i2.Database?>.value(),
-      ) as _i4.Future<_i2.Database?>);
-
-  @override
-  _i4.Future<_i2.Database> initDatabase() => (super.noSuchMethod(
-        Invocation.method(
-          #initDatabase,
-          [],
-        ),
-        returnValue: _i4.Future<_i2.Database>.value(_FakeDatabase_0(
-          this,
-          Invocation.method(
-            #initDatabase,
-            [],
-          ),
-        )),
-      ) as _i4.Future<_i2.Database>);
-
-  @override
-  _i4.Future<int> insertJobProfile(_i5.JobProfileModel? jobProfileModel) =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #insertJobProfile,
-          [jobProfileModel],
-        ),
-        returnValue: _i4.Future<int>.value(0),
-      ) as _i4.Future<int>);
-
-  @override
-  _i4.Future<List<_i5.JobProfileModel>> readJobProfiles() =>
-      (super.noSuchMethod(
-        Invocation.method(
-          #readJobProfiles,
-          [],
-        ),
-        returnValue: _i4.Future<List<_i5.JobProfileModel>>.value(
-            <_i5.JobProfileModel>[]),
-      ) as _i4.Future<List<_i5.JobProfileModel>>);
 }

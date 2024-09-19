@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:merokaam/core/entities/job_profile.dart';
-import 'package:merokaam/core/mappers/map_failure_to_message.dart';
 import 'package:merokaam/core/models/job_profile_model.dart';
 import 'package:merokaam/layers/data/job_profile/data_sources/job_profile_local_data_source.dart';
 import 'package:merokaam/layers/data/job_profile/data_sources/job_profile_remote_data_sources.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/errors/failures.dart';
+import '../../../../core/mappers/map_exception_to_failure.dart';
 import '../../../../core/network/network_info.dart';
 import '../../../domain/job_profile/repositories/job_profile_repositories.dart';
 

@@ -6,7 +6,6 @@ import 'package:merokaam/layers/presentation/login/bloc/login_event.dart';
 import 'package:merokaam/layers/presentation/login/bloc/login_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../core/mappers/map_failure_to_message.dart';
 import '../../../../injection_container.dart';
 import '../../../domain/login/usecases/login.dart';
 

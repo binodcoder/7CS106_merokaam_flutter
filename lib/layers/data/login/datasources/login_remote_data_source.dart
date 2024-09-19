@@ -7,6 +7,7 @@ import '../../../../core/entities/login.dart';
 import '../../../../core/entities/user_info_response.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/models/user_model.dart';
+import '../../../../resources/url.dart';
 
 abstract class LoginRemoteDataSource {
   Future<UserInfoResponse> login(LoginModel loginModel);
@@ -70,5 +71,5 @@ class LoginRemoteDataSourceImpl implements LoginRemoteDataSource {
   }
 
   @override
-  Future<UserInfoResponse> login(LoginModel loginModel) => _login("http://192.168.1.180:5000/api/auth/signin", loginModel);
+  Future<UserInfoResponse> login(LoginModel loginModel) => _login(AppUrl.signin, loginModel);
 }

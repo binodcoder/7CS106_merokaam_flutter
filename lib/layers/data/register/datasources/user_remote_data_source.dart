@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/models/user_model.dart';
+import '../../../../resources/url.dart';
 
 abstract class UserRemoteDataSource {
   Future<int> addUser(UserModel userModel);
@@ -74,5 +75,5 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   }
 
   @override
-  Future<int> addUser(UserModel userModel) => _addUser("http://192.168.1.180:5000/api/auth/signup", userModel);
+  Future<int> addUser(UserModel userModel) => _addUser(AppUrl.signup, userModel);
 }

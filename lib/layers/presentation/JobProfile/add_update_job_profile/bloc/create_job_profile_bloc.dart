@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 
 import '../../../../../core/errors/failures.dart';
-import '../../../../../core/mappers/map_failure_to_message.dart';
 import '../../../../domain/job_profile/usecases/create_job_profile.dart';
 import '../../../../domain/job_profile/usecases/read_job_profile.dart';
 import '../../../../domain/job_profile/usecases/update_job_profile.dart';

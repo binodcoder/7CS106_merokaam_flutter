@@ -3,12 +3,14 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i3;
+import 'dart:async' as _i4;
 
-import 'package:merokaam/core/models/job_profile_model.dart' as _i4;
+import 'package:merokaam/core/models/job_profile_model.dart' as _i2;
 import 'package:merokaam/core/network/network_info.dart' as _i6;
-import 'package:merokaam/layers/data/job_profile/data_sources/job_profile_local_data_source.dart' as _i2;
-import 'package:merokaam/layers/data/job_profile/data_sources/job_profile_remote_data_sources.dart' as _i5;
+import 'package:merokaam/layers/data/job_profile/data_sources/job_profile_local_data_source.dart'
+    as _i3;
+import 'package:merokaam/layers/data/job_profile/data_sources/job_profile_remote_data_sources.dart'
+    as _i5;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -24,76 +26,105 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
+class _FakeJobProfileModel_0 extends _i1.SmartFake
+    implements _i2.JobProfileModel {
+  _FakeJobProfileModel_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [JobProfilesLocalDataSource].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockJobProfilesLocalDataSource extends _i1.Mock implements _i2.JobProfilesLocalDataSource {
+class MockJobProfilesLocalDataSource extends _i1.Mock
+    implements _i3.JobProfilesLocalDataSource {
   MockJobProfilesLocalDataSource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i3.Future<List<_i4.JobProfileModel>> readLastJobProfiles() => (super.noSuchMethod(
+  _i4.Future<_i2.JobProfileModel> readLastJobProfile(int? id) =>
+      (super.noSuchMethod(
         Invocation.method(
-          #readLastJobProfiles,
-          [],
+          #readLastJobProfile,
+          [id],
         ),
-        returnValue: _i3.Future<List<_i4.JobProfileModel>>.value(<_i4.JobProfileModel>[]),
-      ) as _i3.Future<List<_i4.JobProfileModel>>);
+        returnValue:
+            _i4.Future<_i2.JobProfileModel>.value(_FakeJobProfileModel_0(
+          this,
+          Invocation.method(
+            #readLastJobProfile,
+            [id],
+          ),
+        )),
+      ) as _i4.Future<_i2.JobProfileModel>);
 
   @override
-  _i3.Future<void>? cacheJobProfile(_i4.JobProfileModel? jobProfileModel) => (super.noSuchMethod(
-        Invocation.method(
-          #cacheJobProfile,
-          [jobProfileModel],
-        ),
-        returnValueForMissingStub: _i3.Future<void>.value(),
-      ) as _i3.Future<void>?);
+  _i4.Future<int>? cacheJobProfile(_i2.JobProfileModel? jobProfileModel) =>
+      (super.noSuchMethod(Invocation.method(
+        #cacheJobProfile,
+        [jobProfileModel],
+      )) as _i4.Future<int>?);
 }
 
 /// A class which mocks [JobProfileRemoteDataSource].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockJobProfileRemoteDataSource extends _i1.Mock implements _i5.JobProfileRemoteDataSource {
+class MockJobProfileRemoteDataSource extends _i1.Mock
+    implements _i5.JobProfileRemoteDataSource {
   MockJobProfileRemoteDataSource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i3.Future<List<_i4.JobProfileModel>> readJobProfiles() => (super.noSuchMethod(
+  _i4.Future<_i2.JobProfileModel> readJobProfile(int? id) =>
+      (super.noSuchMethod(
         Invocation.method(
           #readJobProfile,
-          [],
+          [id],
         ),
-        returnValue: _i3.Future<List<_i4.JobProfileModel>>.value(<_i4.JobProfileModel>[]),
-      ) as _i3.Future<List<_i4.JobProfileModel>>);
+        returnValue:
+            _i4.Future<_i2.JobProfileModel>.value(_FakeJobProfileModel_0(
+          this,
+          Invocation.method(
+            #readJobProfile,
+            [id],
+          ),
+        )),
+      ) as _i4.Future<_i2.JobProfileModel>);
 
   @override
-  _i3.Future<int> deleteJobProfile(int? userAccountId) => (super.noSuchMethod(
+  _i4.Future<int> deleteJobProfile(int? userAccountId) => (super.noSuchMethod(
         Invocation.method(
           #deleteJobProfile,
           [userAccountId],
         ),
-        returnValue: _i3.Future<int>.value(0),
-      ) as _i3.Future<int>);
+        returnValue: _i4.Future<int>.value(0),
+      ) as _i4.Future<int>);
 
   @override
-  _i3.Future<int> createJobProfile(_i4.JobProfileModel? postModel) => (super.noSuchMethod(
+  _i4.Future<int> createJobProfile(_i2.JobProfileModel? postModel) =>
+      (super.noSuchMethod(
         Invocation.method(
           #createJobProfile,
           [postModel],
         ),
-        returnValue: _i3.Future<int>.value(0),
-      ) as _i3.Future<int>);
+        returnValue: _i4.Future<int>.value(0),
+      ) as _i4.Future<int>);
 
   @override
-  _i3.Future<int> updateJobProfile(_i4.JobProfileModel? postModel) => (super.noSuchMethod(
+  _i4.Future<int> updateJobProfile(_i2.JobProfileModel? postModel) =>
+      (super.noSuchMethod(
         Invocation.method(
           #updateJobProfile,
           [postModel],
         ),
-        returnValue: _i3.Future<int>.value(0),
-      ) as _i3.Future<int>);
+        returnValue: _i4.Future<int>.value(0),
+      ) as _i4.Future<int>);
 }
 
 /// A class which mocks [NetworkInfo].
@@ -105,8 +136,8 @@ class MockNetworkInfo extends _i1.Mock implements _i6.NetworkInfo {
   }
 
   @override
-  _i3.Future<bool> get isConnected => (super.noSuchMethod(
+  _i4.Future<bool> get isConnected => (super.noSuchMethod(
         Invocation.getter(#isConnected),
-        returnValue: _i3.Future<bool>.value(false),
-      ) as _i3.Future<bool>);
+        returnValue: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
 }

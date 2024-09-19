@@ -4,7 +4,7 @@ import '../../../../core/entities/user.dart';
 import '../../../../core/entities/user_info_response.dart';
 import '../../../../core/errors/exceptions.dart';
 import '../../../../core/errors/failures.dart';
-import '../../../../core/mappers/map_failure_to_message.dart';
+import '../../../../core/mappers/map_exception_to_failure.dart';
 import '../../../../core/network/network_info.dart';
 import '../../../domain/login/repositories/login_repositories.dart';
 import '../datasources/login_remote_data_source.dart';

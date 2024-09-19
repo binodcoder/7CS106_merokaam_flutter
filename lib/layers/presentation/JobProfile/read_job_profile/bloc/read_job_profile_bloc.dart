@@ -10,7 +10,6 @@ import 'package:merokaam/layers/presentation/JobProfile/read_job_profile/bloc/re
 import 'package:merokaam/layers/presentation/JobProfile/read_job_profile/bloc/read_job_profile_state.dart';
 import '../../../../../core/entities/job_profile.dart';
 import '../../../../../core/errors/failures.dart';
-import '../../../../../core/mappers/map_failure_to_message.dart';
 import '../../../../../core/usecases/usecase.dart';
 import '../../../../domain/job_profile/usecases/delete_job_profile.dart';
 import '../../../../domain/job_profile/usecases/read_job_profile.dart';
