@@ -54,4 +54,6 @@ class JobProfileModel extends JobProfile {
       duration: map['duration'] ?? 0.0,
     );
   }
+
+  copyWith({required userAccountId}) {}
 }

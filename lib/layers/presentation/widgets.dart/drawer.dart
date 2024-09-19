@@ -21,6 +21,7 @@ class MyDrawer extends StatefulWidget {
 
 class _MyDrawerState extends State<MyDrawer> {
   final SharedPreferences sharedPreferences = sl<SharedPreferences>();
+  final DatabaseHelper databaseHelper = sl<DatabaseHelper>();
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +65,7 @@ class _MyDrawerState extends State<MyDrawer> {
             ),
             onTap: () {
               sharedPreferences.clear();
-              DatabaseHelper.deleteAllJobProfiles();
+              databaseHelper.deleteAllJobProfiles();
 
               Navigator.pushReplacement(
                 context,

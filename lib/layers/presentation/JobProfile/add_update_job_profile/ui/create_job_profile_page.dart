@@ -68,6 +68,7 @@ class _CreateJobProfilePageState extends State<CreateJobProfilePage> {
   final _formKey = GlobalKey<FormState>();
 
   SharedPreferences sharedPreferences = sl<SharedPreferences>();
+  DatabaseHelper databaseHelper = sl<DatabaseHelper>();
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +101,7 @@ class _CreateJobProfilePageState extends State<CreateJobProfilePage> {
         } else if (state is AddJobProfileErrorState) {
           if (state.failure is UnauthorizedFailure) {
             sharedPreferences.clear();
-            DatabaseHelper.deleteAllJobProfiles();
+            databaseHelper.deleteAllJobProfiles();
             Navigator.pushReplacementNamed(context, Routes.loginRoute);
           } else {
             Navigator.pop(context);

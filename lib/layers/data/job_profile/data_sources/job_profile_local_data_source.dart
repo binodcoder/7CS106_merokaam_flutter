@@ -31,7 +31,7 @@ class JobProfilesLocalDataSourceImpl implements JobProfilesLocalDataSource {
       //   JobProfileModel? existingProfile = await DatabaseHelper.readJobProfile(jobProfileModel.userAccountId!);
       // If it exists, update it; otherwise, insert a new profile
       // if (existingProfile != null) {
-      await DatabaseHelper.updateJobProfile(jobProfileModel);
+      await dbHelper.updateJobProfile(jobProfileModel);
       return 1;
       // } else {
       // await DatabaseHelper.insertJobProfile(jobProfileModel);
@@ -39,7 +39,7 @@ class JobProfilesLocalDataSourceImpl implements JobProfilesLocalDataSource {
       // }
     } on NotFoundException {
       // Handle the case when the profile is not found by inserting a new one
-      await DatabaseHelper.insertJobProfile(jobProfileModel);
+      await dbHelper.insertJobProfile(jobProfileModel);
       return 1;
     } on ArgumentException {
       rethrow;
@@ -53,7 +53,7 @@ class JobProfilesLocalDataSourceImpl implements JobProfilesLocalDataSource {
   Future<JobProfileModel> _readJobProfileFromLocal(int id) async {
     try {
       // Attempt to read job profile from the database
-      JobProfileModel jobProfileModel = await DatabaseHelper.readJobProfile(id);
+      JobProfileModel jobProfileModel = await dbHelper.readJobProfile(id);
       return jobProfileModel;
     } on NotFoundException {
       rethrow;

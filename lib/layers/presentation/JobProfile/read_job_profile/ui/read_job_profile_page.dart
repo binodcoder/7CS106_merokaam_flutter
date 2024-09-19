@@ -40,6 +40,7 @@ class _ReadJobProfilePageState extends State<ReadJobProfilePage> {
 
   ReadJobProfileBloc jobProfileBloc = sl<ReadJobProfileBloc>();
   SharedPreferences sharedPreferences = sl<SharedPreferences>();
+  DatabaseHelper databaseHelper = sl<DatabaseHelper>();
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +67,7 @@ class _ReadJobProfilePageState extends State<ReadJobProfilePage> {
             Navigator.pushNamed(context, Routes.createJobProfileRoute).then((value) => refreshPage());
           } else if (state.failure is UnauthorizedFailure) {
             sharedPreferences.clear();
-            DatabaseHelper.deleteAllJobProfiles();
+            databaseHelper.deleteAllJobProfiles();
             Navigator.pushReplacementNamed(context, Routes.loginRoute);
           } else {
             showDialog(

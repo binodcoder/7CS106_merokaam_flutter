@@ -4,6 +4,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:merokaam/core/db/db_helper.dart';
 import 'package:merokaam/core/errors/exceptions.dart';
+import 'package:merokaam/core/errors/failures.dart';
 import 'package:merokaam/core/models/job_profile_model.dart';
 
 import 'job_profiles_local_data_source_test.mocks.dart';
@@ -35,7 +36,7 @@ void main() {
 
     test('should call DatabaseHelper to update job profile when caching', () async {
       // arrange
-      when(mockDbHelper.updateJobProfile(any)).thenAnswer((_) async => 1);
+      when(mockDbHelper.updateJobProfile(tJobProfileModel)).thenAnswer((_) async => 1);
       // act
       final result = await dataSource.cacheJobProfile(tJobProfileModel);
       // assert
@@ -49,27 +50,27 @@ void main() {
       // act
       expect(() => dataSource.cacheJobProfile(tInvalidJobProfile), throwsA(isA<ArgumentException>()));
       // assert
-      verifyNever(mockDbHelper.updateJobProfile(any));
-    });
-
-    test('should throw CacheException when there is an unexpected error', () async {
-      // arrange
-      when(mockDbHelper.updateJobProfile(any)).thenThrow(Exception());
-      // act
-      expect(() => dataSource.cacheJobProfile(tJobProfileModel), throwsA(isA<CacheException>()));
-      // assert
-      verify(mockDbHelper.updateJobProfile(tJobProfileModel));
+      verifyNever(mockDbHelper.updateJobProfile(tJobProfileModel));
     });
 
     test('should insert a new job profile if NotFoundException occurs', () async {
       // arrange
-      when(mockDbHelper.updateJobProfile(any)).thenThrow(NotFoundException());
-      when(mockDbHelper.insertJobProfile(any)).thenAnswer((_) async => 1);
+      when(mockDbHelper.updateJobProfile(tJobProfileModel)).thenThrow(NotFoundException());
+      when(mockDbHelper.insertJobProfile(tJobProfileModel)).thenAnswer((_) async => 1);
       // act
       final result = await dataSource.cacheJobProfile(tJobProfileModel);
       // assert
       verify(mockDbHelper.insertJobProfile(tJobProfileModel));
       expect(result, equals(1));
+    });
+
+    test('should throw CacheException when there is an unexpected error', () async {
+      // arrange
+      when(mockDbHelper.updateJobProfile(tJobProfileModel)).thenThrow(Exception());
+      // act
+      expect(() => dataSource.cacheJobProfile(tJobProfileModel), throwsA(isA<CacheException>()));
+      // assert
+      verify(mockDbHelper.updateJobProfile(tJobProfileModel));
     });
   });
 
@@ -88,9 +89,9 @@ void main() {
       photosImagePath: 'Image Path',
     );
 
-    test('should return JobProfileModel when the data is found', () async {
+    test('should return JobProfileModel when data is found', () async {
       // arrange
-      when(mockDbHelper.readJobProfile(any)).thenAnswer((_) async => tJobProfileModel);
+      when(mockDbHelper.readJobProfile(1)).thenAnswer((_) async => tJobProfileModel);
       // act
       final result = await dataSource.readLastJobProfile(1);
       // assert
@@ -100,7 +101,7 @@ void main() {
 
     test('should throw NotFoundException when the profile is not found', () async {
       // arrange
-      when(mockDbHelper.readJobProfile(any)).thenThrow(NotFoundException());
+      when(mockDbHelper.readJobProfile(1)).thenThrow(NotFoundException());
       // act
       expect(() => dataSource.readLastJobProfile(1), throwsA(isA<NotFoundException>()));
       // assert
@@ -109,7 +110,7 @@ void main() {
 
     test('should throw CacheException for unexpected errors', () async {
       // arrange
-      when(mockDbHelper.readJobProfile(any)).thenThrow(Exception());
+      when(mockDbHelper.readJobProfile(1)).thenThrow(Exception());
       // act
       expect(() => dataSource.readLastJobProfile(1), throwsA(isA<CacheException>()));
       // assert
