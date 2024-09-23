@@ -3,8 +3,12 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:merokaam/core/db/db_helper.dart' as _i2;
+import 'dart:async' as _i5;
+
+import 'package:merokaam/core/db/db_helper.dart' as _i4;
+import 'package:merokaam/core/models/job_profile_model.dart' as _i3;
 import 'package:mockito/mockito.dart' as _i1;
+import 'package:sqflite/sqflite.dart' as _i2;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -19,11 +23,103 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
+class _FakeDatabase_0 extends _i1.SmartFake implements _i2.Database {
+  _FakeDatabase_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeJobProfileModel_1 extends _i1.SmartFake
+    implements _i3.JobProfileModel {
+  _FakeJobProfileModel_1(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
 /// A class which mocks [DatabaseHelper].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockDatabaseHelper extends _i1.Mock implements _i2.DatabaseHelper {
+class MockDatabaseHelper extends _i1.Mock implements _i4.DatabaseHelper {
   MockDatabaseHelper() {
     _i1.throwOnMissingStub(this);
   }
+
+  @override
+  _i5.Future<_i2.Database> database() => (super.noSuchMethod(
+        Invocation.method(
+          #database,
+          [],
+        ),
+        returnValue: _i5.Future<_i2.Database>.value(_FakeDatabase_0(
+          this,
+          Invocation.method(
+            #database,
+            [],
+          ),
+        )),
+      ) as _i5.Future<_i2.Database>);
+
+  @override
+  _i5.Future<void> createTables(_i2.Database? database) => (super.noSuchMethod(
+        Invocation.method(
+          #createTables,
+          [database],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
+
+  @override
+  _i5.Future<int> insertJobProfile(_i3.JobProfileModel? jobProfileModel) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #insertJobProfile,
+          [jobProfileModel],
+        ),
+        returnValue: _i5.Future<int>.value(0),
+      ) as _i5.Future<int>);
+
+  @override
+  _i5.Future<_i3.JobProfileModel> readJobProfile(int? id) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #readJobProfile,
+          [id],
+        ),
+        returnValue:
+            _i5.Future<_i3.JobProfileModel>.value(_FakeJobProfileModel_1(
+          this,
+          Invocation.method(
+            #readJobProfile,
+            [id],
+          ),
+        )),
+      ) as _i5.Future<_i3.JobProfileModel>);
+
+  @override
+  _i5.Future<int> updateJobProfile(_i3.JobProfileModel? jobProfileModel) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #updateJobProfile,
+          [jobProfileModel],
+        ),
+        returnValue: _i5.Future<int>.value(0),
+      ) as _i5.Future<int>);
+
+  @override
+  _i5.Future<int> deleteAllJobProfiles() => (super.noSuchMethod(
+        Invocation.method(
+          #deleteAllJobProfiles,
+          [],
+        ),
+        returnValue: _i5.Future<int>.value(0),
+      ) as _i5.Future<int>);
 }

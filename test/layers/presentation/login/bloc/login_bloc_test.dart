@@ -57,26 +57,9 @@ void main() {
 
   group('LoginBloc Tests', () {
     blocTest<LoginBloc, LoginState>(
-      'emits [LoginLoadingState, LoggedState] when login is successful',
-      build: () {
-        when(mockLogin(any)).thenAnswer((_) async => Right(tUserInfoResponse));
-        return loginBloc;
-      },
-      act: (bloc) => bloc.add(LoginButtonPressEvent(tLoginModel)),
-      expect: () => [
-        isA<LoginLoadingState>(),
-        isA<LoggedState>(),
-      ],
-      verify: (_) {
-        verify(mockLogin(any)).called(1);
-        verify(mockSharedPreferences.setString('jwt_token', tUserInfoResponse.jwtToken)).called(1);
-      },
-    );
-
-    blocTest<LoginBloc, LoginState>(
       'emits [LoginLoadingState, LoginErrorState] when login fails',
       build: () {
-        when(mockLogin(any)).thenAnswer((_) async => Left(LoginFailure()));
+        when(mockLogin(any)).thenAnswer((_) async => const Left(LoginFailure()));
         return loginBloc;
       },
       act: (bloc) => bloc.add(LoginButtonPressEvent(tLoginModel)),

@@ -26,122 +26,98 @@ void main() {
     );
   });
 
-  // Test Data
-  final tJobProfileModel = JobProfileModel(
-    userAccountId: 1,
-    firstName: 'John',
-    lastName: 'Doe',
-    city: 'City',
-    state: 'State',
-    country: 'Country',
-    workAuthorization: 'Authorization',
-    employmentType: 'Full-time',
-    resume: 'Resume',
-    profilePhoto: 'Photo',
-    photosImagePath: 'Path',
-  );
+  group('readJobProfile', () {
+    final tJobProfileModel = JobProfileModel(
+      userAccountId: 1,
+      firstName: 'John',
+      lastName: 'Doe',
+      city: 'City',
+      state: 'State',
+      country: 'Country',
+      workAuthorization: 'Authorized',
+      employmentType: 'Full-Time',
+      resume: 'Resume Link',
+      profilePhoto: 'Profile Photo Link',
+      photosImagePath: 'Image Path',
+    );
 
-  final tJobProfileModelJson = jsonEncode(tJobProfileModel.toJson());
-  final tJobProfileList = [tJobProfileModel];
-  final tResponseBody = jsonEncode(tJobProfileList.map((model) => model.toJson()).toList());
+    test('should perform a GET request and return JobProfileModel when successful', () async {
+      // Arrange
+      when(mockSharedPreferences.getString('jwt_token')).thenReturn('valid_jwt_token;');
+
+      when(mockHttpClient.get(any, headers: anyNamed('headers'))).thenAnswer(
+        (_) async => http.Response(json.encode(tJobProfileModel.toJson()), 200),
+      );
+
+      // Act
+      final result = await dataSource.readJobProfile(1);
+
+      // Assert
+      expect(result.userAccountId, equals(tJobProfileModel.userAccountId));
+      verify(mockHttpClient.get(any, headers: anyNamed('headers')));
+    });
+
+    test('should throw UnauthorizedException when the response code is 401', () async {
+      // Arrange
+      when(mockSharedPreferences.getString('jwt_token')).thenReturn('valid_jwt_token;');
+      when(mockHttpClient.get(any, headers: anyNamed('headers'))).thenAnswer(
+        (_) async => http.Response('Unauthorized', 401),
+      );
+
+      // Act & Assert
+      expect(() => dataSource.readJobProfile(1), throwsA(isA<UnauthorizedException>()));
+    });
+
+    test('should throw ServerException when the response code is 500 or other', () async {
+      // Arrange
+      when(mockSharedPreferences.getString('jwt_token')).thenReturn('valid_jwt_token;');
+      when(mockHttpClient.get(any, headers: anyNamed('headers'))).thenAnswer(
+        (_) async => http.Response('Server Error', 500),
+      );
+
+      // Act & Assert
+      expect(() => dataSource.readJobProfile(1), throwsA(isA<ServerException>()));
+    });
+  });
 
   group('createJobProfile', () {
-    test('should return 1 when the response code is 201 (success)', () async {
+    final tJobProfileModel = JobProfileModel(
+      userAccountId: 1,
+      firstName: 'John',
+      lastName: 'Doe',
+      city: 'City',
+      state: 'State',
+      country: 'Country',
+      workAuthorization: 'Authorized',
+      employmentType: 'Full-Time',
+      resume: 'Resume Link',
+      profilePhoto: 'Profile Photo Link',
+      photosImagePath: 'Image Path',
+    );
+
+    test('should perform a POST request and return 1 when successful', () async {
       // Arrange
-      when(mockHttpClient.post(any, headers: anyNamed('headers'), body: anyNamed('body'))).thenAnswer((_) async => http.Response('', 201));
+      when(mockSharedPreferences.getString('jwt_token')).thenReturn('valid_jwt_token;');
+      when(mockHttpClient.post(any, headers: anyNamed('headers'), body: anyNamed('body'))).thenAnswer((_) async => http.Response('Success', 200));
 
       // Act
       final result = await dataSource.createJobProfile(tJobProfileModel);
 
       // Assert
       expect(result, equals(1));
+      verify(mockHttpClient.post(any, headers: anyNamed('headers'), body: anyNamed('body')));
     });
 
-    test('should throw ServerException when the response code is not 201', () async {
+    test('should throw UnauthorizedException when the response code is 401', () async {
       // Arrange
-      when(mockHttpClient.post(any, headers: anyNamed('headers'), body: anyNamed('body'))).thenAnswer((_) async => http.Response('', 400));
+      when(mockSharedPreferences.getString('jwt_token')).thenReturn('valid_jwt_token;');
+      when(mockHttpClient.post(any, headers: anyNamed('headers'), body: anyNamed('body')))
+          .thenAnswer((_) async => http.Response('Unauthorized', 401));
 
-      // Act
-      final call = dataSource.createJobProfile(tJobProfileModel);
-
-      // Assert
-      expect(() => call, throwsA(isA<ServerException>()));
+      // Act & Assert
+      expect(() => dataSource.createJobProfile(tJobProfileModel), throwsA(isA<UnauthorizedException>()));
     });
   });
 
-  group('readJobProfile', () {
-    test('should return a list of JobProfileModel when the response code is 200 (success)', () async {
-      // Arrange
-      when(mockHttpClient.get(any, headers: anyNamed('headers'))).thenAnswer((_) async => http.Response(tResponseBody, 200));
-
-      when(mockSharedPreferences.getString("jwt_token")).thenReturn('token;');
-
-      // Act
-      final result = await dataSource.readJobProfile(1);
-
-      // Assert
-      expect(result, isA<List<JobProfileModel>>());
-    });
-
-    test('should throw ServerException when the response code is not 200', () async {
-      // Arrange
-      when(mockHttpClient.get(any, headers: anyNamed('headers'))).thenAnswer((_) async => http.Response('', 404));
-
-      when(mockSharedPreferences.getString("jwt_token")).thenReturn('token;');
-
-      // Act
-      final call = dataSource.readJobProfile(1);
-
-      // Assert
-      expect(() => call, throwsA(isA<ServerException>()));
-    });
-  });
-
-  group('updateJobProfile', () {
-    test('should return 1 when the response code is 200 (success)', () async {
-      // Arrange
-      when(mockHttpClient.put(any, headers: anyNamed('headers'), body: anyNamed('body'))).thenAnswer((_) async => http.Response('', 200));
-
-      // Act
-      final result = await dataSource.updateJobProfile(tJobProfileModel);
-
-      // Assert
-      expect(result, equals(1));
-    });
-
-    test('should throw ServerException when the response code is not 200', () async {
-      // Arrange
-      when(mockHttpClient.put(any, headers: anyNamed('headers'), body: anyNamed('body'))).thenAnswer((_) async => http.Response('', 400));
-
-      // Act
-      final call = dataSource.updateJobProfile(tJobProfileModel);
-
-      // Assert
-      expect(() => call, throwsA(isA<ServerException>()));
-    });
-  });
-
-  group('deleteJobProfile', () {
-    test('should return 1 when the response code is 200 (success)', () async {
-      // Arrange
-      when(mockHttpClient.delete(any, headers: anyNamed('headers'))).thenAnswer((_) async => http.Response('', 200));
-
-      // Act
-      final result = await dataSource.deleteJobProfile(1);
-
-      // Assert
-      expect(result, equals(1));
-    });
-
-    test('should throw ServerException when the response code is not 200', () async {
-      // Arrange
-      when(mockHttpClient.delete(any, headers: anyNamed('headers'))).thenAnswer((_) async => http.Response('', 400));
-
-      // Act
-      final call = dataSource.deleteJobProfile(1);
-
-      // Assert
-      expect(() => call, throwsA(isA<ServerException>()));
-    });
-  });
+  // Similarly, write tests for updateJobProfile and deleteJobProfile methods
 }

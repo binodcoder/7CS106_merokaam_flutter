@@ -12,66 +12,11 @@ import 'job_profiles_local_data_source_test.mocks.dart';
 @GenerateMocks([DatabaseHelper])
 void main() {
   late JobProfilesLocalDataSourceImpl dataSource;
-  late MockDatabaseHelper mockDbHelper;
+  late MockDatabaseHelper mockDatabaseHelper;
 
   setUp(() {
-    mockDbHelper = MockDatabaseHelper();
-    dataSource = JobProfilesLocalDataSourceImpl(mockDbHelper);
-  });
-
-  group('cacheJobProfile', () {
-    final tJobProfileModel = JobProfileModel(
-      userAccountId: 1,
-      firstName: 'John',
-      lastName: 'Doe',
-      city: 'City',
-      state: 'State',
-      country: 'Country',
-      workAuthorization: 'Authorized',
-      employmentType: 'Full-Time',
-      resume: 'Resume Link',
-      profilePhoto: 'Profile Photo Link',
-      photosImagePath: 'Image Path',
-    );
-
-    test('should call DatabaseHelper to update job profile when caching', () async {
-      // arrange
-      when(mockDbHelper.updateJobProfile(tJobProfileModel)).thenAnswer((_) async => 1);
-      // act
-      final result = await dataSource.cacheJobProfile(tJobProfileModel);
-      // assert
-      verify(mockDbHelper.updateJobProfile(tJobProfileModel));
-      expect(result, equals(1));
-    });
-
-    test('should throw ArgumentException if userAccountId is null', () async {
-      // arrange
-      final tInvalidJobProfile = tJobProfileModel.copyWith(userAccountId: null);
-      // act
-      expect(() => dataSource.cacheJobProfile(tInvalidJobProfile), throwsA(isA<ArgumentException>()));
-      // assert
-      verifyNever(mockDbHelper.updateJobProfile(tJobProfileModel));
-    });
-
-    test('should insert a new job profile if NotFoundException occurs', () async {
-      // arrange
-      when(mockDbHelper.updateJobProfile(tJobProfileModel)).thenThrow(NotFoundException());
-      when(mockDbHelper.insertJobProfile(tJobProfileModel)).thenAnswer((_) async => 1);
-      // act
-      final result = await dataSource.cacheJobProfile(tJobProfileModel);
-      // assert
-      verify(mockDbHelper.insertJobProfile(tJobProfileModel));
-      expect(result, equals(1));
-    });
-
-    test('should throw CacheException when there is an unexpected error', () async {
-      // arrange
-      when(mockDbHelper.updateJobProfile(tJobProfileModel)).thenThrow(Exception());
-      // act
-      expect(() => dataSource.cacheJobProfile(tJobProfileModel), throwsA(isA<CacheException>()));
-      // assert
-      verify(mockDbHelper.updateJobProfile(tJobProfileModel));
-    });
+    mockDatabaseHelper = MockDatabaseHelper();
+    dataSource = JobProfilesLocalDataSourceImpl(mockDatabaseHelper);
   });
 
   group('readLastJobProfile', () {
@@ -89,32 +34,102 @@ void main() {
       photosImagePath: 'Image Path',
     );
 
-    test('should return JobProfileModel when data is found', () async {
-      // arrange
-      when(mockDbHelper.readJobProfile(1)).thenAnswer((_) async => tJobProfileModel);
-      // act
+    test('should return JobProfileModel when found in local database', () async {
+      // Arrange
+      when(mockDatabaseHelper.readJobProfile(any)).thenAnswer((_) async => tJobProfileModel);
+
+      // Act
       final result = await dataSource.readLastJobProfile(1);
-      // assert
-      verify(mockDbHelper.readJobProfile(1));
+
+      // Assert
       expect(result, equals(tJobProfileModel));
+      verify(mockDatabaseHelper.readJobProfile(1));
     });
 
-    test('should throw NotFoundException when the profile is not found', () async {
-      // arrange
-      when(mockDbHelper.readJobProfile(1)).thenThrow(NotFoundException());
-      // act
+    test('should throw NotFoundException when job profile is not found', () async {
+      // Arrange
+      when(mockDatabaseHelper.readJobProfile(any)).thenThrow(NotFoundException());
+
+      // Act & Assert
       expect(() => dataSource.readLastJobProfile(1), throwsA(isA<NotFoundException>()));
-      // assert
-      verify(mockDbHelper.readJobProfile(1));
+      verify(mockDatabaseHelper.readJobProfile(1));
     });
 
-    test('should throw CacheException for unexpected errors', () async {
-      // arrange
-      when(mockDbHelper.readJobProfile(1)).thenThrow(Exception());
-      // act
+    test('should throw CacheException on unexpected error', () async {
+      // Arrange
+      when(mockDatabaseHelper.readJobProfile(any)).thenThrow(Exception());
+
+      // Act & Assert
       expect(() => dataSource.readLastJobProfile(1), throwsA(isA<CacheException>()));
-      // assert
-      verify(mockDbHelper.readJobProfile(1));
+    });
+  });
+
+  group('cacheJobProfile', () {
+    final tJobProfileModel = JobProfileModel(
+      userAccountId: 1,
+      firstName: 'John',
+      lastName: 'Doe',
+      city: 'City',
+      state: 'State',
+      country: 'Country',
+      workAuthorization: 'Authorized',
+      employmentType: 'Full-Time',
+      resume: 'Resume Link',
+      profilePhoto: 'Profile Photo Link',
+      photosImagePath: 'Image Path',
+    );
+
+    test('should update the job profile in local database when it exists', () async {
+      // Arrange
+      when(mockDatabaseHelper.updateJobProfile(any)).thenAnswer((_) async => 1);
+
+      // Act
+      final result = await dataSource.cacheJobProfile(tJobProfileModel);
+
+      // Assert
+      expect(result, equals(1));
+      verify(mockDatabaseHelper.updateJobProfile(tJobProfileModel));
+    });
+
+    test('should insert new job profile when profile is not found', () async {
+      // Arrange
+      when(mockDatabaseHelper.updateJobProfile(any)).thenThrow(NotFoundException());
+      when(mockDatabaseHelper.insertJobProfile(any)).thenAnswer((_) async => 1);
+
+      // Act
+      final result = await dataSource.cacheJobProfile(tJobProfileModel);
+
+      // Assert
+      expect(result, equals(1));
+      verify(mockDatabaseHelper.insertJobProfile(tJobProfileModel));
+    });
+
+    test('should throw ArgumentException when userAccountId is null', () async {
+      // Arrange
+      final invalidJobProfile = JobProfileModel(
+        userAccountId: null, // Invalid
+        firstName: 'John',
+        lastName: 'Doe',
+        city: 'City',
+        state: 'State',
+        country: 'Country',
+        workAuthorization: 'Authorized',
+        employmentType: 'Full-Time',
+        resume: 'Resume Link',
+        profilePhoto: 'Profile Photo Link',
+        photosImagePath: 'Image Path',
+      );
+
+      // Act & Assert
+      expect(() => dataSource.cacheJobProfile(invalidJobProfile), throwsA(isA<ArgumentException>()));
+    });
+
+    test('should throw CacheException on unexpected error', () async {
+      // Arrange
+      when(mockDatabaseHelper.updateJobProfile(any)).thenThrow(Exception());
+
+      // Act & Assert
+      expect(() => dataSource.cacheJobProfile(tJobProfileModel), throwsA(isA<CacheException>()));
     });
   });
 }

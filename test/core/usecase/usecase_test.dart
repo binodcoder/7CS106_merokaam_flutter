@@ -2,59 +2,52 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:merokaam/core/errors/failures.dart';
 import 'package:merokaam/core/usecases/usecase.dart';
-import 'package:mockito/mockito.dart';
 
-// Mock class to test the UseCase abstract class
-class MockUseCase extends Mock implements UseCase<String, Params> {}
-
-class Params {
-  final String param;
-
-  Params(this.param);
+// A simple example use case to test the abstract class.
+class TestUseCase extends UseCase<String, NoParams> {
+  @override
+  Future<Either<Failure, String>> call(NoParams params) async {
+    // Simulate a successful response
+    return const Right('Test UseCase Success');
+  }
 }
 
 void main() {
+  late TestUseCase useCase;
+
+  setUp(() {
+    useCase = TestUseCase();
+  });
+
   group('UseCase', () {
-    late MockUseCase mockUseCase;
-    late Params params;
-
-    setUp(() {
-      mockUseCase = MockUseCase();
-      params = Params('Test');
-    });
-
-    test('should call the UseCase with the correct parameters', () async {
+    test('should return a successful result when called with NoParams', () async {
       // Arrange
-      final tResult = Right<Failure, String>('Test Result');
-      when(mockUseCase.call(params)).thenAnswer((_) async => tResult);
+      final params = NoParams();
 
       // Act
-      final result = await mockUseCase.call(params);
+      final result = await useCase(params);
 
       // Assert
-      verify(mockUseCase.call(params));
-      expect(result, tResult);
-    });
-
-    test('should return null when UseCase call is not implemented', () async {
-      // Arrange
-      when(mockUseCase.call(params)).thenAnswer((_) async => null);
-
-      // Act
-      final result = await mockUseCase.call(params);
-
-      // Assert
-      expect(result, isNull);
+      expect(result, equals(const Right('Test UseCase Success')));
     });
   });
 
   group('NoParams', () {
     test('should have an empty props list', () {
-      // Act
+      // Arrange
       final noParams = NoParams();
 
       // Assert
-      expect(noParams.props, []);
+      expect(noParams.props, isEmpty);
+    });
+
+    test('should compare two instances as equal', () {
+      // Arrange
+      final noParams1 = NoParams();
+      final noParams2 = NoParams();
+
+      // Assert
+      expect(noParams1, equals(noParams2));
     });
   });
 }

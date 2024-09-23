@@ -26,7 +26,6 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: AppStrings.appTitle,
         initialRoute: Routes.splashRoute,
-        //sharedPreferences.getBool("login") == null ? Routes.loginRoute : Routes.jobProfileRoute,
       ),
     );
   }

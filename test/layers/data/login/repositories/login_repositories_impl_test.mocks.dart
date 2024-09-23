@@ -7,6 +7,7 @@ import 'dart:async' as _i4;
 
 import 'package:merokaam/core/entities/login.dart' as _i5;
 import 'package:merokaam/core/entities/user_info_response.dart' as _i2;
+import 'package:merokaam/core/network/network_info.dart' as _i6;
 import 'package:merokaam/layers/data/login/datasources/login_remote_data_source.dart'
     as _i3;
 import 'package:mockito/mockito.dart' as _i1;
@@ -60,4 +61,19 @@ class MockLoginRemoteDataSource extends _i1.Mock
           ),
         )),
       ) as _i4.Future<_i2.UserInfoResponse>);
+}
+
+/// A class which mocks [NetworkInfo].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockNetworkInfo extends _i1.Mock implements _i6.NetworkInfo {
+  MockNetworkInfo() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i4.Future<bool> get isConnected => (super.noSuchMethod(
+        Invocation.getter(#isConnected),
+        returnValue: _i4.Future<bool>.value(false),
+      ) as _i4.Future<bool>);
 }
